@@ -1,7 +1,7 @@
 import { IGuest, IGuestList, IStaticProps } from '@/interfaces'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
-import { environment } from '@/config'
+import { environment } from '../../config'
 
 const { apiUrl } = environment
 
