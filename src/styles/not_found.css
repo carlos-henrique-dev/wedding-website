@@ -1,0 +1,23 @@
+@tailwind components;
+
+@layer components {
+  .not_found {
+    @apply relative flex flex-col w-full max-w-[100vw] h-[100vh] max-h-[100vh] 
+	items-center justify-center overflow-hidden;
+  }
+
+  .not_found-title {
+    @apply sm:text-7xl xsm:text-4xl text-center text-primary font-medium tracking-wider z-10 font-cursive;
+  }
+
+  .not_found-message {
+    @apply text-primary font-bold pt-[20px] font-cursive-2 sm:text-5xl xsm:text-xl text-center z-10;
+  }
+  .not_found-img-top {
+    @apply absolute sm:-top-[40%] xsm:-top-[30%] sm:-left-[30%] xsm:-left-[40%] z-0 grayscale-[70%];
+  }
+
+  .not_found-img-bottom {
+    @apply absolute sm:-bottom-[50%] xsm:-bottom-[22%] sm:-right-[40%] rotate-45 grayscale-[70%] z-0;
+  }
+}

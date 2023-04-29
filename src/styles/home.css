@@ -1,0 +1,39 @@
+@tailwind components;
+
+@layer components {
+  .home {
+    @apply relative flex flex-col w-full max-w-[100vw] 
+	h-[100vh] max-h-[100vh] items-center justify-center overflow-hidden
+	sm:pt-[20%]
+	xsm:pt-[30%]
+	;
+  }
+
+  .home-title {
+    @apply sm:text-7xl text-center text-primary font-medium tracking-wider z-10 font-cursive
+	xsm:text-6xl flex xsm:flex-col xsm:justify-center xsm:items-center
+	sm:flex-row;
+  }
+
+  .home-title span {
+	@apply xsm:pt-4 sm:pt-0;
+  }
+
+  .home-subtitle {
+    @apply text-secondary pt-14 text-center font-medium tracking-wide text-lg;
+  }
+
+  .home-date {
+    @apply text-primary font-bold sm:pt-[90px] font-cursive-2 text-2xl
+	xsm:pt-[40px];
+  }
+  .home-img-top {
+    @apply absolute sm:-top-[35%] sm:-left-[35%] z-0
+	xsm:-top-[30%] xsm:-left-[50%];
+  }
+
+  .home-img-bottom {
+    @apply absolute sm:-bottom-[40%] sm:-right-[30%] sm:left-[60%] rotate-45
+	xsm:-bottom-[20%] xsm:-right-[30%] xsm:left-[40%];
+  }
+}
