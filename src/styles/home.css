@@ -2,38 +2,59 @@
 
 @layer components {
   .home {
-    @apply relative flex flex-col w-full max-w-[100vw] 
-	h-[100vh] max-h-[100vh] items-center justify-center overflow-hidden
-	sm:pt-[20%]
-	xsm:pt-[30%]
-	;
+    @apply relative w-full max-w-[100vw] h-[100vh] max-h-[100vh]
+	flex flex-col items-center justify-center overflow-hidden;
+  }
+
+  .home-content {
+    @apply z-10 flex flex-col items-center justify-center
+	sm:pt-20 sm:pb-0
+	xsm:pt-0 xsm:pb-10;
   }
 
   .home-title {
-    @apply sm:text-7xl text-center text-primary font-medium tracking-wider z-10 font-cursive
-	xsm:text-6xl flex xsm:flex-col xsm:justify-center xsm:items-center
-	sm:flex-row;
+    @apply text-center text-primary font-medium tracking-wider font-cursive flex 
+	sm:flex-row sm:text-7xl
+	xsm:text-6xl xsm:flex-col xsm:justify-center xsm:items-center;
   }
 
   .home-title span {
-	@apply xsm:pt-4 sm:pt-0;
+    @apply xsm:pt-4 sm:pt-0;
+  }
+
+  .home-title span:nth-child(2) {
+    @apply sm:mx-10 sm:my-0 sm:text-6xl
+	xsm:-mt-2 xsm:mb-5 text-4xl;
   }
 
   .home-subtitle {
-    @apply text-secondary pt-14 text-center font-medium tracking-wide text-lg;
+    @apply text-secondary pt-16 text-center font-medium tracking-wide text-lg;
+  }
+
+  .home-subtitle-main {
+    @apply flex xsm:flex-col xsm:items-center xsm:justify-center
+	  sm:flex-row sm:items-center sm:justify-center;
+  }
+
+  .home-subtitle-main span:nth-child(1) {
+    @apply pr-2;
   }
 
   .home-date {
-    @apply text-primary font-bold sm:pt-[90px] font-cursive-2 text-2xl
-	xsm:pt-[40px];
+    @apply text-primary font-medium font-cursive-2 
+	sm:pt-[50px] sm:text-3xl
+	xsm:pt-[30px] xsm:text-2xl;
   }
+
   .home-img-top {
-    @apply absolute sm:-top-[35%] sm:-left-[35%] z-0
-	xsm:-top-[30%] xsm:-left-[50%];
+    @apply absolute z-0 rotate-[9deg]
+	xsm:-top-[7em] xsm:-left-[10em]
+	sm:-top-[20em] sm:-left-[14em];
   }
 
   .home-img-bottom {
-    @apply absolute sm:-bottom-[40%] sm:-right-[30%] sm:left-[60%] rotate-45
-	xsm:-bottom-[20%] xsm:-right-[30%] xsm:left-[40%];
+    @apply absolute z-0 rotate-45
+	xsm:-bottom-[10em] xsm:-right-[12em]
+	sm:-bottom-[22em] sm:-right-[25em];
   }
 }
