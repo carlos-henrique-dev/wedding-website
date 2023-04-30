@@ -8,5 +8,5 @@ export const environment: EnvironmentVariables = {
   projectId: FIREBASE_PROJECT_ID as string,
   privateKey,
   clientEmail: FIREBASE_CLIENTE_MAIL as string,
-  apiUrl: API_URL as string
+  apiUrl: API_URL as string,
 }

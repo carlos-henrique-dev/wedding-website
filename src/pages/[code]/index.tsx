@@ -1,9 +1,9 @@
 import { IGuest, IGuestList, IStaticProps } from '@/interfaces'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
-import { environment } from '../../config'
+// import { environment } from '../../config'
 
-const { apiUrl } = environment
+// const { apiUrl } = environment
 
 interface Props {
   guests: IGuest
@@ -22,10 +22,15 @@ export default function Home({ guests }: Props) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await fetch(`${apiUrl}/guest-list`)
-  const guest_list = (await response.json()) as IGuestList
-  const paths = guest_list.map(({ code }) => ({ params: { code } }))
+  const { FireStoreAdapter } = await import('@/infra')
+  const database = new FireStoreAdapter()
 
+  const guestsList = await database.getCodes()
+
+  //   const response = await fetch(`${apiUrl}/guest-list`)
+  //   const guest_list = (await response.json()) as IGuestList
+  const paths = guestsList.map(({ code }) => ({ params: { code } }))
+  console.log({ paths: JSON.stringify(paths) })
   return {
     paths,
     fallback: false,
@@ -33,10 +38,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }): IStaticProps<{ guests: IGuest }> => {
-  const code = params?.code
-  const res = await fetch(`${apiUrl}/guests?code=${code}`)
-  const guests = (await res.json()) as IGuest
+  const { FireStoreAdapter } = await import('@/infra')
+  const database = new FireStoreAdapter()
 
+  const code = params?.code
+  const guests = await database.getOne(code as string)
+
+  //   const res = await fetch(`${apiUrl}/guests?code=${code}`)
+  //   const guests = (await res.json()) as IGuest
+  console.log({ guests })
   return {
     props: {
       guests,
