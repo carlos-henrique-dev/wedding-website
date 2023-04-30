@@ -30,7 +30,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
   //   const response = await fetch(`${apiUrl}/guest-list`)
   //   const guest_list = (await response.json()) as IGuestList
   const paths = guestsList.map(({ code }) => ({ params: { code } }))
-  console.log({ paths: JSON.stringify(paths) })
   return {
     paths,
     fallback: false,
@@ -46,7 +45,6 @@ export const getStaticProps: GetStaticProps = async ({ params }): IStaticProps<{
 
   //   const res = await fetch(`${apiUrl}/guests?code=${code}`)
   //   const guests = (await res.json()) as IGuest
-  console.log({ guests })
   return {
     props: {
       guests,
