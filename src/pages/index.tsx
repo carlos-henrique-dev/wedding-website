@@ -1,11 +1,21 @@
 import { RoseImage } from '@/components'
 import Head from 'next/head'
 
+const content = {
+  title: `Henrique e Thaysa\'s Wedding`,
+  subtitle: 'Vamos casar! E você está convidado para testemunhar nossa união. Clique para saber mais.',
+}
+
 export default function Home() {
   return (
     <>
       <Head>
-        <title>Henrique e Thaysa&apos;s Wedding</title>
+        <title>{content.title}</title>
+        <meta name="description" content={content.subtitle} />
+
+        {/* <!-- Open Graph / Facebook --> */}
+        <meta property="og:title" content={content.title} />
+        <meta property="og:description" content={content.subtitle} />
       </Head>
 
       <main className="home">
@@ -20,10 +30,10 @@ export default function Home() {
           </h1>
 
           <p className="home-subtitle">
-            <div className="home-subtitle-main">
+            <span className="home-subtitle-main">
               <span>&quot;Grandes coisas fez o Senhor por nós.</span>
               <span>Por isso estamos alegres.&quot;</span>
-            </div>
+            </span>
 
             <span>Salmos 126:3</span>
           </p>

@@ -1,19 +1,24 @@
-import { IGuest, IGuestList, IStaticProps } from '@/interfaces'
+import { IGuest, IStaticProps } from '@/interfaces'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
-// import { environment } from '../../config'
-
-// const { apiUrl } = environment
+import { useMemo } from 'react'
 
 interface Props {
   guests: IGuest
 }
 
-export default function Home({ guests }: Props) {
+export default function Invite({ guests }: Props) {
+  const invite = useMemo(() => {
+    const isPlural = guests.members.length > 1
+
+    return `Hey, ${guests.family} nós vamos casar! E gostaríamos que venha fazer parte deste maravilhoso momento em nossas vidas!`
+  }, [guests.family, guests.members])
+
   return (
     <>
       <Head>
-        <title>{guests.family}</title>
+        <title>{`Convite ${guests.family}`}</title>
+        <meta name="description" content={invite} />
       </Head>
 
       <main>{guests.family}</main>
@@ -27,8 +32,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   const guestsList = await database.getCodes()
 
-  //   const response = await fetch(`${apiUrl}/guest-list`)
-  //   const guest_list = (await response.json()) as IGuestList
   const paths = guestsList.map(({ code }) => ({ params: { code } }))
   return {
     paths,
@@ -43,8 +46,6 @@ export const getStaticProps: GetStaticProps = async ({ params }): IStaticProps<{
   const code = params?.code
   const guests = await database.getOne(code as string)
 
-  //   const res = await fetch(`${apiUrl}/guests?code=${code}`)
-  //   const guests = (await res.json()) as IGuest
   return {
     props: {
       guests,
