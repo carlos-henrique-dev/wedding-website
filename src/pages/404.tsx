@@ -9,23 +9,19 @@ export default function NotFoundPage() {
         <title>Convite não encontrado</title>
       </Head>
 
-      <main className="not_found">
-        <div className="not_found-img-top">
-          <RoseImage />
-        </div>
+      <section className="not_found">
+        <RoseImage className="rose-top-left" />
 
-        <div className="not_found-img-bottom">
-          <RoseImage />
-        </div>
+        <RoseImage className="rose-middle-right" />
 
-        <h1 className="not_found-title">404</h1>
+        <h1 className="title">404</h1>
 
-        <p className="not_found-message">
+        <p className="message">
           <span>Hmmm...</span>
           <br />
           <span>Parece que este convite foi extraviado</span>
         </p>
-      </main>
+      </section>
     </>
   )
 }

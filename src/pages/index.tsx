@@ -19,29 +19,30 @@ export default function Home() {
       </Head>
 
       <main className="home">
-        <RoseImage className="home-img-top" />
-        <RoseImage className="home-img-bottom" />
+        <RoseImage className="rose-top-left" />
 
-        <div className="home-content">
-          <h1 className="home-title">
+        <section className="content">
+          <h1 className="title">
             <span>Henrique</span>
             <span>e</span>
             <span>Thaysa</span>
           </h1>
 
-          <p className="home-subtitle">
-            <span className="home-subtitle-main">
+          <section className="subtitle">
+            <div className="sentence">
               <span>&quot;Grandes coisas fez o Senhor por nós.</span>
               <span>Por isso estamos alegres.&quot;</span>
-            </span>
+            </div>
 
             <span>Salmos 126:3</span>
-          </p>
+          </section>
 
-          <p className="home-date">
+          <section className="date">
             <span>15 - 07 - 2023</span>
-          </p>
-        </div>
+          </section>
+        </section>
+
+        <RoseImage className="rose-middle-right" />
       </main>
     </>
   )

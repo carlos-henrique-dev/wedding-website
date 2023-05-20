@@ -1,0 +1,23 @@
+@import "./variables.scss";
+@import "./common.scss";
+
+@import "./home.scss";
+@import "./not_found.scss";
+@import "./invite.scss";
+
+html {
+	scroll-behavior: smooth;
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+	width: 0px;
+	background: transparent;
+}

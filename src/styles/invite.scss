@@ -1,0 +1,265 @@
+.invite {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	overflow-x: hidden;
+
+	.paper {
+		filter: url(#roughpaper);
+		height: 100vh;
+		width: 100vw;
+		position: fixed;
+		top: 0;
+		left: 0;
+	}
+
+	[class$="rose_background"] {
+		transform-origin: top left;
+
+		position: absolute;
+		z-index: 0;
+
+		width: 350px;
+		height: 370px;
+	}
+
+	.first_rose_background {
+		transform: rotate(10deg);
+
+		top: -8%;
+		left: -20%;
+	}
+
+	.second_rose_background {
+		transform-origin: center right;
+		transform: rotate(50deg);
+
+		top: 29%;
+		right: -38%;
+	}
+
+	.third_rose_background {
+		transform: rotate(10deg);
+
+		top: 58%;
+		left: -30%;
+	}
+
+	@media (min-width: 1080px) {
+		[class$="rose_background"] {
+			width: 860px;
+			height: 910px;
+		}
+
+		.first_rose_background {
+			top: -10%;
+			left: -10%;
+		}
+
+		.second_rose_background {
+			top: 27%;
+			right: -10%;
+		}
+
+		.third_rose_background {
+			top: 52%;
+			left: -5%;
+		}
+	}
+
+	.cover,
+	.details,
+	.rsvp {
+		@include full-screen;
+		@include content-center;
+
+		z-index: 20;
+	}
+
+	.cover {
+		.title,
+		.subtitle,
+		.date {
+			text-align: center;
+		}
+
+		.title {
+			font-family: "Amsterdam Four";
+			color: $primary;
+			font-weight: medium;
+			letter-spacing: 0.2em;
+			text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+
+			font-size: 3rem;
+			display: flex;
+			flex-direction: column;
+			line-height: 1.4em;
+			margin-top: 60px;
+
+			span:nth-child(2) {
+				font-size: 2rem;
+			}
+		}
+
+		.subtitle {
+			font-family: "EB Garamond";
+			color: $secondary;
+			margin-top: 40px;
+			font-size: 1.1rem;
+
+			display: flex;
+			flex-direction: column;
+
+			box-sizing: border-box;
+			padding: 0 20px;
+
+			.verse {
+				display: flex;
+				flex-direction: column;
+			}
+		}
+
+		.date {
+			font-family: "EB Garamond";
+			font-weight: bold;
+			font-size: 1.5rem;
+			color: $primary;
+
+			margin-top: 20px;
+		}
+
+		@media (min-width: 1080px) {
+			.title {
+				font-size: 7rem;
+				flex-direction: row;
+				font-weight: normal;
+
+				span {
+					margin: 0 10px;
+				}
+
+				span:nth-child(2) {
+					margin-top: 20px;
+					font-size: 3rem;
+				}
+			}
+
+			.subtitle {
+				font-size: 1.7rem;
+				margin-top: 60px;
+
+				.verse {
+					flex-direction: row;
+
+					span {
+						margin: 0 5px;
+					}
+				}
+			}
+
+			.date {
+				font-size: 2rem;
+				margin-top: 40px;
+			}
+		}
+	}
+
+	.details {
+		position: relative;
+
+		box-sizing: border-box;
+		padding: 0 20px;
+
+		.family-name,
+		.invitation,
+		.parents,
+		.date_place {
+			color: $primary;
+			text-align: center;
+			margin: 10px 0;
+		}
+
+		.family-name {
+			font-family: "Amsterdam Four";
+			font-size: 2rem;
+			font-weight: normal;
+		}
+
+		.invitation,
+		.parents {
+			font-family: "EB Garamond";
+			font-size: 1rem;
+		}
+
+		.parents {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: 1fr 1fr;
+			grid-gap: 10px;
+		}
+
+		.date_place {
+			@include content-center;
+			flex-direction: column;
+			font-weight: bold;
+
+			.date-divider {
+				border: 2px solid $primary;
+				height: 0;
+				width: 5rem;
+				margin: 0.3rem 0;
+			}
+
+			.date {
+				@include content-center;
+				flex-direction: row;
+
+				span:not(:nth-child(2)) {
+					min-width: 60px;
+				}
+
+				.day {
+					font-family: "Amsterdam Four";
+					font-weight: bold;
+					font-size: 1.5rem;
+					margin: 0 0.3rem 0 0.5rem;
+					line-height: 3rem;
+				}
+			}
+
+			.time-place {
+				@include content-center;
+				flex-direction: column;
+				margin: 0;
+				font-size: 1.2rem;
+
+				.place {
+					span {
+						margin: 0 5px;
+					}
+				}
+			}
+		}
+	}
+
+	.rsvp {
+		position: relative;
+	}
+}
+
+.background-overlay {
+	position: absolute;
+	z-index: -1;
+	background-color: rgba(184, 184, 184, 0.3);
+	width: 90%;
+	height: 90%;
+
+	@media (min-width: 1080px) {
+		width: 80%;
+		height: 80%;
+	}
+}
+
+.mini_rose {
+	z-index: 20;
+}

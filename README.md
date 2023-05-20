@@ -7,7 +7,7 @@ This project was developed to be used as my wedding online invitations.
 ## Stack
 
 - Next.js
-- Tailwind CSS
+- SCSS
 - Firebase
 
 ## About

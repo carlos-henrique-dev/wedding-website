@@ -1,0 +1,31 @@
+.rose-top-left,
+.rose-middle-right {
+	position: absolute;
+	z-index: 0;
+}
+
+.rose-top-left {
+	top: -40%;
+	left: -15%;
+	transform: rotate(10deg);
+
+	@media (max-width: 428px) {
+		width: 350px;
+		height: 370px;
+		top: -20%;
+		left: -30%;
+	}
+}
+
+.rose-middle-right {
+	bottom: -50%;
+	right: -30%;
+	transform: rotate(45deg);
+
+	@media (max-width: 428px) {
+		width: 350px;
+		height: 370px;
+		bottom: -20%;
+		right: -20%;
+	}
+}

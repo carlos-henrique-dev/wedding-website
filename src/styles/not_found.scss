@@ -1,0 +1,41 @@
+.not_found {
+	@include full-screen;
+	@include content-center;
+
+	position: relative;
+	overflow: hidden;
+
+	.rose-top-left,
+	.rose-middle-right {
+		filter: grayscale(70%);
+	}
+
+	.title,
+	.message {
+		z-index: 10;
+		text-align: center;
+
+		color: $primary;
+	}
+
+	.title {
+		font-family: "Amsterdam Four";
+		font-size: 7rem;
+
+		@media (max-width: 428px) {
+			font-size: 3rem;
+		}
+	}
+
+	.message {
+		font-family: "EB Garamond";
+		font-size: 2rem;
+		font-weight: bold;
+		margin-top: -50px;
+		
+		@media (max-width: 428px) {
+			font-size: 1rem;
+			margin-top: -20px;
+		}
+	}
+}

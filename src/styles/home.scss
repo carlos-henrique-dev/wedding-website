@@ -1,0 +1,102 @@
+.home {
+	@include full-screen;
+	@include content-center;
+
+	position: relative;
+	overflow: hidden;
+
+	.content {
+		z-index: 10;
+
+		.title,
+		.subtitle,
+		.date {
+			text-align: center;
+		}
+
+		.title {
+			font-family: "Amsterdam Four";
+			font-size: 7rem;
+			color: $primary;
+			font-weight: lighter;
+			letter-spacing: 0.1em;
+			text-shadow: 0 0 10px white;
+			margin-top: 50px;
+
+			@media (max-width: 428px) {
+				font-size: 3rem;
+				display: flex;
+				flex-direction: column;
+				line-height: 1.2em;
+
+				span:nth-child(2) {
+					font-size: 2rem;
+				}
+			}
+
+			@media (max-height: 700px) {
+				font-size: 2.5rem;
+			}
+		}
+
+		.subtitle {
+			font-family: "EB Garamond";
+			font-size: 1.6rem;
+			color: $secondary;
+			font-weight: lighter;
+
+			display: flex;
+			flex-direction: column;
+
+			box-sizing: border-box;
+			padding: 0 20px;
+
+			@media (max-width: 428px) {
+				margin-top: 50px;
+				font-size: 1rem;
+
+				.sentence {
+					display: flex;
+					flex-direction: column;
+				}
+			}
+		}
+
+		.date {
+			font-family: "EB Garamond";
+			font-weight: bold;
+			font-size: 1.5rem;
+			color: $primary;
+
+			margin-top: 50px;
+
+			@media (max-width: 428px) {
+				font-size: 1rem;
+			}
+		}
+	}
+
+	.rose-top-left {
+		@media (max-height: 850px) {
+			left: -30%;
+			top: -10%;
+		}
+
+		@media (max-height: 700px) {
+			left: -30%;
+			top: -15%;
+		}
+	}
+
+	.rose-middle-right {
+		@media (max-height: 850px) {
+			right: -30%;
+			bottom: -15%;
+		}
+
+		@media (max-height: 750px) {
+			right: -40%;
+			bottom: -25%;
+		}
+	}
+}
