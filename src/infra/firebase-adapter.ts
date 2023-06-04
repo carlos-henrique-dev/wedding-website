@@ -35,4 +35,24 @@ export class FireStoreAdapter implements IDatabaseClient {
 
     return data.data() as IGuest
   }
+
+  deleteInvite = async (code: string) => {
+    const result = await this.fireStore.collection('guests').where('code', '==', code).get()
+
+    const data = result.docs[0].data() as IGuest
+
+    await result.docs[0].ref.delete()
+
+    return data
+  }
+
+  sendInvite = async (code: string) => {
+    const result = await this.fireStore.collection('guests').where('code', '==', code).get()
+
+    const data = result.docs[0].data() as IGuest
+
+    await result.docs[0].ref.update({ inviteSent: true })
+
+    return data
+  }
 }

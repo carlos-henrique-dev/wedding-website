@@ -6,6 +6,7 @@ import { IGuest } from '@/interfaces'
 import { CreateInviteModal, DetailsModal, Header, InviteCard } from '../../modules/admin/components'
 import { FILTERS_OPTIONS } from '../../modules/admin/constants'
 import { Filters } from '../../modules/admin/interfaces'
+import { get } from 'http'
 
 interface IState {
   invites: Array<IGuest>
@@ -42,9 +43,14 @@ export default function AdminLoginPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.showNewInviteModal])
 
-  function copyToClipboard(text: string) {
+  async function copyToClipboard(text: string) {
     const link = `${window.location.origin}/${text}`
     window.navigator.clipboard.writeText(link)
+
+    await fetch('/api/send-invite', {
+      method: 'POST',
+      body: JSON.stringify({ code: text }),
+    }).catch((err) => console.log({ err }))
 
     toast({
       title: 'Link Copiado.',
@@ -53,6 +59,8 @@ export default function AdminLoginPage() {
       duration: 9000,
       isClosable: true,
     })
+
+    getInvites()
   }
 
   function openDetails(invite: IGuest) {
@@ -61,6 +69,23 @@ export default function AdminLoginPage() {
 
   function onNewInvite() {
     setState({ ...state, showDetails: false, selectedInvite: undefined, showNewInviteModal: true })
+  }
+
+  async function onDeleteInvite(code: string) {
+    await fetch('/api/delete-invite', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    }).catch((err) => console.log({ err }))
+
+    toast({
+      title: 'Convite excluído.',
+      description: 'Convite excluído com sucesso!',
+      status: 'success',
+      duration: 9000,
+      isClosable: true,
+    })
+
+    getInvites()
   }
 
   function setFilters(filters: Array<string>) {
@@ -95,7 +120,7 @@ export default function AdminLoginPage() {
     const filteredInvites = filterInvites()
 
     return filteredInvites.map((invite, index) => {
-      return <InviteCard key={index} invite={invite} copyToClipboard={copyToClipboard} openDetails={openDetails} />
+      return <InviteCard key={index} invite={invite} copyToClipboard={copyToClipboard} openDetails={openDetails} onDeleteInvite={onDeleteInvite} />
     })
   }
 

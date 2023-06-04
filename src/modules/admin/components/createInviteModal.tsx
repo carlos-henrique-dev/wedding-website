@@ -27,7 +27,7 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
   const ran = useRef(false)
 
   useEffect(() => {
-    if (!ran.current) {
+    if (ran.current) {
       ran.current = true
       return
     }
