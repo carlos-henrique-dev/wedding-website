@@ -19,4 +19,20 @@ export class FireStoreAdapter implements IDatabaseClient {
 
     return data
   }
+
+  getList = async () => {
+    const result = await this.fireStore.collection('guests').get()
+
+    const data = result.docs.map((guest) => guest.data()) as IGuestList
+
+    return data
+  }
+
+  createInvite = async (guest: IGuest) => {
+    const result = await this.fireStore.collection('guests').add(guest)
+
+    const data = await result.get()
+
+    return data.data() as IGuest
+  }
 }

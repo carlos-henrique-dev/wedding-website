@@ -10,21 +10,29 @@
 		"ngrok": "ngrok http 3000"
 	},
 	"dependencies": {
+		"@chakra-ui/icons": "^2.0.19",
+		"@chakra-ui/react": "^2.7.0",
+		"@emotion/react": "^11.11.0",
+		"@emotion/styled": "^11.11.0",
+		"@next-auth/firebase-adapter": "^0.0.2-canary.207",
 		"firebase-admin": "^11.7.0",
+		"framer-motion": "^10.12.16",
 		"next": "13.3.1",
+		"next-auth": "^4.22.1",
 		"react": "18.2.0",
-		"react-dom": "18.2.0"
+		"react-dom": "18.2.0",
+		"react-hook-form": "^7.44.3"
 	},
 	"devDependencies": {
-		"typescript": "5.0.4",
-		"sass": "^1.62.1",
-		"ngrok": "^4.3.3",
 		"@types/node": "18.16.3",
 		"@types/react": "18.2.0",
 		"@types/react-dom": "18.2.1",
+		"autoprefixer": "10.4.14",
 		"eslint": "8.39.0",
 		"eslint-config-next": "13.3.1",
-		"autoprefixer": "10.4.14",
-		"postcss": "8.4.23"
+		"ngrok": "^4.3.3",
+		"postcss": "8.4.23",
+		"sass": "^1.62.1",
+		"typescript": "5.0.4"
 	}
 }
