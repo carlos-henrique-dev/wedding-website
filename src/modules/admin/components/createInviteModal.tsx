@@ -49,7 +49,6 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
       .replace(/\s/g, '-')
       .toLowerCase()
 
-    console.log({ values })
     const data: IGuest = {
       code,
       family: values.family,
@@ -59,6 +58,7 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
       })),
       confirmed: false,
       inviteSent: false,
+      openedTimes: 0,
     }
 
     await fetch('/api/new-invite', {

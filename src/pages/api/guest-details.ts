@@ -8,7 +8,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   const guest = await database.getOne(req.query.code as string)
 
-  console.log(guest)
-
   res.status(200).json(guest)
 }

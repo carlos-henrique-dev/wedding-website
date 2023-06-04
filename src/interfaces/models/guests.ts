@@ -9,6 +9,7 @@ export interface IGuest {
   confirmed: boolean
   inviteSent: boolean
   members: IMember[]
+  openedTimes: number
 }
 
 export type IGuestList = Array<Pick<IGuest, 'code'>>
