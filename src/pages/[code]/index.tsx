@@ -1,21 +1,10 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { IGuest, IStaticProps } from '@/interfaces'
+import { IGuest, IServerSideReturn } from '@/interfaces'
 import { RoseImage } from '@/components'
 import Image from 'next/image'
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const { FireStoreAdapter } = await import('@/infra')
-  const database = new FireStoreAdapter()
-
-  const guestsList = await database.getCodes()
-
-  const paths = guestsList.map(({ code }) => ({ params: { code } }))
-
-  return { paths, fallback: false }
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }): IStaticProps<{ guests: IGuest }> => {
+export const getServerSideProps: GetServerSideProps = async ({ params }): IServerSideReturn<{ guests: IGuest }> => {
   const { FireStoreAdapter } = await import('@/infra')
   const database = new FireStoreAdapter()
 

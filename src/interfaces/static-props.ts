@@ -1,3 +1,3 @@
-export type IStaticProps<T extends Record<string, unknown>> = Promise<{
+export type IServerSideReturn<T extends Record<string, unknown>> = Promise<{
   props: T
 }>
