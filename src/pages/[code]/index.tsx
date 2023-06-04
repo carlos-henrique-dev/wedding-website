@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { IGuest, IServerSideReturn } from '@/interfaces'
 import { RoseImage } from '@/components'
 import Image from 'next/image'
+import { useState } from 'react'
 
 export const getServerSideProps: GetServerSideProps = async ({ params }): IServerSideReturn<{ guests: IGuest }> => {
   const { FireStoreAdapter } = await import('@/infra')
@@ -19,6 +20,24 @@ interface Props {
 }
 
 export default function Invite({ guests }: Props) {
+  const [confirmed, setConfirmed] = useState<string[]>([])
+
+  const handleConfirmed = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked, name } = event.target
+
+    if (!checked) {
+      setConfirmed(confirmed.filter((item) => item !== name))
+      return
+    }
+
+    if (confirmed.includes(name)) {
+      setConfirmed(confirmed.filter((item) => item === name))
+      return
+    }
+
+    setConfirmed([...confirmed, name])
+  }
+
   return (
     <>
       <Head>
@@ -61,7 +80,13 @@ export default function Invite({ guests }: Props) {
             <span>15 - 07 - 2023</span>
           </p>
 
-          <a href="#details">\/</a>
+          <a href="#details" className="arrow_down">
+            <div className="arrow_down_container">
+              <div className="arrow_down_chevron"></div>
+              <div className="arrow_down_chevron"></div>
+              <div className="arrow_down_chevron"></div>
+            </div>
+          </a>
         </section>
 
         <RoseImage className="second_rose_background" />
@@ -111,7 +136,13 @@ export default function Invite({ guests }: Props) {
             </span>
           </div>
 
-          <a href="#confirmation">\/</a>
+          <a href="#confirmation" className="arrow_down">
+            <div className="arrow_down_container">
+              <div className="arrow_down_chevron"></div>
+              <div className="arrow_down_chevron"></div>
+              <div className="arrow_down_chevron"></div>
+            </div>
+          </a>
         </section>
 
         <RoseImage className="third_rose_background" />
@@ -121,44 +152,35 @@ export default function Invite({ guests }: Props) {
 
           <Image src="/images/mini_rose.png" alt="mini_rose" width={60} height={60} className="mini_rose" />
 
-          <span className="info-part-1">
-            PEDIMOS QUE CONFIRMEM SUA PRESENÇA ATÉ O DIA <b>20-05-2023</b>
+          <span className="information">
+            PEDIMOS QUE CONFIRMEM SUA
+            <br /> PRESENÇA ATÉ O DIA <b>20-05-2023</b>
           </span>
 
-          <p className="parents">
-            <span>Luciana Fernandes</span>
-            <span>Marluci Tobias</span>
-            <span>João Carlos</span>
-            <span>Elio Joaquim</span>
-          </p>
+          <span className="information">Selecione na lista abaixo as pessoas que estarão presentes.</span>
 
-          <span className="info-part-2">
-            CONVIDAMOS VOCÊS PARA A CELEBRAÇÃO DO NOSSO
-            <br />
-            CASAMENTO A SER REALIZADO NO DIA
-          </span>
+          <div className="guest-list">
+            {guests.members.map((member, index) => (
+              <div className="guest" key={index}>
+                <input className="checkbox" type="checkbox" id={`guest-${index}`} name={`guest-${member.name}`} onChange={handleConfirmed} />
 
-          <div className="invite-content__date">
-            <span className="date">SÁBADO</span>
+                <label htmlFor={`guest-${index}`}>
+                  <span className="name">{member.name}</span>
+                </label>
+              </div>
+            ))}
+          </div>
 
-            <div className="date-divider" />
+          <p className="confirmed-count">{`${confirmed.length} de ${guests.members.length} convidados confirmados`}</p>
 
-            <span className="date">
-              <span>JULHO</span>
-              <span className="day">15</span>
-              <span className="year">2023</span>
-            </span>
+          <div className="actions">
+            <button className="confirm-button" type="button">
+              Confirmar Presença
+            </button>
 
-            <div className="date-divider" />
-
-            <span className="time-place">
-              <span className="time">ÀS 18h</span>
-              <span className="place">
-                PALLADIUM
-                <br />
-                BUFFET
-              </span>
-            </span>
+            <button className="cancel-button" type="button">
+              Não poderemos comparecer
+            </button>
           </div>
         </section>
       </main>

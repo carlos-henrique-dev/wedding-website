@@ -88,7 +88,6 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
         lg: 'xl',
         xl: 'xl',
       }}
-      isCentered
     >
       <ModalOverlay />
 

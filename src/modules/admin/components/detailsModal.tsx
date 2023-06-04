@@ -22,7 +22,6 @@ export default function DetailsModal({ invite, isOpen, onClose }: IDetailsModalP
         lg: 'xl',
         xl: 'xl',
       }}
-      isCentered
     >
       <ModalOverlay />
 
