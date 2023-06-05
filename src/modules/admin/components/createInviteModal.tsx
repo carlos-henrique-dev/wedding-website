@@ -1,8 +1,27 @@
 import { IGuest } from '@/interfaces'
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, FormControl, FormLabel, Input, FormErrorMessage, HStack, useToast } from '@chakra-ui/react'
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+  HStack,
+  useToast,
+  Radio,
+  RadioGroup,
+  Stack,
+  VStack,
+} from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 
-import { useFieldArray, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 
 interface IDetailsModalProps {
   isOpen: boolean
@@ -19,8 +38,13 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
     reset,
   } = useForm<{
     family: string
+    side: string
     members: Array<{ value: string }>
-  }>()
+  }>({
+    defaultValues: {
+      side: 'bride',
+    },
+  })
 
   const { fields, append, remove } = useFieldArray({ control, name: 'members' })
 
@@ -38,7 +62,7 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
 
   const handleClose = () => {
     reset()
-    fields.map((field: any, index: number) => remove(index))
+    fields.map((_, index: number) => remove(index))
     onClose()
   }
 
@@ -52,6 +76,7 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
     const data: IGuest = {
       code,
       family: values.family,
+      side: values.side,
       members: values.members.map((member: any) => ({
         name: member.value,
         is_coming: false,
@@ -97,43 +122,68 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
         <ModalCloseButton />
 
         <ModalBody>
-          <FormControl isInvalid={!!errors.family}>
-            <FormLabel htmlFor="family">Nome da família</FormLabel>
-            <Input
-              id="family"
-              placeholder="John and Jane"
-              {...register('family', {
-                required: 'Nome da família é obrigatório',
-                minLength: { value: 3, message: 'Pelo menos 3 letras' },
-              })}
-            />
-            <FormErrorMessage>{String(errors?.family?.message)}</FormErrorMessage>
-          </FormControl>
+          <VStack spacing={5} align="start">
+            <FormControl isInvalid={!!errors.side}>
+              <FormLabel htmlFor="family">Convite para qual lado?</FormLabel>
+              <Controller
+                name="side"
+                control={control}
+                render={({ field }) => (
+                  <RadioGroup {...field} colorScheme="green">
+                    <Stack direction="row">
+                      <Radio value="bride">Noiva</Radio>
+                      <Radio value="groom">Noivo</Radio>
+                    </Stack>
+                  </RadioGroup>
+                )}
+                rules={{
+                  required: { value: true, message: 'This is required.' },
+                }}
+              />
 
-          {fields.map((field: any, index: any) => (
-            <HStack key={field.id} align="end" my={1}>
-              <FormControl isInvalid={!!errors?.members?.[index]}>
-                <FormLabel htmlFor="members">Membro</FormLabel>
-                <Input
-                  id="members"
-                  placeholder="John"
-                  {...register(`members.${index}.value`, {
-                    required: 'Campo obrigatório',
-                    minLength: { value: 3, message: 'Pelo menos 3 letras' },
-                  })}
-                />
-                <FormErrorMessage>{String(errors?.members?.[index]?.value?.message)}</FormErrorMessage>
-              </FormControl>
+              <FormErrorMessage>{String(errors?.side?.message)}</FormErrorMessage>
+            </FormControl>
 
-              <Button colorScheme="red" onClick={() => remove(index)}>
-                Remover
-              </Button>
-            </HStack>
-          ))}
+            <FormControl isInvalid={!!errors.family}>
+              <FormLabel htmlFor="family">Nome da família</FormLabel>
+              <Input
+                id="family"
+                placeholder="John and Jane"
+                {...register('family', {
+                  required: 'Nome da família é obrigatório',
+                  minLength: { value: 3, message: 'Pelo menos 3 letras' },
+                })}
+              />
+              <FormErrorMessage>{String(errors?.family?.message)}</FormErrorMessage>
+            </FormControl>
 
-          <Button mt={5} colorScheme="green" onClick={() => append({ value: '' })}>
-            Adicionar membro
-          </Button>
+            <VStack spacing={2} align="start" w="full">
+              {fields.map((field: any, index: any) => (
+                <HStack key={field.id} align="end" my={1} w="full">
+                  <FormControl isInvalid={!!errors?.members?.[index]}>
+                    <FormLabel htmlFor="members">Membro</FormLabel>
+                    <Input
+                      id="members"
+                      placeholder="John"
+                      {...register(`members.${index}.value`, {
+                        required: 'Campo obrigatório',
+                        minLength: { value: 3, message: 'Pelo menos 3 letras' },
+                      })}
+                    />
+                    <FormErrorMessage>{String(errors?.members?.[index]?.value?.message)}</FormErrorMessage>
+                  </FormControl>
+
+                  <Button colorScheme="red" onClick={() => remove(index)}>
+                    Remover
+                  </Button>
+                </HStack>
+              ))}
+            </VStack>
+
+            <Button colorScheme="green" onClick={() => append({ value: '' })}>
+              Adicionar membro
+            </Button>
+          </VStack>
         </ModalBody>
 
         <ModalFooter>

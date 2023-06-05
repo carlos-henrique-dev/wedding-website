@@ -11,6 +11,7 @@ export interface IGuest {
   inviteSent: boolean
   members: IMember[]
   openedTimes: number
+  side: 'bride' | 'groom'
 }
 
 export type IGuestList = Array<Pick<IGuest, 'code'>>

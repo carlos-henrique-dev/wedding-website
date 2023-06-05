@@ -3,7 +3,7 @@ import Head from 'next/head'
 
 import { Box, ChakraProvider, CircularProgress, Container, Grid, StackDivider, VStack, Divider, useToast, HStack, Text, Tag } from '@chakra-ui/react'
 import { IGuest } from '@/interfaces'
-import { CreateInviteModal, DetailsModal, Header, InviteCard } from '../../modules/admin/components'
+import { CreateInviteModal, DetailsModal, Header, InviteCard, ReportModal } from '../../modules/admin/components'
 import { FILTERS_OPTIONS } from '../../modules/admin/constants'
 import { Filters } from '../../modules/admin/interfaces'
 import { get } from 'http'
@@ -14,8 +14,10 @@ interface IState {
   loading: boolean
   showDetails: boolean
   showNewInviteModal: boolean
+  showReportModal: boolean
   selectedInvite?: IGuest
   filters: Filters
+  search: string
 }
 
 const INITIAL_STATE: IState = {
@@ -24,8 +26,10 @@ const INITIAL_STATE: IState = {
   loading: true,
   showDetails: false,
   showNewInviteModal: false,
+  showReportModal: false,
   selectedInvite: undefined,
   filters: [FILTERS_OPTIONS[0]],
+  search: '',
 }
 
 export default function AdminLoginPage() {
@@ -71,6 +75,10 @@ export default function AdminLoginPage() {
     setState({ ...state, showDetails: false, selectedInvite: undefined, showNewInviteModal: true })
   }
 
+  function toggleReportsModal() {
+    setState({ ...state, showReportModal: !state.showReportModal })
+  }
+
   async function onDeleteInvite(code: string) {
     await fetch('/api/delete-invite', {
       method: 'POST',
@@ -101,6 +109,8 @@ export default function AdminLoginPage() {
       notSent: (invite: IGuest) => !invite.inviteSent,
       confirmed: (invite: IGuest) => invite.confirmed,
       notConfirmed: (invite: IGuest) => !invite.confirmed,
+      bride: (invite: IGuest) => invite.side === 'bride',
+      groom: (invite: IGuest) => invite.side === 'groom',
     }
 
     const filtersValues = state.filters.map((filter) => filter.value)
@@ -116,8 +126,23 @@ export default function AdminLoginPage() {
     return filtersValues.includes('all') ? state.invites : filterItems()
   }
 
+  function searchInvites(search: string) {
+    setState({ ...state, search })
+  }
+
   function renderInvites() {
-    const filteredInvites = filterInvites()
+    let filteredInvites = filterInvites()
+
+    if (state.search.length > 0) {
+      const search = state.search.toLowerCase()
+
+      filteredInvites = filteredInvites.filter((invite) => {
+        const familyMembers = invite.members.map((member) => member.name.toLowerCase())
+        const inviteName = invite.family.toLowerCase()
+
+        return [...familyMembers, inviteName].some((name) => name.includes(search))
+      })
+    }
 
     return filteredInvites.map((invite, index) => {
       return <InviteCard key={index} invite={invite} copyToClipboard={copyToClipboard} openDetails={openDetails} onDeleteInvite={onDeleteInvite} />
@@ -132,7 +157,7 @@ export default function AdminLoginPage() {
         </Head>
 
         <Container centerContent minHeight="100vh" minWidth="full">
-          <Header onNewInviteClick={onNewInvite} onFilterClick={setFilters} />
+          <Header onNewInviteClick={onNewInvite} onShowReportsClick={toggleReportsModal} onFilterClick={setFilters} onSearchClick={searchInvites} />
 
           <Divider color="gray.200" />
 
@@ -190,6 +215,7 @@ export default function AdminLoginPage() {
 
         <DetailsModal isOpen={state.showDetails} onClose={() => setState({ ...state, showDetails: false })} invite={state.selectedInvite} />
         {state.showNewInviteModal && <CreateInviteModal isOpen={state.showNewInviteModal} onClose={() => setState({ ...state, showNewInviteModal: false })} />}
+        {state.showReportModal && <ReportModal invites={state.invites} isOpen={state.showReportModal} onClose={toggleReportsModal} />}
       </main>
     </ChakraProvider>
   )

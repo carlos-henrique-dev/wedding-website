@@ -1,15 +1,18 @@
-import { ChevronDownIcon } from '@chakra-ui/icons'
-import { HStack, Button, Menu, MenuButton, MenuList, MenuItem, Divider, Text, CheckboxGroup, Checkbox } from '@chakra-ui/react'
+import { ChevronDownIcon, SearchIcon, ViewIcon } from '@chakra-ui/icons'
+import { HStack, Button, Menu, MenuButton, MenuList, MenuItem, Divider, Text, CheckboxGroup, Checkbox, Input } from '@chakra-ui/react'
 import { FILTERS_OPTIONS } from '../constants'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 interface IHeaderProps {
   onNewInviteClick: () => void
+  onShowReportsClick: () => void
   onFilterClick: (filter: Array<string>) => void
+  onSearchClick: (search: string) => void
 }
 
-export default function Header({ onNewInviteClick, onFilterClick }: IHeaderProps) {
+export default function Header({ onNewInviteClick, onShowReportsClick, onFilterClick, onSearchClick }: IHeaderProps) {
   const [selectedValues, setSelectedValues] = useState<Array<string>>(['all'])
+  const [searchBarState, setSearchBarState] = useState<{ show: boolean; search: string }>({ show: false, search: '' })
 
   const handleCheckboxChange = (newValues: Array<string>) => {
     const newValuesWithoutAll = newValues.filter((value) => value !== 'all')
@@ -28,6 +31,21 @@ export default function Header({ onNewInviteClick, onFilterClick }: IHeaderProps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValues])
 
+  const toggleSearchBar = () => {
+    setSearchBarState({ show: !searchBarState.show, search: '' })
+    onSearchClick('')
+  }
+
+  const searchInvite = (event: ChangeEvent<HTMLInputElement>) => {
+    const search = event.target.value.trim()
+
+    setSearchBarState({ ...searchBarState, search })
+  }
+
+  const handleSearch = () => {
+    onSearchClick(searchBarState.search)
+  }
+
   return (
     <>
       <Text
@@ -43,7 +61,7 @@ export default function Header({ onNewInviteClick, onFilterClick }: IHeaderProps
         Lista de convidados
       </Text>
 
-      <HStack w="full" justify="center" py={4}>
+      <HStack w="full" justify="center" py={4} spacing={5}>
         <Button
           size={{
             base: 'sm',
@@ -91,7 +109,34 @@ export default function Header({ onNewInviteClick, onFilterClick }: IHeaderProps
             </CheckboxGroup>
           </MenuList>
         </Menu>
+
+        <SearchIcon w={6} h={6} color="blue.600" onClick={toggleSearchBar} cursor="pointer" />
+
+        <ViewIcon w={6} h={6} color="green.600" onClick={onShowReportsClick} cursor="pointer" />
       </HStack>
+
+      {searchBarState.show && (
+        <HStack w="full" spacing={1} my={2}>
+          <Input
+            placeholder="Pesquisar pelo nome da família ou membros"
+            value={searchBarState.search}
+            onChange={searchInvite}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleSearch()
+              }
+            }}
+          />
+
+          <Button size="sm" onClick={handleSearch} disabled={searchBarState.search.trim() === ''} colorScheme="green">
+            Buscar
+          </Button>
+
+          <Button size="sm" onClick={toggleSearchBar} colorScheme="red">
+            Cancelar
+          </Button>
+        </HStack>
+      )}
     </>
   )
 }
