@@ -1,18 +1,46 @@
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next'
 import Head from 'next/head'
 import { IGuest, IServerSideReturn } from '@/interfaces'
 import { RoseImage } from '@/components'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
-export const getServerSideProps: GetServerSideProps = async ({ params }): IServerSideReturn<{ guests: IGuest }> => {
+// export const getServerSideProps: GetServerSideProps = async ({ params }): IServerSideReturn<{ guests: IGuest }> => {
+//   const { FireStoreAdapter } = await import('@/infra')
+//   const database = new FireStoreAdapter()
+
+//   const code = params?.code
+//   const guests = await database.getOne(code as string)
+
+//   return { props: { guests } }
+// }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const { FireStoreAdapter } = await import('@/infra')
+  const database = new FireStoreAdapter()
+
+  const guestsList = await database.getCodes()
+
+  const paths = guestsList.map(({ code }) => ({ params: { code } }))
+  return {
+    paths,
+    fallback: 'blocking',
+  }
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }): Promise<GetStaticPropsResult<{ guests: IGuest }>> => {
   const { FireStoreAdapter } = await import('@/infra')
   const database = new FireStoreAdapter()
 
   const code = params?.code
   const guests = await database.getOne(code as string)
 
-  return { props: { guests } }
+  return {
+    props: {
+      guests,
+    },
+    revalidate: 60 * 60, // 1 hour
+  }
 }
 
 interface Props {
