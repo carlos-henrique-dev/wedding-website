@@ -1,4 +1,4 @@
-import { IDatabaseClient, IGuest, IGuestList } from '@/interfaces'
+import { IDatabaseClient, IGuest, IGuestList, IMember } from '@/interfaces'
 import { fireStoreInstance } from '@/config'
 
 export class FireStoreAdapter implements IDatabaseClient {
@@ -52,6 +52,57 @@ export class FireStoreAdapter implements IDatabaseClient {
     const data = result.docs[0].data() as IGuest
 
     await result.docs[0].ref.update({ inviteSent: true })
+
+    return data
+  }
+
+  markAsSeen = async (code: string) => {
+    const result = await this.fireStore.collection('guests').where('code', '==', code).get()
+
+    const data = result.docs[0].data() as IGuest
+
+    const openedTimes = (data.openedTimes || 0) + 1
+
+    await result.docs[0].ref.update({ openedTimes })
+
+    return data
+  }
+
+  confirmPresence = async ({ code, members }: { code: string; members: Array<string> }) => {
+    const result = await this.fireStore.collection('guests').where('code', '==', code).get()
+
+    const data = result.docs[0].data() as IGuest
+
+    const guest = {
+      ...data,
+      confirmed: true,
+      members: data.members.map((member) => {
+        const memberIndex = members.findIndex((m) => m === member.name)
+        if (memberIndex === -1) return member
+
+        return {
+          ...member,
+          is_coming: true,
+        }
+      }),
+    }
+
+    await result.docs[0].ref.update(guest)
+
+    return data
+  }
+
+  confirmAbsence = async (code: string) => {
+    const result = await this.fireStore.collection('guests').where('code', '==', code).get()
+
+    const data = result.docs[0].data() as IGuest
+
+    const guest = {
+      ...data,
+      absent: true,
+    }
+
+    await result.docs[0].ref.update(guest)
 
     return data
   }

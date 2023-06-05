@@ -57,6 +57,7 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
         is_coming: false,
       })),
       confirmed: false,
+      absent: false,
       inviteSent: false,
       openedTimes: 0,
     }

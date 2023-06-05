@@ -7,6 +7,7 @@ export interface IGuest {
   family: string
   code: string
   confirmed: boolean
+  absent: boolean
   inviteSent: boolean
   members: IMember[]
   openedTimes: number

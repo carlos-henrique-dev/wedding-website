@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { IGuest, IServerSideReturn } from '@/interfaces'
 import { RoseImage } from '@/components'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const getServerSideProps: GetServerSideProps = async ({ params }): IServerSideReturn<{ guests: IGuest }> => {
   const { FireStoreAdapter } = await import('@/infra')
@@ -21,8 +21,44 @@ interface Props {
 
 export default function Invite({ guests }: Props) {
   const [confirmed, setConfirmed] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
 
-  const handleConfirmed = (event: React.ChangeEvent<HTMLInputElement>) => {
+  async function markAsSeen() {
+    await fetch('/api/mark-as-seen', {
+      method: 'POST',
+      body: JSON.stringify({ code: guests.code }),
+    })
+  }
+
+  async function confirmPresence() {
+    setLoading(true)
+
+    const members = confirmed.map((name) => name.split('guest-')[1])
+    await fetch('/api/confirm-presence', {
+      method: 'POST',
+      body: JSON.stringify({ code: guests.code, members }),
+    })
+
+    setLoading(false)
+  }
+
+  async function confirmAbsence() {
+    setLoading(true)
+
+    await fetch('/api/confirm-absence', {
+      method: 'POST',
+      body: JSON.stringify({ code: guests.code }),
+    })
+
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    markAsSeen()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleCheckConfirmed = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, name } = event.target
 
     if (!checked) {
@@ -36,6 +72,42 @@ export default function Invite({ guests }: Props) {
     }
 
     setConfirmed([...confirmed, name])
+  }
+
+  const isConfirmed = (name: string) => guests.members.some((member) => member.name === name && member.is_coming)
+
+  const confirmedCount = () => {
+    let count = 0
+    const mountMessage = (total: number) => `${total} de ${guests.members.length} convidados confirmados`
+
+    if (guests.absent) return mountMessage(count)
+
+    if (guests.confirmed) {
+      count = guests.members.filter((member) => member.is_coming).length
+      return mountMessage(count)
+    }
+
+    count = confirmed.length
+
+    return mountMessage(count)
+  }
+
+  const confirmPresenceButtonLabel = () => {
+    if (loading) return 'Confirmando...'
+
+    if (guests.absent) return 'Ausência confirmada'
+
+    if (guests.confirmed) return 'Presença confirmada'
+
+    return 'Confirmar presença'
+  }
+
+  const confirmAbsenceButtonLabel = () => {
+    if (loading) return 'Confirmando...'
+
+    if (guests.absent) return 'Você confirmou ausência'
+
+    return 'Confirmar ausência'
   }
 
   return (
@@ -136,7 +208,7 @@ export default function Invite({ guests }: Props) {
             </span>
           </div>
 
-          <a href="#confirmation" className="arrow_down">
+          <a href="#rsvp" className="arrow_down">
             <div className="arrow_down_container">
               <div className="arrow_down_chevron"></div>
               <div className="arrow_down_chevron"></div>
@@ -162,7 +234,15 @@ export default function Invite({ guests }: Props) {
           <div className="guest-list">
             {guests.members.map((member, index) => (
               <div className="guest" key={index}>
-                <input className="checkbox" type="checkbox" id={`guest-${index}`} name={`guest-${member.name}`} onChange={handleConfirmed} />
+                <input
+                  disabled={guests.confirmed || guests.absent}
+                  defaultChecked={isConfirmed(member.name)}
+                  className="checkbox"
+                  type="checkbox"
+                  id={`guest-${index}`}
+                  name={`guest-${member.name}`}
+                  onChange={handleCheckConfirmed}
+                />
 
                 <label htmlFor={`guest-${index}`}>
                   <span className="name">{member.name}</span>
@@ -171,16 +251,20 @@ export default function Invite({ guests }: Props) {
             ))}
           </div>
 
-          <p className="confirmed-count">{`${confirmed.length} de ${guests.members.length} convidados confirmados`}</p>
+          <p className="confirmed-count">{confirmedCount()}</p>
 
           <div className="actions">
-            <button className="confirm-button" type="button">
-              Confirmar Presença
-            </button>
+            {guests.absent ? null : (
+              <button className="confirm-button" type="button" disabled={guests.absent || guests.confirmed || confirmed.length === 0} onClick={() => confirmPresence()}>
+                {confirmPresenceButtonLabel()}
+              </button>
+            )}
 
-            <button className="cancel-button" type="button">
-              Não poderemos comparecer
-            </button>
+            {guests.confirmed ? null : (
+              <button className="cancel-button" type="button" disabled={guests.absent} onClick={() => confirmAbsence()}>
+                {confirmAbsenceButtonLabel()}
+              </button>
+            )}
           </div>
         </section>
       </main>

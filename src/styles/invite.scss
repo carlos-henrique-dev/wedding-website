@@ -289,6 +289,12 @@
 						border: 1px solid #41b883;
 						background-color: #41b883;
 					}
+
+					&:disabled {
+						border: 1px solid gray;
+						background-color: gray;
+						cursor: not-allowed;
+					}
 				}
 
 				.name {
@@ -310,6 +316,10 @@
 				background-color: $primary;
 				color: white;
 				padding: 5px 10px;
+
+				&:disabled {
+					background-color: gray;
+				}
 			}
 
 			.cancel-button {
