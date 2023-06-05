@@ -43,19 +43,19 @@
 	.third_rose_background {
 		transform: rotate(10deg);
 
-		top: 58%;
-		left: -30%;
+		top: 59%;
+		left: -35%;
 	}
 
 	@media (min-width: 1080px) {
 		[class$="rose_background"] {
-			width: 860px;
-			height: 910px;
+			width: 660px;
+			height: 710px;
 		}
 
 		.first_rose_background {
-			top: -10%;
-			left: -10%;
+			top: -15%;
+			left: -15%;
 		}
 
 		.second_rose_background {
@@ -65,7 +65,14 @@
 
 		.third_rose_background {
 			top: 52%;
-			left: -5%;
+			left: -10%;
+		}
+	}
+
+	@media (min-width: 1440px) {
+		[class$="rose_background"] {
+			width: 860px;
+			height: 910px;
 		}
 	}
 
@@ -88,18 +95,21 @@
 		.title {
 			font-family: "Amsterdam Four";
 			color: $primary;
-			font-weight: medium;
 			letter-spacing: 0.2em;
 			text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
 
-			font-size: 3rem;
+			font-size: 2.5rem;
 			display: flex;
 			flex-direction: column;
 			line-height: 1.4em;
 			margin-top: 60px;
 
 			span:nth-child(2) {
-				font-size: 2rem;
+				font-size: 1.5rem;
+
+				@media (max-width: 1080px) {
+					font-size: 2rem;
+				}
 			}
 		}
 
@@ -132,7 +142,7 @@
 
 		@media (min-width: 1080px) {
 			.title {
-				font-size: 7rem;
+				font-size: 5rem;
 				flex-direction: row;
 				font-weight: normal;
 
@@ -185,12 +195,28 @@
 			font-family: "Amsterdam Four";
 			font-size: 2rem;
 			font-weight: normal;
+
+			@media (min-width: 1080px) {
+				font-size: 2.2rem;
+			}
+
+			@media (min-width: 1440px) {
+				font-size: 3rem;
+			}
 		}
 
 		.invitation,
 		.parents {
 			font-family: "EB Garamond";
 			font-size: 1rem;
+
+			@media (min-width: 1080px) {
+				font-size: 1.1rem;
+			}
+
+			@media (min-width: 1440px) {
+				font-size: 1.4rem;
+			}
 		}
 
 		.parents {
@@ -241,93 +267,180 @@
 					}
 				}
 			}
+
+			@media (min-width: 1080px) {
+				width: 50%;
+				max-width: 600px;
+				box-sizing: border-box;
+				padding-left: 5%;
+				flex-direction: row;
+				justify-content: space-evenly;
+
+				.date-divider {
+					width: 0;
+					height: 5rem;
+					margin: 0;
+				}
+
+				.date {
+					flex-direction: column;
+				}
+
+				.time-place {
+					.place {
+						display: flex;
+						flex-direction: column;
+					}
+				}
+			}
 		}
 	}
 
 	.rsvp {
 		position: relative;
-
 		box-sizing: border-box;
-		padding: 0 20px;
+		padding: 0 40px;
 
-		.information,
-		.guest-list,
-		.confirmed-count {
-			color: $primary;
-			text-align: center;
-			margin: 10px 0;
-		}
+		.wrapper {
+			position: relative;
 
-		.guest-list {
-			border: 1px solid rgba(151, 15, 11, 0.3);
-			padding: 20px 10px;
-			box-sizing: border-box;
-			width: 90%;
-
-			.guest {
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				margin-bottom: 5px;
-
-				.checkbox {
-					height: 25px;
-					width: 25px;
-					margin-right: 10px;
-					-webkit-appearance: none;
-					-moz-appearance: none;
-					-o-appearance: none;
-					appearance: none;
-					border: 1px solid $primary;
-					border-radius: 4px;
-					outline: none;
-					transition-duration: 0.3s;
-					background-color: $primary;
-					cursor: pointer;
-
-					&:checked {
-						border: 1px solid #41b883;
-						background-color: #41b883;
-					}
-
-					&:disabled {
-						border: 1px solid gray;
-						background-color: gray;
-						cursor: not-allowed;
-					}
-				}
-
-				.name {
-					font-weight: bold;
-				}
-			}
-		}
-
-		.actions {
 			display: flex;
 			flex-direction: column;
-			align-items: center;
-			gap: 10px;
+			justify-content: space-evenly;
+			height: 100%;
 
-			.confirm-button {
-				width: 100%;
-				border: none;
-				border-radius: 4px;
-				background-color: $primary;
-				color: white;
-				padding: 5px 10px;
+			.confirmation {
+				display: flex;
+				align-items: center;
+				flex-direction: column;
 
-				&:disabled {
-					background-color: gray;
+				.information,
+				.guest-list,
+				.confirmed-count {
+					color: $primary;
+					text-align: center;
+					margin: 10px 0;
+
+					@media (min-width: 1080px) {
+						font-size: 1.2rem;
+					}
+
+					@media (min-width: 1440px) {
+						font-size: 1.5rem;
+					}
+				}
+
+				.guest-list {
+					border: 1px solid rgba(151, 15, 11, 0.3);
+					padding: 20px 10px;
+					box-sizing: border-box;
+					width: 90%;
+
+					.guest {
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						margin-bottom: 5px;
+
+						.checkbox {
+							height: 25px;
+							width: 25px;
+							margin-right: 10px;
+							-webkit-appearance: none;
+							-moz-appearance: none;
+							-o-appearance: none;
+							appearance: none;
+							border: 1px solid $primary;
+							border-radius: 4px;
+							outline: none;
+							transition-duration: 0.3s;
+							background-color: $primary;
+							cursor: pointer;
+
+							&:checked {
+								border: 1px solid #41b883;
+								background-color: #41b883;
+							}
+
+							&:disabled {
+								border: 1px solid gray;
+								background-color: gray;
+								cursor: not-allowed;
+							}
+						}
+
+						.name {
+							font-weight: bold;
+						}
+					}
+
+					@media (min-width: 1080px) {
+						max-width: 500px;
+					}
+				}
+
+				.actions {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					gap: 10px;
+
+					.confirm-button {
+						width: 100%;
+						border: none;
+						border-radius: 4px;
+						background-color: $primary;
+						color: white;
+						padding: 5px 10px;
+
+						&:disabled {
+							background-color: gray;
+						}
+					}
+
+					.cancel-button {
+						border: 0.5px solid gray;
+						border-radius: 4px;
+						background-color: transparent;
+						color: gray;
+						padding: 5px 10px;
+					}
 				}
 			}
 
-			.cancel-button {
-				border: 0.5px solid gray;
-				border-radius: 4px;
-				background-color: transparent;
-				color: gray;
-				padding: 5px 10px;
+			.additional_information {
+				display: flex;
+				flex-direction: row;
+				width: 100%;
+				justify-content: space-evenly;
+				padding-top: 20px;
+
+				.gifts,
+				.location {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					gap: 5px;
+					width: 100px;
+					border-radius: 10px;
+					padding: 5px 10px;
+					background-color: $secondary;
+					color: white;
+					font-family: "EB Garamond";
+				}
+
+				.gifts {
+					.gifts_svg {
+						scale: 1.3;
+					}
+				}
+
+				.location {
+					.location_svg {
+						scale: 1.3;
+					}
+				}
 			}
 		}
 	}
@@ -354,16 +467,21 @@ $base: 0.5rem;
 
 .arrow_down {
 	position: relative;
-	margin-top: 20px;
+	margin-bottom: 30px;
+	z-index: 30;
 }
 
 .arrow_down_container {
 	position: absolute;
-	bottom: 0;
+	bottom: -60px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
+
+	&.bottom_zero {
+		bottom: 0;
+	}
 }
 
 .arrow_down_chevron {
@@ -419,5 +537,82 @@ $base: 0.5rem;
 	100% {
 		opacity: 0;
 		transform: translateY($base * 8) scale(0.5);
+	}
+}
+
+.info-modal {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 100;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.info-modal-content {
+		position: relative;
+		width: 90%;
+		height: 90%;
+		background-color: white;
+		border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+		padding: 20px 10px;
+		box-sizing: border-box;
+
+		&.normal-height {
+			height: auto;
+		}
+
+		.close-button {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			border: none;
+			background-color: white;
+			cursor: pointer;
+			padding: 5px 10px;
+			border-radius: 4px;
+			transition-duration: 0.3s;
+			color: $primary;
+			font-weight: bold;
+			font-size: 1.5rem;
+			font-family: "EB Garamond";
+
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.1);
+			}
+		}
+
+		.info {
+			width: 100%;
+			height: 100%;
+			border-radius: 10px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			h3 {
+				margin-top: 30px;
+			}
+
+			.content {
+				box-sizing: border-box;
+				padding: 20px 10px;
+				font-size: 1.2rem;
+				font-family: "EB Garamond";
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+		}
 	}
 }

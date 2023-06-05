@@ -50,6 +50,8 @@ interface Props {
 export default function Invite({ guests }: Props) {
   const [confirmed, setConfirmed] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
+  const [showMaps, setShowMaps] = useState(false)
+  const [showGiftsInfo, setGiftsInfo] = useState(false)
 
   async function markAsSeen() {
     await fetch('/api/mark-as-seen', {
@@ -137,6 +139,9 @@ export default function Invite({ guests }: Props) {
 
     return 'Confirmar ausência'
   }
+
+  const toggleMaps = () => setShowMaps(!showMaps)
+  const toggleGiftsInfo = () => setGiftsInfo(!showGiftsInfo)
 
   return (
     <>
@@ -237,7 +242,7 @@ export default function Invite({ guests }: Props) {
           </div>
 
           <a href="#rsvp" className="arrow_down">
-            <div className="arrow_down_container">
+            <div className="arrow_down_container bottom_zero">
               <div className="arrow_down_chevron"></div>
               <div className="arrow_down_chevron"></div>
               <div className="arrow_down_chevron"></div>
@@ -250,50 +255,124 @@ export default function Invite({ guests }: Props) {
         <section className="rsvp" id="rsvp">
           <div className="background-overlay" />
 
-          <Image src="/images/mini_rose.png" alt="mini_rose" width={60} height={60} className="mini_rose" />
+          <div className="wrapper">
+            <div className="confirmation">
+              <Image src="/images/mini_rose.png" alt="mini_rose" width={60} height={60} className="mini_rose" />
 
-          <span className="information">
-            PEDIMOS QUE CONFIRMEM SUA
-            <br /> PRESENÇA ATÉ O DIA <b>20-05-2023</b>
-          </span>
+              <span className="information">
+                PEDIMOS QUE CONFIRMEM SUA
+                <br /> PRESENÇA ATÉ O DIA <b>20-05-2023</b>
+              </span>
 
-          <span className="information">Selecione na lista abaixo as pessoas que estarão presentes.</span>
+              <span className="information">Selecione na lista abaixo as pessoas que estarão presentes.</span>
 
-          <div className="guest-list">
-            {guests.members.map((member, index) => (
-              <div className="guest" key={index}>
-                <input
-                  disabled={guests.confirmed || guests.absent}
-                  defaultChecked={isConfirmed(member.name)}
-                  className="checkbox"
-                  type="checkbox"
-                  id={`guest-${index}`}
-                  name={`guest-${member.name}`}
-                  onChange={handleCheckConfirmed}
-                />
+              <div className="guest-list">
+                {guests.members.map((member, index) => (
+                  <div className="guest" key={index}>
+                    <input
+                      disabled={guests.confirmed || guests.absent}
+                      defaultChecked={isConfirmed(member.name)}
+                      className="checkbox"
+                      type="checkbox"
+                      id={`guest-${index}`}
+                      name={`guest-${member.name}`}
+                      onChange={handleCheckConfirmed}
+                    />
 
-                <label htmlFor={`guest-${index}`}>
-                  <span className="name">{member.name}</span>
-                </label>
+                    <label htmlFor={`guest-${index}`}>
+                      <span className="name">{member.name}</span>
+                    </label>
+                  </div>
+                ))}
               </div>
-            ))}
+
+              <p className="confirmed-count">{confirmedCount()}</p>
+
+              <div className="actions">
+                {guests.absent ? null : (
+                  <button className="confirm-button" type="button" disabled={guests.absent || guests.confirmed || confirmed.length === 0} onClick={() => confirmPresence()}>
+                    {confirmPresenceButtonLabel()}
+                  </button>
+                )}
+
+                {guests.confirmed ? null : (
+                  <button className="cancel-button" type="button" disabled={guests.absent} onClick={() => confirmAbsence()}>
+                    {confirmAbsenceButtonLabel()}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="additional_information">
+              <div className="gifts" onClick={toggleGiftsInfo}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" className="gifts_svg" viewBox="0 0 16 16">
+                  <path d="M3 2.5a2.5 2.5 0 0 1 5 0 2.5 2.5 0 0 1 5 0v.006c0 .07 0 .27-.038.494H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h2.038A2.968 2.968 0 0 1 3 2.506V2.5zm1.068.5H7v-.5a1.5 1.5 0 1 0-3 0c0 .085.002.274.045.43a.522.522 0 0 0 .023.07zM9 3h2.932a.56.56 0 0 0 .023-.07c.043-.156.045-.345.045-.43a1.5 1.5 0 0 0-3 0V3zm6 4v7.5a1.5 1.5 0 0 1-1.5 1.5H9V7h6zM2.5 16A1.5 1.5 0 0 1 1 14.5V7h6v9H2.5z" />
+                </svg>
+                <span>Presentes</span>
+              </div>
+
+              <div className="location" onClick={toggleMaps}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" fill="currentColor" height="16" className="location_svg" viewBox="0 0 16 16">
+                  <path
+                    fillRule="evenodd"
+                    d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"
+                  />
+                </svg>
+                <span>Localização</span>
+              </div>
+            </div>
           </div>
 
-          <p className="confirmed-count">{confirmedCount()}</p>
+          {showGiftsInfo && (
+            <div className="info-modal">
+              <div className="info-modal-content normal-height">
+                <span className="close-button" onClick={toggleMaps}>
+                  Fechar
+                </span>
 
-          <div className="actions">
-            {guests.absent ? null : (
-              <button className="confirm-button" type="button" disabled={guests.absent || guests.confirmed || confirmed.length === 0} onClick={() => confirmPresence()}>
-                {confirmPresenceButtonLabel()}
-              </button>
-            )}
+                <div className="info">
+                  <h3>Sobre os presentes</h3>
 
-            {guests.confirmed ? null : (
-              <button className="cancel-button" type="button" disabled={guests.absent} onClick={() => confirmAbsence()}>
-                {confirmAbsenceButtonLabel()}
-              </button>
-            )}
-          </div>
+                  <p className="content">
+                    Optamos por não fazer lista de presentes!
+                    <br />
+                    <br />
+                    Receberemos com o maior carinho o que você sentir no coração!
+                    <br />
+                    <br />
+                    Se preferir contribuir com nossa lua de mel, segue abaixo nossa chave pix!
+                    <br />
+                    <br />
+                    <span>
+                      Chave: <strong>henriqueok20@gmail.com</strong>
+                    </span>
+                    <br />E caso não possa, não há problemas, o nosso presente é ter a sua companhia!
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showMaps && (
+            <div className="info-modal">
+              <div className="info-modal-content">
+                <span className="close-button" onClick={toggleMaps}>
+                  Fechar
+                </span>
+
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3669.4112850366396!2d-55.22242031811882!3d-23.118637317134738!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x948a14066ab82db3%3A0xb94f8c9f31164de6!2sPalladium%20Buffet!5e0!3m2!1sen!2sbr!4v1685947028405!5m2!1sen!2sbr"
+                  width="600"
+                  height="450"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="info"
+                ></iframe>
+              </div>
+            </div>
+          )}
         </section>
       </main>
     </>

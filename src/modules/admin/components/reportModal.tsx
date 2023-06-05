@@ -1,25 +1,5 @@
 import { IGuest } from '@/interfaces'
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Text,
-  Divider,
-  List,
-  VStack,
-  HStack,
-  Box,
-  AbsoluteCenter,
-  Stat,
-  StatHelpText,
-  StatLabel,
-  StatNumber,
-} from '@chakra-ui/react'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Text, Divider, VStack, HStack, Box, AbsoluteCenter, Stat, StatLabel, StatNumber } from '@chakra-ui/react'
 
 interface IDetailsModalProps {
   invites: IGuest[]
