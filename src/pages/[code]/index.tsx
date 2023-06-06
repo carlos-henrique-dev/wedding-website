@@ -161,7 +161,7 @@ export default function Invite({ guests: guestsProps }: Props) {
 
   const isConfirmButtonDisabled = guests.absent || guests.confirmed || confirmed.length === 0
 
-  const inviteText = guests.members.length > 1 ? 'CONVIDAMOS VOCÊS PARA A CELEBRAÇÃO DO NOSSO' : 'Convidamos CONVIDAMOS VOCÊ PARA A CELEBRAÇÃO DO NOSSO'
+  const inviteText = guests.members.length > 1 ? 'CONVIDAMOS VOCÊS PARA A CELEBRAÇÃO DO NOSSO' : 'CONVIDAMOS VOCÊ PARA A CELEBRAÇÃO DO NOSSO'
   const confirmationText = guests.members.length > 1 ? 'PEDIMOS QUE CONFIRMEM SUA' : 'PEDIMOS QUE CONFIRME SUA'
 
   return (
