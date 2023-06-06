@@ -14,7 +14,11 @@ export default function ReportModal({ invites, isOpen, onClose }: IDetailsModalP
         return acc
       }
 
-      return acc + invite.members.filter((member) => !member.is_coming).length
+      if (invite.confirmed || invite.absent) {
+        return acc + invite.members.filter((member) => !member.is_coming).length
+      }
+
+      return acc
     }, 0)
   }
 
