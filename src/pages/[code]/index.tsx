@@ -282,7 +282,7 @@ export default function Invite({ guests: guestsProps }: Props) {
 
               <span className="information">
                 {confirmationText}
-                <br /> PRESENÇA ATÉ O DIA <b>23-06-2023</b>
+                <br /> PRESENÇA ATÉ O DIA <b>15-06-2023</b>
               </span>
 
               <span className="information">Selecione na lista abaixo as pessoas que estarão presentes.</span>
