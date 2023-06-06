@@ -47,17 +47,28 @@ interface Props {
   guests: IGuest
 }
 
-export default function Invite({ guests }: Props) {
+export default function Invite({ guests: guestsProps }: Props) {
   const [confirmed, setConfirmed] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [showMaps, setShowMaps] = useState(false)
   const [showGiftsInfo, setGiftsInfo] = useState(false)
+  const [guests, setGuests] = useState<IGuest>(guestsProps)
 
   async function markAsSeen() {
     await fetch('/api/mark-as-seen', {
       method: 'POST',
       body: JSON.stringify({ code: guests.code }),
     })
+  }
+
+  async function getGuestDetails() {
+    const url = '/api/guest-details?code=' + guests.code
+    const response = await fetch(url, {
+      method: 'GET',
+    })
+
+    const data = await response.json()
+    setGuests(data)
   }
 
   async function confirmPresence() {
@@ -69,6 +80,7 @@ export default function Invite({ guests }: Props) {
       body: JSON.stringify({ code: guests.code, members }),
     })
 
+    await getGuestDetails()
     setLoading(false)
   }
 
@@ -80,6 +92,7 @@ export default function Invite({ guests }: Props) {
       body: JSON.stringify({ code: guests.code }),
     })
 
+    await getGuestDetails()
     setLoading(false)
   }
 
@@ -108,7 +121,8 @@ export default function Invite({ guests }: Props) {
 
   const confirmedCount = () => {
     let count = 0
-    const mountMessage = (total: number) => `${total} de ${guests.members.length} convidados confirmados`
+    const suffix = guests.members.length > 1 ? 'convidados confirmados' : 'convidado confirmado'
+    const mountMessage = (total: number) => `${total} de ${guests.members.length} ${suffix}`
 
     if (guests.absent) return mountMessage(count)
 
@@ -137,11 +151,18 @@ export default function Invite({ guests }: Props) {
 
     if (guests.absent) return 'Você confirmou ausência'
 
-    return 'Confirmar ausência'
+    let isPlural = guests.members.length > 1
+
+    return isPlural ? 'Não poderemos comparecer' : 'Não poderei comparecer'
   }
 
   const toggleMaps = () => setShowMaps(!showMaps)
   const toggleGiftsInfo = () => setGiftsInfo(!showGiftsInfo)
+
+  const isConfirmButtonDisabled = guests.absent || guests.confirmed || confirmed.length === 0
+
+  const inviteText = guests.members.length > 1 ? 'CONVIDAMOS VOCÊS PARA A CELEBRAÇÃO DO NOSSO' : 'Convidamos CONVIDAMOS VOCÊ PARA A CELEBRAÇÃO DO NOSSO'
+  const confirmationText = guests.members.length > 1 ? 'PEDIMOS QUE CONFIRMEM SUA' : 'PEDIMOS QUE CONFIRME SUA'
 
   return (
     <>
@@ -213,7 +234,7 @@ export default function Invite({ guests }: Props) {
           </p>
 
           <span className="invitation">
-            CONVIDAMOS VOCÊS PARA A CELEBRAÇÃO DO NOSSO
+            {inviteText}
             <br />
             CASAMENTO A SER REALIZADO NO DIA
           </span>
@@ -260,7 +281,7 @@ export default function Invite({ guests }: Props) {
               <Image src="/images/mini_rose.png" alt="mini_rose" width={60} height={60} className="mini_rose" />
 
               <span className="information">
-                PEDIMOS QUE CONFIRMEM SUA
+                {confirmationText}
                 <br /> PRESENÇA ATÉ O DIA <b>20-05-2023</b>
               </span>
 
@@ -290,7 +311,7 @@ export default function Invite({ guests }: Props) {
 
               <div className="actions">
                 {guests.absent ? null : (
-                  <button className="confirm-button" type="button" disabled={guests.absent || guests.confirmed || confirmed.length === 0} onClick={() => confirmPresence()}>
+                  <button className={`confirm-button ${guests.confirmed ? 'confirmed' : ''}`} type="button" disabled={isConfirmButtonDisabled} onClick={() => confirmPresence()}>
                     {confirmPresenceButtonLabel()}
                   </button>
                 )}
@@ -326,7 +347,7 @@ export default function Invite({ guests }: Props) {
           {showGiftsInfo && (
             <div className="info-modal">
               <div className="info-modal-content normal-height">
-                <span className="close-button" onClick={toggleMaps}>
+                <span className="close-button" onClick={toggleGiftsInfo}>
                   Fechar
                 </span>
 

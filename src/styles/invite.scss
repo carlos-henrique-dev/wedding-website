@@ -367,6 +367,12 @@
 								background-color: gray;
 								cursor: not-allowed;
 							}
+
+							// if disabled and checked
+							&:disabled:checked {
+								border: 1px solid #41b883;
+								background-color: #41b883;
+							}
 						}
 
 						.name {
@@ -385,16 +391,26 @@
 					align-items: center;
 					gap: 10px;
 
+					.confirm-button,
+					.cancel-button {
+						padding: 10px 15px;
+						font-size: 1.2rem;
+						font-weight: 500;
+					}
+
 					.confirm-button {
 						width: 100%;
 						border: none;
 						border-radius: 4px;
 						background-color: $primary;
 						color: white;
-						padding: 5px 10px;
 
 						&:disabled {
 							background-color: gray;
+						}
+
+						&.confirmed {
+							background-color: #41b883;
 						}
 					}
 
@@ -403,7 +419,6 @@
 						border-radius: 4px;
 						background-color: transparent;
 						color: gray;
-						padding: 5px 10px;
 					}
 				}
 			}
@@ -428,6 +443,8 @@
 					background-color: $secondary;
 					color: white;
 					font-family: "EB Garamond";
+					cursor: pointer;
+					box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 				}
 
 				.gifts {
