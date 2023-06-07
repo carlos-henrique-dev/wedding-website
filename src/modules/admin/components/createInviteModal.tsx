@@ -71,6 +71,7 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/\s/g, '-')
+      .replace(/\./g, '')
       .toLowerCase()
 
     const data: IGuest = {
