@@ -71,7 +71,7 @@ export default function DetailsModal({ invite, isOpen, onClose }: IDetailsModalP
             <List spacing={1}>
               {invite.members.map((member, index) => (
                 <HStack key={index} align="center" justify="start">
-                  <CheckIcon color={invite.confirmed ? 'green.300' : 'red.300'} />
+                  {member.is_coming ? <CheckIcon color="green.300" /> : <CloseIcon color="red.300" />}
                   <Text>{member.name}</Text>
                 </HStack>
               ))}

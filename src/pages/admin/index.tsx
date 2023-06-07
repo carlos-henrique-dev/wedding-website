@@ -116,7 +116,10 @@ export default function AdminLoginPage() {
       notConfirmed: (invite: IGuest) => !invite.confirmed,
       bride: (invite: IGuest) => invite.side === 'bride',
       groom: (invite: IGuest) => invite.side === 'groom',
-      absent: (invite: IGuest) => invite.absent,
+      absent: (invite: IGuest) => {
+        const someMemberAbsent = invite.confirmed && invite.members.some((member) => !member.is_coming)
+        return invite.absent || someMemberAbsent
+      },
     }
 
     const filtersValues = state.filters.map((filter) => filter.value)
