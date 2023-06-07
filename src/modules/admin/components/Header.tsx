@@ -1,35 +1,40 @@
-import { ChevronDownIcon, SearchIcon, ViewIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, SearchIcon, UpDownIcon, ViewIcon } from '@chakra-ui/icons'
 import { HStack, Button, Menu, MenuButton, MenuList, MenuItem, Divider, Text, CheckboxGroup, Checkbox, Input } from '@chakra-ui/react'
-import { FILTERS_OPTIONS } from '../constants'
+import { FILTERS_OPTIONS, SORT_OPTIONS } from '../constants'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 interface IHeaderProps {
   onNewInviteClick: () => void
   onShowReportsClick: () => void
   onFilterClick: (filter: Array<string>) => void
+  onSortClick: (sorter: string | null) => void
   onSearchClick: (search: string) => void
 }
 
-export default function Header({ onNewInviteClick, onShowReportsClick, onFilterClick, onSearchClick }: IHeaderProps) {
-  const [selectedValues, setSelectedValues] = useState<Array<string>>(['all'])
+export default function Header({ onNewInviteClick, onShowReportsClick, onFilterClick, onSearchClick, onSortClick }: IHeaderProps) {
+  const [selectedFilters, setSelectedFilters] = useState<Array<string>>(['all'])
   const [searchBarState, setSearchBarState] = useState<{ show: boolean; search: string }>({ show: false, search: '' })
 
   const handleCheckboxChange = (newValues: Array<string>) => {
     const newValuesWithoutAll = newValues.filter((value) => value !== 'all')
 
-    setSelectedValues(newValuesWithoutAll)
+    setSelectedFilters(newValuesWithoutAll)
   }
 
-  const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSortCheckboxChange = (sortValue: string | null) => {
+    onSortClick(sortValue)
+  }
+
+  const handleSelectAllFilters = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      setSelectedValues(['all'])
+      setSelectedFilters(['all'])
     }
   }
 
   useEffect(() => {
-    onFilterClick(selectedValues)
+    onFilterClick(selectedFilters)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedValues])
+  }, [selectedFilters])
 
   const toggleSearchBar = () => {
     setSearchBarState({ show: !searchBarState.show, search: '' })
@@ -61,7 +66,7 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
         Lista de convidados
       </Text>
 
-      <HStack w="full" justify="center" py={4} spacing={5}>
+      <HStack w="full" justify="center" py={4} spacing={2}>
         <Button
           size={{
             base: 'sm',
@@ -90,9 +95,9 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
           </MenuButton>
 
           <MenuList>
-            <CheckboxGroup colorScheme="red" value={selectedValues} onChange={handleCheckboxChange}>
+            <CheckboxGroup colorScheme="red" value={selectedFilters} onChange={handleCheckboxChange}>
               <MenuItem>
-                <Checkbox value={FILTERS_OPTIONS[0].value} onChange={handleSelectAll}>
+                <Checkbox value={FILTERS_OPTIONS[0].value} onChange={handleSelectAllFilters}>
                   {FILTERS_OPTIONS[0].label}
                 </Checkbox>
               </MenuItem>
@@ -107,6 +112,30 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
                 </MenuItem>
               ))}
             </CheckboxGroup>
+          </MenuList>
+        </Menu>
+
+        <Menu>
+          <MenuButton
+            as={Button}
+            size={{
+              base: 'sm',
+              md: 'md',
+              lg: 'md',
+              xl: 'md',
+            }}
+          >
+            <UpDownIcon />
+          </MenuButton>
+
+          <MenuList>
+            <MenuItem onClick={() => handleSortCheckboxChange(null)}>Sem ordenar</MenuItem>
+
+            {SORT_OPTIONS.map((sorter, index) => (
+              <MenuItem key={index} onClick={() => handleSortCheckboxChange(sorter.value)}>
+                {sorter.label}
+              </MenuItem>
+            ))}
           </MenuList>
         </Menu>
 

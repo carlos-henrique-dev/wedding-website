@@ -1,5 +1,5 @@
 import { IGuest } from '@/interfaces'
-import { CopyIcon, CheckIcon, DeleteIcon } from '@chakra-ui/icons'
+import { CopyIcon, CheckIcon, DeleteIcon, CloseIcon } from '@chakra-ui/icons'
 import { Card, HStack, VStack, Divider, Text, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure } from '@chakra-ui/react'
 import { useRef } from 'react'
 
@@ -17,6 +17,18 @@ export default function InviteCard({ invite, copyToClipboard, openDetails, onDel
   const handleDelete = () => {
     onClose()
     onDeleteInvite(invite.code)
+  }
+
+  const confirmationColor = () => {
+    if (invite.absent || !invite.confirmed) return 'red.300'
+
+    return 'green.300'
+  }
+
+  const confirmationLabel = () => {
+    if (invite.absent) return 'Convidado não comparecerá'
+
+    return invite.confirmed ? 'Convite aceito' : 'Convite não confirmado'
   }
 
   return (
@@ -46,9 +58,9 @@ export default function InviteCard({ invite, copyToClipboard, openDetails, onDel
           </HStack>
 
           <HStack>
-            <CheckIcon color={invite.confirmed ? 'green.300' : 'red.300'} />
+            {invite.absent ? <CloseIcon color="red.300" /> : <CheckIcon color={confirmationColor()} />}
             <Text fontSize="sm" color="gray.500">
-              {invite.confirmed ? 'Convite aceito' : 'Convite não confirmado'}
+              {confirmationLabel()}
             </Text>
           </HStack>
 

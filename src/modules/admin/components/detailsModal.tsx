@@ -1,5 +1,5 @@
 import { IGuest } from '@/interfaces'
-import { CheckIcon } from '@chakra-ui/icons'
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Text, Divider, List, VStack, HStack, Box, AbsoluteCenter } from '@chakra-ui/react'
 
 interface IDetailsModalProps {
@@ -10,6 +10,18 @@ interface IDetailsModalProps {
 
 export default function DetailsModal({ invite, isOpen, onClose }: IDetailsModalProps) {
   if (!invite) return null
+
+  const confirmationColor = () => {
+    if (invite.absent || !invite.confirmed) return 'red.300'
+
+    return 'green.300'
+  }
+
+  const confirmationLabel = () => {
+    if (invite.absent) return 'Convidado não comparecerá'
+
+    return invite.confirmed ? 'Convite aceito' : 'Convite não confirmado'
+  }
 
   return (
     <Modal
@@ -40,9 +52,9 @@ export default function DetailsModal({ invite, isOpen, onClose }: IDetailsModalP
               </HStack>
 
               <HStack>
-                <CheckIcon color={invite.confirmed ? 'green.300' : 'red.300'} />
+                {invite.absent ? <CloseIcon color="red.300" /> : <CheckIcon color={confirmationColor()} />}
                 <Text fontSize="sm" color="gray.500">
-                  {invite.confirmed ? 'Convite aceito' : 'Convite não confirmado'}
+                  {confirmationLabel()}
                 </Text>
               </HStack>
             </VStack>

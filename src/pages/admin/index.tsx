@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 
-import { Box, ChakraProvider, CircularProgress, Container, Grid, StackDivider, VStack, Divider, useToast, HStack, Text, Tag } from '@chakra-ui/react'
+import { Box, ChakraProvider, CircularProgress, Container, Grid, StackDivider, VStack, Divider, useToast, HStack, Text, Tag, Stack } from '@chakra-ui/react'
 import { IGuest } from '@/interfaces'
 import { CreateInviteModal, DetailsModal, Header, InviteCard, ReportModal } from '../../modules/admin/components'
-import { FILTERS_OPTIONS } from '../../modules/admin/constants'
+import { FILTERS_OPTIONS, SORT_OPTIONS } from '../../modules/admin/constants'
 import { Filters } from '../../modules/admin/interfaces'
-import { get } from 'http'
 
 interface IState {
   invites: Array<IGuest>
@@ -17,6 +16,7 @@ interface IState {
   showReportModal: boolean
   selectedInvite?: IGuest
   filters: Filters
+  sort: string | null
   search: string
 }
 
@@ -29,6 +29,7 @@ const INITIAL_STATE: IState = {
   showReportModal: false,
   selectedInvite: undefined,
   filters: [FILTERS_OPTIONS[0]],
+  sort: null,
   search: '',
 }
 
@@ -103,6 +104,10 @@ export default function AdminLoginPage() {
     setState({ ...state, filters: selectedFilters })
   }
 
+  function setSorters(sorter: string | null) {
+    setState({ ...state, sort: sorter })
+  }
+
   function filterInvites() {
     const filters = {
       sent: (invite: IGuest) => invite.inviteSent,
@@ -111,6 +116,7 @@ export default function AdminLoginPage() {
       notConfirmed: (invite: IGuest) => !invite.confirmed,
       bride: (invite: IGuest) => invite.side === 'bride',
       groom: (invite: IGuest) => invite.side === 'groom',
+      absent: (invite: IGuest) => invite.absent,
     }
 
     const filtersValues = state.filters.map((filter) => filter.value)
@@ -119,11 +125,20 @@ export default function AdminLoginPage() {
       const filterKeys = state.filters.map((filter) => filter.value)
 
       return state.invites.filter((invite) => {
-        return filterKeys.some((key) => filters[key as keyof typeof filters](invite))
+        return filterKeys.every((key) => filters[key as keyof typeof filters](invite))
       })
     }
 
     return filtersValues.includes('all') ? state.invites : filterItems()
+  }
+
+  function sortInvites(a: IGuest, b: IGuest) {
+    const sorter = {
+      familyName: (a: IGuest, b: IGuest) => a.family.localeCompare(b.family),
+      notSent: (a: IGuest, b: IGuest) => Number(a.inviteSent) - Number(b.inviteSent),
+    }
+
+    return sorter[state.sort as keyof typeof sorter](a, b)
   }
 
   function searchInvites(search: string) {
@@ -144,10 +159,12 @@ export default function AdminLoginPage() {
       })
     }
 
-    return filteredInvites.map((invite, index) => {
-      return <InviteCard key={index} invite={invite} copyToClipboard={copyToClipboard} openDetails={openDetails} onDeleteInvite={onDeleteInvite} />
-    })
+    const card = (invite: IGuest, index: number) => <InviteCard key={index} invite={invite} copyToClipboard={copyToClipboard} openDetails={openDetails} onDeleteInvite={onDeleteInvite} />
+
+    return state.sort ? filteredInvites.slice().sort(sortInvites).map(card) : filteredInvites.map(card)
   }
+
+  const selectedSorter = SORT_OPTIONS.find((sort) => sort.value === state.sort)?.label
 
   return (
     <ChakraProvider>
@@ -157,35 +174,42 @@ export default function AdminLoginPage() {
         </Head>
 
         <Container centerContent minHeight="100vh" minWidth="full">
-          <Header onNewInviteClick={onNewInvite} onShowReportsClick={toggleReportsModal} onFilterClick={setFilters} onSearchClick={searchInvites} />
+          <Header onNewInviteClick={onNewInvite} onShowReportsClick={toggleReportsModal} onFilterClick={setFilters} onSearchClick={searchInvites} onSortClick={setSorters} />
 
           <Divider color="gray.200" />
 
-          <HStack spacing={2} my={1}>
+          <Stack direction={['column', 'row']} spacing={2} my={1}>
             <Text>{`Exibindo ${filterInvites().length} convites`}</Text>
 
-            <Text> - </Text>
+            <Stack direction={['column', 'row']}>
+              {state.sort && (
+                <HStack>
+                  <Text>Ordenando por:</Text>
+                  <Tag colorScheme="red">{selectedSorter}</Tag>
+                </HStack>
+              )}
 
-            <HStack spacing={2} my={1}>
-              <Text>Filtros:</Text>
+              <HStack spacing={2} my={1}>
+                <Text>Filtros:</Text>
 
-              <Grid
-                templateColumns={{
-                  base: 'repeat(1, 1fr)',
-                  md: 'repeat(2, 1fr)',
-                  lg: 'repeat(3, 1fr)',
-                  xl: 'repeat(4, 1fr)',
-                }}
-                gap={2}
-              >
-                {state.filters.map((filter, index) => (
-                  <Tag key={index} size="sm" variant="subtle" colorScheme="red">
-                    {filter.label}
-                  </Tag>
-                ))}
-              </Grid>
-            </HStack>
-          </HStack>
+                <Grid
+                  templateColumns={{
+                    base: 'repeat(1, 1fr)',
+                    md: 'repeat(2, 1fr)',
+                    lg: 'repeat(3, 1fr)',
+                    xl: 'repeat(4, 1fr)',
+                  }}
+                  gap={2}
+                >
+                  {state.filters.map((filter, index) => (
+                    <Tag key={index} size="sm" variant="subtle" colorScheme="red">
+                      {filter.label}
+                    </Tag>
+                  ))}
+                </Grid>
+              </HStack>
+            </Stack>
+          </Stack>
 
           <Divider color="gray.200" />
 
