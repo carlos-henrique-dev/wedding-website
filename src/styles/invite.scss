@@ -319,7 +319,7 @@
 				.confirmed-count {
 					color: $primary;
 					text-align: center;
-					margin: 10px 0;
+					margin: 5px 0;
 
 					@media (min-width: 1080px) {
 						font-size: 1.2rem;
@@ -332,15 +332,23 @@
 
 				.guest-list {
 					border: 1px solid rgba(151, 15, 11, 0.3);
-					padding: 20px 10px;
+					padding: 5px 10px;
 					box-sizing: border-box;
 					width: 90%;
+
+					.tip {
+						font-weight: bold;
+						margin-bottom: 10px;
+					}
 
 					.guest {
 						display: flex;
 						flex-direction: row;
 						align-items: center;
-						margin-bottom: 5px;
+						margin-bottom: 10px;
+						width: 100%;
+						border-radius: 5px;
+						cursor: pointer;
 
 						.checkbox {
 							height: 25px;
@@ -350,16 +358,16 @@
 							-moz-appearance: none;
 							-o-appearance: none;
 							appearance: none;
-							border: 1px solid $primary;
+							border: 1px solid gray;
 							border-radius: 4px;
 							outline: none;
 							transition-duration: 0.3s;
-							background-color: $primary;
+							background-color: gray;
 							cursor: pointer;
 
 							&:checked {
-								border: 1px solid #41b883;
-								background-color: #41b883;
+								border: 1px solid $green;
+								background-color: $green;
 							}
 
 							&:disabled {
@@ -369,13 +377,19 @@
 							}
 
 							&:disabled:checked {
-								border: 1px solid #41b883;
-								background-color: #41b883;
+								border: 1px solid $green;
+								background-color: $green;
 							}
 						}
 
 						.name {
 							font-weight: bold;
+						}
+
+						&:hover,
+						&:focus,
+						&:active {
+							background-color: $green_light;
 						}
 					}
 
@@ -386,9 +400,10 @@
 
 				.actions {
 					display: flex;
-					flex-direction: column;
+					flex-direction: row;
 					align-items: center;
 					gap: 10px;
+					position: relative;
 
 					.confirm-button,
 					.cancel-button {
@@ -410,15 +425,41 @@
 						}
 
 						&.confirmed {
-							background-color: #41b883;
+							background-color: $green;
 						}
 					}
 
 					.cancel-button {
+						width: 100%;
 						border: 0.5px solid gray;
 						border-radius: 4px;
 						background-color: transparent;
 						color: gray;
+					}
+
+					.confirm-tip {
+						position: absolute;
+						bottom: 70%;
+						left: 50%;
+						transform: translate(-50%, -50%);
+						width: 100%;
+						height: 50px;
+						background-color: $green;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						z-index: 100;
+						box-sizing: border-box;
+						align-self: center;
+						border-radius: 10px;
+						padding: 5px;
+
+						.tip {
+							font-size: 1.1rem;
+							font-family: "EB Garamond";
+							color: white;
+							text-align: center;
+						}
 					}
 				}
 			}
@@ -428,7 +469,7 @@
 				flex-direction: row;
 				width: 100%;
 				justify-content: space-evenly;
-				padding-top: 20px;
+				margin-top: 10px;
 
 				.gifts,
 				.location {
@@ -469,6 +510,10 @@
 	background-color: rgba(184, 184, 184, 0.3);
 	width: 90%;
 	height: 90%;
+
+	&.less_opacity {
+		background-color: rgba(223, 223, 223, 0.8);
+	}
 
 	@media (min-width: 1080px) {
 		width: 80%;
@@ -582,6 +627,14 @@ $base: 0.5rem;
 		padding: 20px 10px;
 		box-sizing: border-box;
 
+		&.half-width {
+			width: 50%;
+
+			@media (max-width: 768px) {
+				width: 90%;
+			}
+		}
+
 		&.normal-height {
 			height: auto;
 		}
@@ -614,6 +667,7 @@ $base: 0.5rem;
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
+			text-align: justify;
 
 			h3 {
 				margin-top: 30px;
@@ -629,7 +683,70 @@ $base: 0.5rem;
 				flex-direction: column;
 				justify-content: center;
 				align-items: center;
+
+				&.center {
+					text-align: center;
+				}
+			}
+		}
+
+		.actions {
+			display: flex;
+			flex-direction: row;
+			gap: 20px;
+
+			.cancel-button {
+				border: none;
+				background-color: white;
+				cursor: pointer;
+				padding: 5px 10px;
+				border-radius: 4px;
+				transition-duration: 0.3s;
+				color: grey;
+				font-weight: bold;
+				font-size: 1.2rem;
+				font-family: "EB Garamond";
+
+				&:hover {
+					background-color: rgba(0, 0, 0, 0.1);
+				}
+			}
+
+			.confirm-button {
+				border: none;
+				background-color: $primary;
+				cursor: pointer;
+				padding: 5px 10px;
+				border-radius: 4px;
+				transition-duration: 0.3s;
+				color: white;
+				font-weight: bold;
+				font-size: 1.2rem;
+				font-family: "EB Garamond";
+
+				&:hover {
+					background-color: $primary_darker;
+				}
 			}
 		}
 	}
+}
+
+.copy-pix {
+	border: none;
+	background-color: $green;
+	color: white;
+	padding: 5px 10px;
+	border-radius: 5px;
+	margin-top: 5px;
+	cursor: pointer;
+
+	&:hover {
+		transform: scale(1.1);
+	}
+}
+
+.pix-key-copied {
+	font-size: 1.2rem;
+	color: $green;
 }

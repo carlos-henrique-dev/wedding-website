@@ -1,19 +1,9 @@
-import { GetServerSideProps, GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next'
+import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next'
 import Head from 'next/head'
-import { IGuest, IServerSideReturn } from '@/interfaces'
+import { IGuest } from '@/interfaces'
 import { RoseImage } from '@/components'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-
-// export const getServerSideProps: GetServerSideProps = async ({ params }): IServerSideReturn<{ guests: IGuest }> => {
-//   const { FireStoreAdapter } = await import('@/infra')
-//   const database = new FireStoreAdapter()
-
-//   const code = params?.code
-//   const guests = await database.getOne(code as string)
-
-//   return { props: { guests } }
-// }
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { FireStoreAdapter } = await import('@/infra')
@@ -48,10 +38,13 @@ interface Props {
 }
 
 export default function Invite({ guests: guestsProps }: Props) {
-  const [confirmed, setConfirmed] = useState<string[]>([])
+  const [confirmedGuests, setConfirmedGuests] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [showMaps, setShowMaps] = useState(false)
   const [showGiftsInfo, setGiftsInfo] = useState(false)
+  const [showConfirmTip, setShowConfirmTip] = useState(false)
+  const [showConfirmAbsence, setShowConfirmAbsence] = useState(false)
+  const [pixKeyCopied, setPixKeyCopied] = useState(false)
   const [guests, setGuests] = useState<IGuest>(guestsProps)
 
   async function markAsSeen() {
@@ -72,9 +65,14 @@ export default function Invite({ guests: guestsProps }: Props) {
   }
 
   async function confirmPresence() {
+    if (!confirmedGuests.length) {
+      setShowConfirmTip(true)
+      return
+    }
+
     setLoading(true)
 
-    const members = confirmed.map((name) => name.split('guest-')[1])
+    const members = confirmedGuests.map((name) => name.split('guest-')[1])
     await fetch('/api/confirm-presence', {
       method: 'POST',
       body: JSON.stringify({ code: guests.code, members }),
@@ -101,20 +99,28 @@ export default function Invite({ guests: guestsProps }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    if (showConfirmTip) {
+      setTimeout(() => {
+        setShowConfirmTip(false)
+      }, 2000)
+    }
+  }, [showConfirmTip])
+
   const handleCheckConfirmed = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, name } = event.target
 
     if (!checked) {
-      setConfirmed(confirmed.filter((item) => item !== name))
+      setConfirmedGuests(confirmedGuests.filter((item) => item !== name))
       return
     }
 
-    if (confirmed.includes(name)) {
-      setConfirmed(confirmed.filter((item) => item === name))
+    if (confirmedGuests.includes(name)) {
+      setConfirmedGuests(confirmedGuests.filter((item) => item === name))
       return
     }
 
-    setConfirmed([...confirmed, name])
+    setConfirmedGuests([...confirmedGuests, name])
   }
 
   const isConfirmed = (name: string) => guests.members.some((member) => member.name === name && member.is_coming)
@@ -131,7 +137,7 @@ export default function Invite({ guests: guestsProps }: Props) {
       return mountMessage(count)
     }
 
-    count = confirmed.length
+    count = confirmedGuests.length
 
     return mountMessage(count)
   }
@@ -151,15 +157,22 @@ export default function Invite({ guests: guestsProps }: Props) {
 
     if (guests.absent) return 'Você confirmou ausência'
 
-    let isPlural = guests.members.length > 1
-
-    return isPlural ? 'Não poderemos comparecer' : 'Não poderei comparecer'
+    return 'Confirmar ausência'
   }
 
   const toggleMaps = () => setShowMaps(!showMaps)
-  const toggleGiftsInfo = () => setGiftsInfo(!showGiftsInfo)
+  const toggleGiftsInfo = () => {
+    setGiftsInfo(!showGiftsInfo)
+    if (pixKeyCopied) {
+      setPixKeyCopied(false)
+    }
+  }
+  const copyPixKey = () => {
+    navigator.clipboard.writeText('henriqueok20@gmail.com')
+    setPixKeyCopied(true)
+  }
 
-  const isConfirmButtonDisabled = guests.absent || guests.confirmed || confirmed.length === 0
+  const isConfirmButtonDisabled = guests.absent || guests.confirmed
 
   const inviteText = guests.members.length > 1 ? 'CONVIDAMOS VOCÊS PARA A CELEBRAÇÃO DO NOSSO' : 'CONVIDAMOS VOCÊ PARA A CELEBRAÇÃO DO NOSSO'
   const confirmationText = guests.members.length > 1 ? 'PEDIMOS QUE CONFIRMEM SUA' : 'PEDIMOS QUE CONFIRME SUA'
@@ -274,7 +287,7 @@ export default function Invite({ guests: guestsProps }: Props) {
         <RoseImage className="third_rose_background" />
 
         <section className="rsvp" id="rsvp">
-          <div className="background-overlay" />
+          <div className="background-overlay less_opacity" />
 
           <div className="wrapper">
             <div className="confirmation">
@@ -310,16 +323,22 @@ export default function Invite({ guests: guestsProps }: Props) {
               <p className="confirmed-count">{confirmedCount()}</p>
 
               <div className="actions">
+                {guests.confirmed ? null : (
+                  <button className="cancel-button" type="button" disabled={guests.absent} onClick={() => setShowConfirmAbsence(!showConfirmAbsence)}>
+                    {confirmAbsenceButtonLabel()}
+                  </button>
+                )}
+
                 {guests.absent ? null : (
                   <button className={`confirm-button ${guests.confirmed ? 'confirmed' : ''}`} type="button" disabled={isConfirmButtonDisabled} onClick={() => confirmPresence()}>
                     {confirmPresenceButtonLabel()}
                   </button>
                 )}
 
-                {guests.confirmed ? null : (
-                  <button className="cancel-button" type="button" disabled={guests.absent} onClick={() => confirmAbsence()}>
-                    {confirmAbsenceButtonLabel()}
-                  </button>
+                {showConfirmTip && (
+                  <div className="confirm-tip">
+                    <span className="tip">Primeiro você precisa selecionar quem vai comparecer.</span>
+                  </div>
                 )}
               </div>
             </div>
@@ -344,6 +363,28 @@ export default function Invite({ guests: guestsProps }: Props) {
             </div>
           </div>
 
+          {showConfirmAbsence && (
+            <div className="info-modal">
+              <div className="info-modal-content normal-height half-width">
+                <div className="info">
+                  <h3>Confirmar ausência</h3>
+
+                  <p className="content center">Confirma que não poderá comparecer?</p>
+
+                  <div className="actions">
+                    <button className="cancel-button" type="button" onClick={() => setShowConfirmAbsence(!showConfirmAbsence)}>
+                      Cancelar
+                    </button>
+
+                    <button className="confirm-button" type="button" onClick={() => confirmAbsence()}>
+                      Confirmar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {showGiftsInfo && (
             <div className="info-modal">
               <div className="info-modal-content normal-height">
@@ -363,11 +404,16 @@ export default function Invite({ guests: guestsProps }: Props) {
                     <br />
                     Se preferir contribuir com nossa lua de mel, segue abaixo nossa chave pix!
                     <br />
+                    <br />E caso não possa, não há problemas, o nosso presente é ter a sua companhia!
+                    <br />
                     <br />
                     <span>
                       Chave: <strong>henriqueok20@gmail.com</strong>
                     </span>
-                    <br />E caso não possa, não há problemas, o nosso presente é ter a sua companhia!
+                    <button className="copy-pix" onClick={() => copyPixKey()}>
+                      Copiar chave
+                    </button>
+                    {pixKeyCopied && <span className="pix-key-copied">Chave copiada!</span>}
                   </p>
                 </div>
               </div>
