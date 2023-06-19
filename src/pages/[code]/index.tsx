@@ -92,6 +92,7 @@ export default function Invite({ guests: guestsProps }: Props) {
 
     await getGuestDetails()
     setLoading(false)
+    setShowConfirmAbsence(false)
   }
 
   useEffect(() => {
@@ -293,10 +294,10 @@ export default function Invite({ guests: guestsProps }: Props) {
             <div className="confirmation">
               <Image src="/images/mini_rose.png" alt="mini_rose" width={60} height={60} className="mini_rose" />
 
-              <span className="information">
+              {/* <span className="information">
                 {confirmationText}
                 <br /> PRESENÇA ATÉ O DIA <b>15-06-2023</b>
-              </span>
+              </span> */}
 
               <span className="information">Selecione na lista abaixo as pessoas que estarão presentes.</span>
 
