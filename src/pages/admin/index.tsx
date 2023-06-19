@@ -113,7 +113,7 @@ export default function AdminLoginPage() {
       sent: (invite: IGuest) => invite.inviteSent,
       notSent: (invite: IGuest) => !invite.inviteSent,
       confirmed: (invite: IGuest) => invite.confirmed,
-      notConfirmed: (invite: IGuest) => !invite.confirmed,
+      notConfirmed: (invite: IGuest) => !invite.confirmed && !invite.absent,
       bride: (invite: IGuest) => invite.side === 'bride',
       groom: (invite: IGuest) => invite.side === 'groom',
       absent: (invite: IGuest) => {
