@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     const invite = await database.createInvite(JSON.parse(req.body))
 
-    res.status(200).json(invite)
+    return res.status(200).json(invite)
   }
 
   if (req.method === 'PUT') {
@@ -17,8 +17,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     const invite = await database.updateInvite(JSON.parse(req.body))
 
-    res.status(200).json(invite)
+    return res.status(200).json(invite)
   }
 
-  res.status(404).json({ error: 'Not Found' })
+  return res.status(404).json({ error: 'Not Found' })
 }
