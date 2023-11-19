@@ -7,7 +7,11 @@ export class FireStoreAdapter implements IDatabaseClient {
   getOne = async (code: string) => {
     const result = await this.fireStore.collection('guests').where('code', '==', code).get()
 
-    const data = result.docs[0].data() as IGuest
+    if (!result.docs[0]) {
+      return null
+    }
+
+    const data = result.docs[0]?.data() as IGuest
 
     return data
   }
@@ -34,6 +38,14 @@ export class FireStoreAdapter implements IDatabaseClient {
     const data = await result.get()
 
     return data.data() as IGuest
+  }
+
+  updateInvite = async ({ oldCode, ...guest }: IGuest & { oldCode: string }) => {
+    const result = await this.fireStore.collection('guests').where('code', '==', oldCode).get()
+
+    await result.docs[0].ref.update(guest)
+
+    return guest
   }
 
   deleteInvite = async (code: string) => {

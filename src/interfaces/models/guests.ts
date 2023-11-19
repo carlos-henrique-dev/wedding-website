@@ -12,6 +12,7 @@ export interface IGuest {
   members: IMember[]
   openedTimes: number
   side: 'bride' | 'groom'
+  group: string
 }
 
 export type IGuestList = Array<Pick<IGuest, 'code'>>

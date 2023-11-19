@@ -15,3 +15,10 @@ export const SORT_OPTIONS: Array<Sorter> = [
   { label: 'Nome da família', value: 'familyName' },
   { label: 'Convites não enviados', value: 'notSent' },
 ]
+
+export const GROUP_OPTIONS: Array<Sorter> = [
+  { label: '1ª Opção', value: 'firstOption' },
+  { label: '2ª Opção', value: 'secondOption' },
+  { label: '3ª Opção', value: 'thirdOption' },
+  { label: '4ª Opção', value: 'fourthOption' },
+]

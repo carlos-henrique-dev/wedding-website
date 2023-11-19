@@ -18,17 +18,23 @@ import {
   RadioGroup,
   Stack,
   VStack,
+  Select,
+  Alert,
+  AlertIcon,
+  Text,
 } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { GROUP_OPTIONS } from '../constants'
 
 interface IDetailsModalProps {
   isOpen: boolean
   onClose: () => void
+  invite?: IGuest
 }
 
-export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProps) {
+export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsModalProps) {
   const toast = useToast()
   const {
     handleSubmit,
@@ -40,19 +46,23 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
     family: string
     side: string
     members: Array<{ value: string }>
+    group: string
   }>({
     defaultValues: {
-      side: 'bride',
+      side: invite?.side || 'bride',
+      family: invite?.family || undefined,
+      group: invite?.group || undefined,
+      members: invite?.members.map((member) => ({ value: member.name })) || undefined,
     },
   })
 
   const { fields, append, remove } = useFieldArray({ control, name: 'members' })
 
-  const ran = useRef(false)
+  const alreadyRunAppend = useRef(false)
 
   useEffect(() => {
-    if (ran.current) {
-      ran.current = true
+    if (alreadyRunAppend.current || (invite?.members.length && invite?.members.length > 0)) {
+      alreadyRunAppend.current = true
       return
     }
 
@@ -86,22 +96,40 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
       absent: false,
       inviteSent: false,
       openedTimes: 0,
+      group: values.group,
     }
 
-    await fetch('/api/new-invite', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }).catch((err) => console.log({ err }))
+    const method = invite ? 'PUT' : 'POST'
 
-    toast({
-      title: 'Convite criado.',
-      description: 'Convite criado com sucesso!',
-      status: 'success',
-      duration: 9000,
-      isClosable: true,
-    })
+    const body = invite ? JSON.stringify({ ...data, oldCode: invite.code }) : JSON.stringify(data)
 
-    handleClose()
+    try {
+      const result = await fetch('/api/invite', { method, body })
+
+      if (result.status !== 200) {
+        throw new Error(result.statusText)
+      }
+
+      toast({
+        title: invite ? 'Convite atualizado!' : 'Convite criado!',
+        description: invite ? 'O convite foi atualizado com sucesso.' : 'O convite foi criado com sucesso.',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
+    } catch (err) {
+      toast({
+        title: invite ? 'Erro ao atualizar convite' : 'Erro ao criar convite',
+        description: invite ? 'Ocorreu um erro ao atualizar o convite. Tente novamente mais tarde.' : 'Ocorreu um erro ao criar o convite. Tente novamente mais tarde.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
+
+      console.error({ err })
+    } finally {
+      handleClose()
+    }
   }
 
   return (
@@ -138,14 +166,46 @@ export default function CreateInviteModal({ isOpen, onClose }: IDetailsModalProp
                   </RadioGroup>
                 )}
                 rules={{
-                  required: { value: true, message: 'This is required.' },
+                  required: { value: true, message: 'Este campo é obrigatório.' },
                 }}
               />
 
               <FormErrorMessage>{String(errors?.side?.message)}</FormErrorMessage>
             </FormControl>
 
+            <FormControl isInvalid={!!errors.group}>
+              <FormLabel htmlFor="group">Grupo</FormLabel>
+              <Controller
+                name="group"
+                control={control}
+                render={({ field }) => (
+                  <Select placeholder="Selecione um grupo" {...field}>
+                    {GROUP_OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                )}
+                rules={{
+                  required: { value: true, message: 'Este campo é obrigatório.' },
+                }}
+              />
+
+              <FormErrorMessage>{String(errors?.group?.message)}</FormErrorMessage>
+            </FormControl>
+
             <FormControl isInvalid={!!errors.family}>
+              {invite && (
+                <Alert status="warning">
+                  <AlertIcon />
+                  <Text>
+                    Caso altere o <Text as={({ children }: any) => <b>{children}</b>}>nome da família</Text>, a URL do convite será alterada. Se já tiver enviado o convite, envie novamente para que o link seja
+                    atualizado.
+                  </Text>
+                </Alert>
+              )}
+
               <FormLabel htmlFor="family">Nome da família</FormLabel>
               <Input
                 id="family"

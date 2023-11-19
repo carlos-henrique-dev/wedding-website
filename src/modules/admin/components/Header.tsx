@@ -1,24 +1,32 @@
 import { ChevronDownIcon, SearchIcon, UpDownIcon, ViewIcon } from '@chakra-ui/icons'
-import { HStack, Button, Menu, MenuButton, MenuList, MenuItem, Divider, Text, CheckboxGroup, Checkbox, Input } from '@chakra-ui/react'
-import { FILTERS_OPTIONS, SORT_OPTIONS } from '../constants'
+import { HStack, Button, Menu, MenuButton, MenuList, MenuItem, Divider, Text, CheckboxGroup, Checkbox, Input, Wrap, WrapItem } from '@chakra-ui/react'
+import { FILTERS_OPTIONS, GROUP_OPTIONS, SORT_OPTIONS } from '../constants'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 interface IHeaderProps {
   onNewInviteClick: () => void
   onShowReportsClick: () => void
   onFilterClick: (filter: Array<string>) => void
+  onGroupClick: (group: Array<string> | undefined) => void
   onSortClick: (sorter: string | null) => void
   onSearchClick: (search: string) => void
 }
 
-export default function Header({ onNewInviteClick, onShowReportsClick, onFilterClick, onSearchClick, onSortClick }: IHeaderProps) {
+export default function Header({ onNewInviteClick, onShowReportsClick, onFilterClick, onGroupClick, onSearchClick, onSortClick }: IHeaderProps) {
   const [selectedFilters, setSelectedFilters] = useState<Array<string>>(['all'])
+  const [selectedGroup, setSelectedGroup] = useState<Array<string> | undefined>()
   const [searchBarState, setSearchBarState] = useState<{ show: boolean; search: string }>({ show: false, search: '' })
 
   const handleCheckboxChange = (newValues: Array<string>) => {
     const newValuesWithoutAll = newValues.filter((value) => value !== 'all')
 
     setSelectedFilters(newValuesWithoutAll)
+  }
+
+  const handleGroupCheckboxChange = (newValues: Array<string>) => {
+    const newSelectedGroup = newValues.filter((value) => !selectedGroup?.includes(value))
+
+    setSelectedGroup(newSelectedGroup)
   }
 
   const handleSortCheckboxChange = (sortValue: string | null) => {
@@ -35,6 +43,11 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
     onFilterClick(selectedFilters)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilters])
+
+  useEffect(() => {
+    onGroupClick(selectedGroup)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedGroup])
 
   const toggleSearchBar = () => {
     setSearchBarState({ show: !searchBarState.show, search: '' })
@@ -67,81 +80,147 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
       </Text>
 
       <HStack w="full" justify="center" py={4} spacing={2}>
-        <Button
-          size={{
-            base: 'sm',
-            md: 'md',
-            lg: 'md',
-            xl: 'md',
-          }}
-          colorScheme="red"
-          onClick={onNewInviteClick}
-        >
-          Novo convite
-        </Button>
+        <Wrap justify="space-evenly" align="center">
+          <WrapItem>
+            <Button
+              size={{
+                base: 'sm',
+                md: 'md',
+                lg: 'md',
+                xl: 'md',
+              }}
+              colorScheme="green"
+              onClick={onNewInviteClick}
+            >
+              Novo convite
+            </Button>
+          </WrapItem>
 
-        <Menu closeOnSelect={false}>
-          <MenuButton
-            as={Button}
-            size={{
-              base: 'sm',
-              md: 'md',
-              lg: 'md',
-              xl: 'md',
-            }}
-            rightIcon={<ChevronDownIcon />}
-          >
-            Filtros
-          </MenuButton>
+          <WrapItem>
+            <Menu closeOnSelect={false}>
+              <MenuButton
+                as={Button}
+                size={{
+                  base: 'sm',
+                  md: 'md',
+                  lg: 'md',
+                  xl: 'md',
+                }}
+                rightIcon={<ChevronDownIcon />}
+              >
+                Filtros
+              </MenuButton>
 
-          <MenuList>
-            <CheckboxGroup colorScheme="red" value={selectedFilters} onChange={handleCheckboxChange}>
-              <MenuItem>
-                <Checkbox value={FILTERS_OPTIONS[0].value} onChange={handleSelectAllFilters}>
-                  {FILTERS_OPTIONS[0].label}
-                </Checkbox>
-              </MenuItem>
+              <MenuList>
+                <CheckboxGroup colorScheme="red" value={selectedFilters} onChange={handleCheckboxChange}>
+                  <MenuItem>
+                    <Checkbox value={FILTERS_OPTIONS[0].value} onChange={handleSelectAllFilters}>
+                      {FILTERS_OPTIONS[0].label}
+                    </Checkbox>
+                  </MenuItem>
 
-              <Divider color="gray.200" />
+                  <Divider color="gray.200" />
 
-              {FILTERS_OPTIONS.slice(1).map((filter, index) => (
-                <MenuItem key={index}>
-                  <Checkbox key={index} value={filter.value}>
-                    {filter.label}
-                  </Checkbox>
-                </MenuItem>
-              ))}
-            </CheckboxGroup>
-          </MenuList>
-        </Menu>
+                  {FILTERS_OPTIONS.slice(1).map((filter, index) => (
+                    <MenuItem key={index}>
+                      <Checkbox key={index} value={filter.value}>
+                        {filter.label}
+                      </Checkbox>
+                    </MenuItem>
+                  ))}
+                </CheckboxGroup>
+              </MenuList>
+            </Menu>
+          </WrapItem>
 
-        <Menu>
-          <MenuButton
-            as={Button}
-            size={{
-              base: 'sm',
-              md: 'md',
-              lg: 'md',
-              xl: 'md',
-            }}
-          >
-            <UpDownIcon />
-          </MenuButton>
+          <WrapItem>
+            <Menu closeOnSelect={false}>
+              <MenuButton
+                as={Button}
+                size={{
+                  base: 'sm',
+                  md: 'md',
+                  lg: 'md',
+                  xl: 'md',
+                }}
+                rightIcon={<ChevronDownIcon />}
+              >
+                Grupo
+              </MenuButton>
 
-          <MenuList>
-            <MenuItem onClick={() => handleSortCheckboxChange(null)}>Sem ordenar</MenuItem>
+              <MenuList>
+                <CheckboxGroup colorScheme="red" value={selectedGroup} onChange={handleGroupCheckboxChange}>
+                  {GROUP_OPTIONS.map((filter, index) => (
+                    <MenuItem key={index}>
+                      <Checkbox key={index} value={filter.value}>
+                        {filter.label}
+                      </Checkbox>
+                    </MenuItem>
+                  ))}
+                </CheckboxGroup>
+              </MenuList>
+            </Menu>
+          </WrapItem>
 
-            {SORT_OPTIONS.map((sorter, index) => (
-              <MenuItem key={index} onClick={() => handleSortCheckboxChange(sorter.value)}>
-                {sorter.label}
-              </MenuItem>
-            ))}
-          </MenuList>
-        </Menu>
+          <WrapItem>
+            <Menu>
+              <MenuButton
+                as={Button}
+                size={{
+                  base: 'sm',
+                  md: 'md',
+                  lg: 'md',
+                  xl: 'md',
+                }}
+              >
+                Ordenar
+                <UpDownIcon ml={2} />
+              </MenuButton>
 
-        <SearchIcon w={6} h={6} color="blue.600" onClick={toggleSearchBar} cursor="pointer" />
+              <MenuList>
+                <MenuItem onClick={() => handleSortCheckboxChange(null)}>Sem ordenar</MenuItem>
 
-        <ViewIcon w={6} h={6} color="green.600" onClick={onShowReportsClick} cursor="pointer" />
+                {SORT_OPTIONS.map((sorter, index) => (
+                  <MenuItem key={index} onClick={() => handleSortCheckboxChange(sorter.value)}>
+                    {sorter.label}
+                  </MenuItem>
+                ))}
+              </MenuList>
+            </Menu>
+          </WrapItem>
+
+          <WrapItem mx={2}>
+            <Button
+              size={{
+                base: 'sm',
+                md: 'md',
+                lg: 'md',
+                xl: 'md',
+              }}
+              colorScheme="gray"
+              onClick={toggleSearchBar}
+              rightIcon={<SearchIcon w={4} h={4} cursor="pointer" />}
+            >
+              Pesquisa
+            </Button>
+          </WrapItem>
+
+          <WrapItem mx={2}>
+            <Button
+              size={{
+                base: 'sm',
+                md: 'md',
+                lg: 'md',
+                xl: 'md',
+              }}
+              colorScheme="blue"
+              onClick={onShowReportsClick}
+              rightIcon={<ViewIcon w={4} h={4} cursor="pointer" />}
+            >
+              Relatório
+            </Button>
+          </WrapItem>
+        </Wrap>
       </HStack>
 
       {searchBarState.show && (

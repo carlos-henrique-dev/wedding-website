@@ -18,6 +18,7 @@ interface IState {
   filters: Filters
   sort: string | null
   search: string
+  group?: Array<string>
 }
 
 const INITIAL_STATE: IState = {
@@ -31,6 +32,7 @@ const INITIAL_STATE: IState = {
   filters: [FILTERS_OPTIONS[0]],
   sort: null,
   search: '',
+  group: undefined,
 }
 
 export default function AdminLoginPage() {
@@ -40,13 +42,16 @@ export default function AdminLoginPage() {
   async function getInvites() {
     const res = await fetch('/api/guest-list')
     const data = (await res.json()) satisfies Array<IGuest>
+
     setState({ ...state, invites: data, total: data.length, loading: false })
   }
 
   useEffect(() => {
-    if (!state.showNewInviteModal) getInvites()
+    if (!state.showNewInviteModal || !state.showDetails) {
+      getInvites()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.showNewInviteModal])
+  }, [state.showNewInviteModal, state.showDetails])
 
   async function copyToClipboard(text: string) {
     const link = `${window.location.origin}/${text}`
@@ -98,7 +103,9 @@ export default function AdminLoginPage() {
   }
 
   function setFilters(filters: Array<string>) {
-    if (filters.includes('all') || filters.length === 0) return setState({ ...state, filters: [FILTERS_OPTIONS[0]] })
+    if (filters.includes('all') || filters.length === 0) {
+      return setState({ ...state, filters: [FILTERS_OPTIONS[0]] })
+    }
 
     const selectedFilters = FILTERS_OPTIONS.filter((filter) => filters.includes(filter.value))
     setState({ ...state, filters: selectedFilters })
@@ -106,6 +113,10 @@ export default function AdminLoginPage() {
 
   function setSorters(sorter: string | null) {
     setState({ ...state, sort: sorter })
+  }
+
+  function setGroup(group: Array<string> | undefined) {
+    setState({ ...state, group })
   }
 
   function filterInvites() {
@@ -120,19 +131,31 @@ export default function AdminLoginPage() {
         const someMemberAbsent = invite.confirmed && invite.members.some((member) => !member.is_coming)
         return invite.absent || someMemberAbsent
       },
+
+      // group
+      firstOption: (invite: IGuest) => invite.group === 'firstOption',
+      secondOption: (invite: IGuest) => invite.group === 'secondOption',
+      thirdOption: (invite: IGuest) => invite.group === 'thirdOption',
+      fourthOption: (invite: IGuest) => invite.group === 'fourthOption',
     }
 
     const filtersValues = state.filters.map((filter) => filter.value)
 
     const filterItems = () => {
-      const filterKeys = state.filters.map((filter) => filter.value)
+      const filterKeys = state.filters.filter((f) => f.value !== 'all').map((filter) => filter.value)
+
+      if (state.group) {
+        filterKeys.push(...state.group)
+      }
 
       return state.invites.filter((invite) => {
-        return filterKeys.every((key) => filters[key as keyof typeof filters](invite))
+        return filterKeys.every((key) => {
+          return filters[key as keyof typeof filters](invite)
+        })
       })
     }
 
-    return filtersValues.includes('all') ? state.invites : filterItems()
+    return filtersValues.includes('all') && !state.group ? state.invites : filterItems()
   }
 
   function sortInvites(a: IGuest, b: IGuest) {
@@ -177,7 +200,7 @@ export default function AdminLoginPage() {
         </Head>
 
         <Container centerContent minHeight="100vh" minWidth="full">
-          <Header onNewInviteClick={onNewInvite} onShowReportsClick={toggleReportsModal} onFilterClick={setFilters} onSearchClick={searchInvites} onSortClick={setSorters} />
+          <Header onNewInviteClick={onNewInvite} onShowReportsClick={toggleReportsModal} onFilterClick={setFilters} onSearchClick={searchInvites} onSortClick={setSorters} onGroupClick={setGroup} />
 
           <Divider color="gray.200" />
 
@@ -240,7 +263,7 @@ export default function AdminLoginPage() {
           </VStack>
         </Container>
 
-        <DetailsModal isOpen={state.showDetails} onClose={() => setState({ ...state, showDetails: false })} invite={state.selectedInvite} />
+        {state.showDetails && <DetailsModal isOpen={state.showDetails} onClose={() => setState({ ...state, showDetails: false })} invite={state.selectedInvite} />}
         {state.showNewInviteModal && <CreateInviteModal isOpen={state.showNewInviteModal} onClose={() => setState({ ...state, showNewInviteModal: false })} />}
         {state.showReportModal && <ReportModal invites={state.invites} isOpen={state.showReportModal} onClose={toggleReportsModal} />}
       </main>

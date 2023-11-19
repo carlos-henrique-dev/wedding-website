@@ -18,26 +18,32 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }): Promise<GetStaticPropsResult<{ guests: IGuest }>> => {
+export const getStaticProps: GetStaticProps = async ({ params }): Promise<GetStaticPropsResult<{ guest: IGuest }>> => {
   const { FireStoreAdapter } = await import('@/infra')
   const database = new FireStoreAdapter()
 
   const code = params?.code
-  const guests = await database.getOne(code as string)
+  const guest = await database.getOne(code as string)
+
+  if (!guest) {
+    return {
+      notFound: true,
+    }
+  }
 
   return {
     props: {
-      guests,
+      guest,
     },
     revalidate: 60 * 60, // 1 hour
   }
 }
 
 interface Props {
-  guests: IGuest
+  guest: IGuest
 }
 
-export default function Invite({ guests: guestsProps }: Props) {
+export default function Invite({ guest: guestsProps }: Props) {
   const [confirmedGuests, setConfirmedGuests] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [showMaps, setShowMaps] = useState(false)
@@ -60,7 +66,8 @@ export default function Invite({ guests: guestsProps }: Props) {
       method: 'GET',
     })
 
-    const data = await response.json()
+    const data: IGuest = await response.json()
+
     setGuests(data)
   }
 
