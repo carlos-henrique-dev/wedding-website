@@ -204,7 +204,6 @@ export default function DetailsModal({ invite, isOpen, onClose }: IDetailsModalP
                               ...field,
                               is_coming: !field.is_coming,
                             }
-                            console.log({ _update })
                             update(index, _update)
                           }}
                         />

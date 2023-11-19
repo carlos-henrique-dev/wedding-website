@@ -1,7 +1,9 @@
-import { ChevronDownIcon, SearchIcon, UpDownIcon, ViewIcon } from '@chakra-ui/icons'
-import { HStack, Button, Menu, MenuButton, MenuList, MenuItem, Divider, Text, CheckboxGroup, Checkbox, Input, Wrap, WrapItem } from '@chakra-ui/react'
+import { AddIcon, ChevronDownIcon, HamburgerIcon, SearchIcon, UpDownIcon, ViewIcon } from '@chakra-ui/icons'
+import { HStack, Button, Menu, MenuButton, MenuList, MenuItem, Divider, Text, CheckboxGroup, Checkbox, Input, Wrap, WrapItem, IconButton, Flex, Box, useDisclosure } from '@chakra-ui/react'
 import { FILTERS_OPTIONS, GROUP_OPTIONS, SORT_OPTIONS } from '../constants'
 import { ChangeEvent, useEffect, useState } from 'react'
+import { signOut, useSession } from 'next-auth/react'
+import { LogoutModal } from './logoutModal'
 
 interface IHeaderProps {
   onNewInviteClick: () => void
@@ -13,6 +15,10 @@ interface IHeaderProps {
 }
 
 export default function Header({ onNewInviteClick, onShowReportsClick, onFilterClick, onGroupClick, onSearchClick, onSortClick }: IHeaderProps) {
+  const { data } = useSession()
+
+  const { isOpen: showConfirmLogout, onOpen: onTryLogout, onClose: onCancelLogout } = useDisclosure()
+
   const [selectedFilters, setSelectedFilters] = useState<Array<string>>(['all'])
   const [selectedGroup, setSelectedGroup] = useState<Array<string> | undefined>()
   const [searchBarState, setSearchBarState] = useState<{ show: boolean; search: string }>({ show: false, search: '' })
@@ -66,18 +72,41 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
 
   return (
     <>
-      <Text
-        fontSize={{
-          base: '2xl',
-          md: '4xl',
-          lg: '4xl',
-          xl: '4xl',
-        }}
-        color="gray.500"
-        py={4}
-      >
-        Lista de convidados
-      </Text>
+      <Flex width="full">
+        <Box p={4}>
+          <Menu>
+            <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
+
+            <MenuList>
+              <MenuItem>Usuário: {data?.user?.name}</MenuItem>
+
+              <Divider />
+
+              <MenuItem onClick={onShowReportsClick}>Relatório</MenuItem>
+
+              <Divider />
+
+              <MenuItem onClick={onTryLogout}>Sair</MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+
+        <Box flex="1" w="full">
+          <Text
+            fontSize={{
+              base: '2xl',
+              md: '4xl',
+              lg: '4xl',
+              xl: '4xl',
+            }}
+            color="gray.500"
+            textAlign="center"
+            py={4}
+          >
+            Lista de convidados
+          </Text>
+        </Box>
+      </Flex>
 
       <HStack w="full" justify="center" py={4} spacing={2}>
         <Wrap justify="space-evenly" align="center">
@@ -205,7 +234,7 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
             </Button>
           </WrapItem>
 
-          <WrapItem mx={2}>
+          {/* <WrapItem mx={2}>
             <Button
               size={{
                 base: 'sm',
@@ -219,7 +248,7 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
             >
               Relatório
             </Button>
-          </WrapItem>
+          </WrapItem> */}
         </Wrap>
       </HStack>
 
@@ -245,6 +274,8 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
           </Button>
         </HStack>
       )}
+
+      {showConfirmLogout && <LogoutModal isOpen={showConfirmLogout} onClose={onCancelLogout} />}
     </>
   )
 }

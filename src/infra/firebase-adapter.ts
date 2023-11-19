@@ -118,4 +118,17 @@ export class FireStoreAdapter implements IDatabaseClient {
 
     return data
   }
+
+  // USERS
+  getUser = async (username: string) => {
+    const result = await this.fireStore.collection('users').where('username', '==', username).get()
+
+    if (!result.docs[0]) {
+      return null
+    }
+
+    const data = result.docs[0]?.data()
+
+    return data
+  }
 }

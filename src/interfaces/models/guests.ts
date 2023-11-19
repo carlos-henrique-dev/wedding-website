@@ -3,6 +3,8 @@ export interface IMember {
   is_coming: boolean
 }
 
+export type TSide = 'bride' | 'groom'
+
 export interface IGuest {
   family: string
   code: string
@@ -11,7 +13,7 @@ export interface IGuest {
   inviteSent: boolean
   members: IMember[]
   openedTimes: number
-  side: 'bride' | 'groom'
+  side: TSide
   group: string
 }
 

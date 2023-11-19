@@ -27,6 +27,7 @@ import { useEffect, useRef } from 'react'
 
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { GROUP_OPTIONS } from '../constants'
+import { useSession } from 'next-auth/react'
 
 interface IDetailsModalProps {
   isOpen: boolean
@@ -35,7 +36,9 @@ interface IDetailsModalProps {
 }
 
 export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsModalProps) {
+  const { data } = useSession()
   const toast = useToast()
+
   const {
     handleSubmit,
     register,
@@ -49,7 +52,7 @@ export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsM
     group: string
   }>({
     defaultValues: {
-      side: invite?.side || 'bride',
+      side: invite?.side || data?.user.side || 'bride',
       family: invite?.family || undefined,
       group: invite?.group || undefined,
       members: invite?.members.map((member) => ({ value: member.name })) || undefined,

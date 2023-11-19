@@ -6,6 +6,8 @@ import { IGuest } from '@/interfaces'
 import { CreateInviteModal, DetailsModal, Header, InviteCard, ReportModal } from '../../modules/admin/components'
 import { FILTERS_OPTIONS, SORT_OPTIONS } from '../../modules/admin/constants'
 import { Filters } from '../../modules/admin/interfaces'
+import { withAuthorization } from '@/hocs'
+import { useSession } from 'next-auth/react'
 
 interface IState {
   invites: Array<IGuest>
@@ -35,7 +37,9 @@ const INITIAL_STATE: IState = {
   group: undefined,
 }
 
-export default function AdminLoginPage() {
+function AdminManagePage() {
+  const { data, status } = useSession()
+
   const toast = useToast()
   const [state, setState] = useState<IState>(INITIAL_STATE)
 
@@ -270,3 +274,5 @@ export default function AdminLoginPage() {
     </ChakraProvider>
   )
 }
+
+export default withAuthorization(AdminManagePage)
