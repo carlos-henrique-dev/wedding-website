@@ -1,7 +1,6 @@
 import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next'
 import Head from 'next/head'
 import { IGuest } from '@/interfaces'
-import { RoseImage } from '@/components'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
@@ -176,7 +175,7 @@ export default function Invite({ guest: guestsProps }: Props) {
     }
   }
   const copyPixKey = () => {
-    navigator.clipboard.writeText('henriqueok20@gmail.com')
+    navigator.clipboard.writeText('TODO VERIFICAR O EMAIL')
     setPixKeyCopied(true)
   }
 
@@ -205,26 +204,23 @@ export default function Invite({ guest: guestsProps }: Props) {
           </svg>
         </div>
 
-        <RoseImage className="first_rose_background" />
-
         <section className="cover" id="cover">
           <h1 className="title">
-            <span>Henrique</span>
-            <span>e</span>
-            <span>Thaysa</span>
+            <span>Alan</span>
+            <span>- e -</span>
+            <span>Fran</span>
           </h1>
 
           <p className="subtitle">
             <span className="verse">
-              <span>&quot;Grandes coisas fez o Senhor por nós.</span>
-              <span>Por isso estamos alegres.&quot;</span>
+              <span>Texto aqui?</span>
             </span>
 
-            <span>Salmos 126:3</span>
+            <span>Texto aqui?</span>
           </p>
 
           <p className="date">
-            <span>15 - 07 - 2023</span>
+            <span>data a definir</span>
           </p>
 
           <a href="#details" className="arrow_down">
@@ -236,8 +232,6 @@ export default function Invite({ guest: guestsProps }: Props) {
           </a>
         </section>
 
-        <RoseImage className="second_rose_background" />
-
         <section className="details" id="details">
           <div className="background-overlay" />
 
@@ -245,13 +239,13 @@ export default function Invite({ guest: guestsProps }: Props) {
 
           <h2 className="family-name">{guests.family}</h2>
 
-          <span className="invitation">COM A BÊNÇÃO DE DEUS E NOSSOS PAIS</span>
+          <span className="invitation">texto aqui?</span>
 
           <p className="parents">
-            <span>Luciana Fernandes</span>
-            <span>Marluci Tobias</span>
-            <span>João Carlos</span>
-            <span>Elio Joaquim</span>
+            <span>vai</span>
+            <span>listar algo</span>
+            <span>aqui</span>
+            <span>?</span>
           </p>
 
           <span className="invitation">
@@ -266,19 +260,19 @@ export default function Invite({ guest: guestsProps }: Props) {
             <div className="date-divider" />
 
             <span className="date">
-              <span>JULHO</span>
-              <span className="day">15</span>
-              <span className="year">2023</span>
+              <span>dia</span>
+              <span className="day">a</span>
+              <span className="year">definir</span>
             </span>
 
             <div className="date-divider" />
 
             <span className="time-place">
-              <span className="time">ÀS 18h</span>
+              <span className="time">horario a definir</span>
 
               <span className="place">
-                <span>PALLADIUM</span>
-                <span>BUFFET</span>
+                <span>Local</span>
+                <span>a definir</span>
               </span>
             </span>
           </div>
@@ -292,19 +286,12 @@ export default function Invite({ guest: guestsProps }: Props) {
           </a>
         </section>
 
-        <RoseImage className="third_rose_background" />
-
         <section className="rsvp" id="rsvp">
           <div className="background-overlay less_opacity" />
 
           <div className="wrapper">
             <div className="confirmation">
               <Image src="/images/mini_rose.png" alt="mini_rose" width={60} height={60} className="mini_rose" />
-
-              {/* <span className="information">
-                {confirmationText}
-                <br /> PRESENÇA ATÉ O DIA <b>15-06-2023</b>
-              </span> */}
 
               <span className="information">Selecione na lista abaixo as pessoas que estarão presentes.</span>
 
@@ -404,19 +391,9 @@ export default function Invite({ guest: guestsProps }: Props) {
                   <h3>Sobre os presentes</h3>
 
                   <p className="content">
-                    Optamos por não fazer lista de presentes!
-                    <br />
-                    <br />
-                    Receberemos com o maior carinho o que você sentir no coração!
-                    <br />
-                    <br />
-                    Se preferir contribuir com nossa lua de mel, segue abaixo nossa chave pix!
-                    <br />
-                    <br />E caso não possa, não há problemas, o nosso presente é ter a sua companhia!
-                    <br />
-                    <br />
+                    Definir o texto aqui
                     <span>
-                      Chave: <strong>henriqueok20@gmail.com</strong>
+                      Chave: <strong>DEFINIR a chave</strong>
                     </span>
                     <button className="copy-pix" onClick={() => copyPixKey()}>
                       Copiar chave
