@@ -1,6 +1,6 @@
-import Head from 'next/head'
+import Head from "next/head";
 
-import { RoseImage } from '@/components'
+import { RoseImage } from "@/components";
 
 export default function NotFoundPage() {
   return (
@@ -23,5 +23,5 @@ export default function NotFoundPage() {
         </p>
       </section>
     </>
-  )
+  );
 }

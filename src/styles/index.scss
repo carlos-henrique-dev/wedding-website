@@ -3,27 +3,27 @@
 @tailwind utilities;
 
 html {
-	scroll-behavior: smooth;
-	overflow: scroll;
-	overflow-x: hidden;
+  scroll-behavior: smooth;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 
 * {
-	scroll-behavior: smooth;
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 ::-webkit-scrollbar {
-	width: 0px;
-	background: transparent;
+  width: 0px;
+  background: transparent;
 }
 
 input[type="checkbox"]:checked::before {
-	content: "\2713";
-	display: inline-block;
-	text-align: center;
-	width: 100%;
-	color: white;
+  content: "\2713";
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  color: white;
 }

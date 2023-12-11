@@ -1,6 +1,7 @@
-import { Html, Head, Main, NextScript } from 'next/document'
+import { Html, Head, Main, NextScript } from "next/document";
 
-const OG_IMAGE = 'https://drive.google.com/file/d/1RoG_1XOZj1gdOH5glt58FWQFJcj5cYha/view?usp=share_link'
+const OG_IMAGE =
+  "https://drive.google.com/file/d/1RoG_1XOZj1gdOH5glt58FWQFJcj5cYha/view?usp=share_link";
 
 export default function Document() {
   return (
@@ -23,5 +24,5 @@ export default function Document() {
         <NextScript />
       </body>
     </Html>
-  )
+  );
 }

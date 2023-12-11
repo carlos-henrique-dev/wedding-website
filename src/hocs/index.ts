@@ -1,1 +1,1 @@
-export { default as withAuthorization } from './with-authorization'
+export { default as withAuthorization } from "./with-authorization";

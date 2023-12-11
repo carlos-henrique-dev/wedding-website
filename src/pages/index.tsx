@@ -1,11 +1,12 @@
-import { RoseImage } from '@/components'
-import Head from 'next/head'
-import Image from 'next/image'
+import { RoseImage } from "@/components";
+import Head from "next/head";
+import Image from "next/image";
 
 const content = {
   title: `Alão vai Casar`,
-  subtitle: 'Vamos casar! E você está convidado para testemunhar nossa união. Clique para saber mais.',
-}
+  subtitle:
+    "Vamos casar! E você está convidado para testemunhar nossa união. Clique para saber mais.",
+};
 
 export default function Home() {
   return (
@@ -38,5 +39,5 @@ export default function Home() {
         />
       </main>
     </>
-  )
+  );
 }

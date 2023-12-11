@@ -1,81 +1,131 @@
-import { AddIcon, ChevronDownIcon, HamburgerIcon, SearchIcon, UpDownIcon, ViewIcon } from '@chakra-ui/icons'
-import { HStack, Button, Menu, MenuButton, MenuList, MenuItem, Divider, Text, CheckboxGroup, Checkbox, Input, Wrap, WrapItem, IconButton, Flex, Box, useDisclosure } from '@chakra-ui/react'
-import { FILTERS_OPTIONS, GROUP_OPTIONS, SORT_OPTIONS } from '../constants'
-import { ChangeEvent, useEffect, useState } from 'react'
-import { signOut, useSession } from 'next-auth/react'
-import { LogoutModal } from './logoutModal'
+import {
+  AddIcon,
+  ChevronDownIcon,
+  HamburgerIcon,
+  SearchIcon,
+  UpDownIcon,
+  ViewIcon,
+} from "@chakra-ui/icons";
+import {
+  HStack,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Divider,
+  Text,
+  CheckboxGroup,
+  Checkbox,
+  Input,
+  Wrap,
+  WrapItem,
+  IconButton,
+  Flex,
+  Box,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { FILTERS_OPTIONS, GROUP_OPTIONS, SORT_OPTIONS } from "../constants";
+import { ChangeEvent, useEffect, useState } from "react";
+import { signOut, useSession } from "next-auth/react";
+import { LogoutModal } from "./logoutModal";
 
 interface IHeaderProps {
-  onNewInviteClick: () => void
-  onShowReportsClick: () => void
-  onFilterClick: (filter: Array<string>) => void
-  onGroupClick: (group: Array<string> | undefined) => void
-  onSortClick: (sorter: string | null) => void
-  onSearchClick: (search: string) => void
+  onNewInviteClick: () => void;
+  onShowReportsClick: () => void;
+  onFilterClick: (filter: Array<string>) => void;
+  onGroupClick: (group: Array<string> | undefined) => void;
+  onSortClick: (sorter: string | null) => void;
+  onSearchClick: (search: string) => void;
 }
 
-export default function Header({ onNewInviteClick, onShowReportsClick, onFilterClick, onGroupClick, onSearchClick, onSortClick }: IHeaderProps) {
-  const { data } = useSession()
+export default function Header({
+  onNewInviteClick,
+  onShowReportsClick,
+  onFilterClick,
+  onGroupClick,
+  onSearchClick,
+  onSortClick,
+}: IHeaderProps) {
+  const { data } = useSession();
 
-  const { isOpen: showConfirmLogout, onOpen: onTryLogout, onClose: onCancelLogout } = useDisclosure()
+  const {
+    isOpen: showConfirmLogout,
+    onOpen: onTryLogout,
+    onClose: onCancelLogout,
+  } = useDisclosure();
 
-  const [selectedFilters, setSelectedFilters] = useState<Array<string>>(['all'])
-  const [selectedGroup, setSelectedGroup] = useState<Array<string> | undefined>()
-  const [searchBarState, setSearchBarState] = useState<{ show: boolean; search: string }>({ show: false, search: '' })
+  const [selectedFilters, setSelectedFilters] = useState<Array<string>>([
+    "all",
+  ]);
+  const [selectedGroup, setSelectedGroup] = useState<
+    Array<string> | undefined
+  >();
+  const [searchBarState, setSearchBarState] = useState<{
+    show: boolean;
+    search: string;
+  }>({ show: false, search: "" });
 
   const handleCheckboxChange = (newValues: Array<string>) => {
-    const newValuesWithoutAll = newValues.filter((value) => value !== 'all')
+    const newValuesWithoutAll = newValues.filter((value) => value !== "all");
 
-    setSelectedFilters(newValuesWithoutAll)
-  }
+    setSelectedFilters(newValuesWithoutAll);
+  };
 
   const handleGroupCheckboxChange = (newValues: Array<string>) => {
-    const newSelectedGroup = newValues.filter((value) => !selectedGroup?.includes(value))
+    const newSelectedGroup = newValues.filter(
+      (value) => !selectedGroup?.includes(value),
+    );
 
-    setSelectedGroup(newSelectedGroup)
-  }
+    setSelectedGroup(newSelectedGroup);
+  };
 
   const handleSortCheckboxChange = (sortValue: string | null) => {
-    onSortClick(sortValue)
-  }
+    onSortClick(sortValue);
+  };
 
   const handleSelectAllFilters = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      setSelectedFilters(['all'])
+      setSelectedFilters(["all"]);
     }
-  }
+  };
 
   useEffect(() => {
-    onFilterClick(selectedFilters)
+    onFilterClick(selectedFilters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFilters])
+  }, [selectedFilters]);
 
   useEffect(() => {
-    onGroupClick(selectedGroup)
+    onGroupClick(selectedGroup);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedGroup])
+  }, [selectedGroup]);
 
   const toggleSearchBar = () => {
-    setSearchBarState({ show: !searchBarState.show, search: '' })
-    onSearchClick('')
-  }
+    setSearchBarState({ show: !searchBarState.show, search: "" });
+    onSearchClick("");
+  };
 
   const searchInvite = (event: ChangeEvent<HTMLInputElement>) => {
-    const search = event.target.value.trim()
+    const search = event.target.value.trim();
 
-    setSearchBarState({ ...searchBarState, search })
-  }
+    setSearchBarState({ ...searchBarState, search });
+  };
 
   const handleSearch = () => {
-    onSearchClick(searchBarState.search)
-  }
+    onSearchClick(searchBarState.search);
+  };
 
   return (
     <>
       <Flex width="full">
         <Box p={4}>
           <Menu>
-            <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<HamburgerIcon />}
+              variant="outline"
+            />
 
             <MenuList>
               <MenuItem>Usuário: {data?.user?.name}</MenuItem>
@@ -94,10 +144,10 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
         <Box flex="1" w="full">
           <Text
             fontSize={{
-              base: '2xl',
-              md: '4xl',
-              lg: '4xl',
-              xl: '4xl',
+              base: "2xl",
+              md: "4xl",
+              lg: "4xl",
+              xl: "4xl",
             }}
             color="gray.500"
             textAlign="center"
@@ -113,10 +163,10 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
           <WrapItem>
             <Button
               size={{
-                base: 'sm',
-                md: 'md',
-                lg: 'md',
-                xl: 'md',
+                base: "sm",
+                md: "md",
+                lg: "md",
+                xl: "md",
               }}
               colorScheme="green"
               onClick={onNewInviteClick}
@@ -130,10 +180,10 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
               <MenuButton
                 as={Button}
                 size={{
-                  base: 'sm',
-                  md: 'md',
-                  lg: 'md',
-                  xl: 'md',
+                  base: "sm",
+                  md: "md",
+                  lg: "md",
+                  xl: "md",
                 }}
                 rightIcon={<ChevronDownIcon />}
               >
@@ -141,9 +191,16 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
               </MenuButton>
 
               <MenuList>
-                <CheckboxGroup colorScheme="red" value={selectedFilters} onChange={handleCheckboxChange}>
+                <CheckboxGroup
+                  colorScheme="red"
+                  value={selectedFilters}
+                  onChange={handleCheckboxChange}
+                >
                   <MenuItem>
-                    <Checkbox value={FILTERS_OPTIONS[0].value} onChange={handleSelectAllFilters}>
+                    <Checkbox
+                      value={FILTERS_OPTIONS[0].value}
+                      onChange={handleSelectAllFilters}
+                    >
                       {FILTERS_OPTIONS[0].label}
                     </Checkbox>
                   </MenuItem>
@@ -167,10 +224,10 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
               <MenuButton
                 as={Button}
                 size={{
-                  base: 'sm',
-                  md: 'md',
-                  lg: 'md',
-                  xl: 'md',
+                  base: "sm",
+                  md: "md",
+                  lg: "md",
+                  xl: "md",
                 }}
                 rightIcon={<ChevronDownIcon />}
               >
@@ -178,7 +235,11 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
               </MenuButton>
 
               <MenuList>
-                <CheckboxGroup colorScheme="red" value={selectedGroup} onChange={handleGroupCheckboxChange}>
+                <CheckboxGroup
+                  colorScheme="red"
+                  value={selectedGroup}
+                  onChange={handleGroupCheckboxChange}
+                >
                   {GROUP_OPTIONS.map((filter, index) => (
                     <MenuItem key={index}>
                       <Checkbox key={index} value={filter.value}>
@@ -196,10 +257,10 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
               <MenuButton
                 as={Button}
                 size={{
-                  base: 'sm',
-                  md: 'md',
-                  lg: 'md',
-                  xl: 'md',
+                  base: "sm",
+                  md: "md",
+                  lg: "md",
+                  xl: "md",
                 }}
               >
                 Ordenar
@@ -207,10 +268,15 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
               </MenuButton>
 
               <MenuList>
-                <MenuItem onClick={() => handleSortCheckboxChange(null)}>Sem ordenar</MenuItem>
+                <MenuItem onClick={() => handleSortCheckboxChange(null)}>
+                  Sem ordenar
+                </MenuItem>
 
                 {SORT_OPTIONS.map((sorter, index) => (
-                  <MenuItem key={index} onClick={() => handleSortCheckboxChange(sorter.value)}>
+                  <MenuItem
+                    key={index}
+                    onClick={() => handleSortCheckboxChange(sorter.value)}
+                  >
                     {sorter.label}
                   </MenuItem>
                 ))}
@@ -221,10 +287,10 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
           <WrapItem mx={2}>
             <Button
               size={{
-                base: 'sm',
-                md: 'md',
-                lg: 'md',
-                xl: 'md',
+                base: "sm",
+                md: "md",
+                lg: "md",
+                xl: "md",
               }}
               colorScheme="gray"
               onClick={toggleSearchBar}
@@ -259,13 +325,18 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
             value={searchBarState.search}
             onChange={searchInvite}
             onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                handleSearch()
+              if (event.key === "Enter") {
+                handleSearch();
               }
             }}
           />
 
-          <Button size="sm" onClick={handleSearch} disabled={searchBarState.search.trim() === ''} colorScheme="green">
+          <Button
+            size="sm"
+            onClick={handleSearch}
+            disabled={searchBarState.search.trim() === ""}
+            colorScheme="green"
+          >
             Buscar
           </Button>
 
@@ -275,7 +346,9 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
         </HStack>
       )}
 
-      {showConfirmLogout && <LogoutModal isOpen={showConfirmLogout} onClose={onCancelLogout} />}
+      {showConfirmLogout && (
+        <LogoutModal isOpen={showConfirmLogout} onClose={onCancelLogout} />
+      )}
     </>
-  )
+  );
 }

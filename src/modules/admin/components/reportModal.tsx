@@ -1,49 +1,84 @@
-import { IGuest } from '@/interfaces'
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Text, Divider, VStack, HStack, Box, AbsoluteCenter, Stat, StatLabel, StatNumber } from '@chakra-ui/react'
+import { IGuest } from "@/interfaces";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Text,
+  Divider,
+  VStack,
+  HStack,
+  Box,
+  AbsoluteCenter,
+  Stat,
+  StatLabel,
+  StatNumber,
+} from "@chakra-ui/react";
 
 interface IDetailsModalProps {
-  invites: IGuest[]
-  isOpen: boolean
-  onClose: () => void
+  invites: IGuest[];
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export default function ReportModal({ invites, isOpen, onClose }: IDetailsModalProps) {
+export default function ReportModal({
+  invites,
+  isOpen,
+  onClose,
+}: IDetailsModalProps) {
   function calculateAbsent() {
     return invites.reduce((acc, invite) => {
       if (!invite.inviteSent || invite.openedTimes === 0) {
-        return acc
+        return acc;
       }
 
       if (invite.confirmed || invite.absent) {
-        return acc + invite.members.filter((member) => !member.is_coming).length
+        return (
+          acc + invite.members.filter((member) => !member.is_coming).length
+        );
       }
 
-      return acc
-    }, 0)
+      return acc;
+    }, 0);
   }
 
-  const createdInvites = invites.length
-  const sentInvites = invites.filter((invite) => invite.inviteSent).length
+  const createdInvites = invites.length;
+  const sentInvites = invites.filter((invite) => invite.inviteSent).length;
 
-  const totalInvited = invites.reduce((acc, invite) => acc + invite.members.length, 0)
-  const totalConfirmed = invites.reduce((acc, invite) => acc + invite.members.filter((member) => member.is_coming).length, 0)
-  const totalAbsent = calculateAbsent()
+  const totalInvited = invites.reduce(
+    (acc, invite) => acc + invite.members.length,
+    0,
+  );
+  const totalConfirmed = invites.reduce(
+    (acc, invite) =>
+      acc + invite.members.filter((member) => member.is_coming).length,
+    0,
+  );
+  const totalAbsent = calculateAbsent();
 
-  const brideInvites = invites.filter((invite) => invite.side === 'bride').reduce((acc, invite) => acc + invite.members.length, 0)
-  const groomInvites = invites.filter((invite) => invite.side === 'groom').reduce((acc, invite) => acc + invite.members.length, 0)
+  const brideInvites = invites
+    .filter((invite) => invite.side === "bride")
+    .reduce((acc, invite) => acc + invite.members.length, 0);
+  const groomInvites = invites
+    .filter((invite) => invite.side === "groom")
+    .reduce((acc, invite) => acc + invite.members.length, 0);
 
-  if (!invites.length) return null
+  if (!invites.length) return null;
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       size={{
-        base: 'sm',
-        sm: 'sm',
-        md: 'md',
-        lg: 'xl',
-        xl: 'xl',
+        base: "sm",
+        sm: "sm",
+        md: "md",
+        lg: "xl",
+        xl: "xl",
       }}
     >
       <ModalOverlay />
@@ -131,5 +166,5 @@ export default function ReportModal({ invites, isOpen, onClose }: IDetailsModalP
         </ModalFooter>
       </ModalContent>
     </Modal>
-  )
+  );
 }

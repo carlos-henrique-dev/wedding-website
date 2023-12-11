@@ -1,12 +1,15 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { IGuestList } from '@/interfaces'
+import type { NextApiRequest, NextApiResponse } from "next";
+import { IGuestList } from "@/interfaces";
 
-import { FireStoreAdapter } from '@/infra'
+import { FireStoreAdapter } from "@/infra";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<IGuestList>) {
-  const database = new FireStoreAdapter()
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<IGuestList>,
+) {
+  const database = new FireStoreAdapter();
 
-  const guests = await database.getList()
+  const guests = await database.getList();
 
-  res.status(200).json(guests)
+  res.status(200).json(guests);
 }

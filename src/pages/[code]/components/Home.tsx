@@ -1,5 +1,5 @@
-import { BouncingArrowDown, RoseImage } from '@/components'
-import Image from 'next/image'
+import { BouncingArrowDown, RoseImage } from "@/components";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -21,5 +21,5 @@ export default function Home() {
         className="absolute -bottom-[15%] -right-10 w-4/5"
       />
     </main>
-  )
+  );
 }

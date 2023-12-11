@@ -1,2 +1,2 @@
-export * from './environment'
-export * from './firebase'
+export * from "./environment";
+export * from "./firebase";

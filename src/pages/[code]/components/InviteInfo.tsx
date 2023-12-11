@@ -1,8 +1,8 @@
-import { BouncingArrowDown, RoseImage } from '@/components'
-import { IGuest } from '@/interfaces'
+import { BouncingArrowDown, RoseImage } from "@/components";
+import { IGuest } from "@/interfaces";
 
 interface Props {
-  guestData: IGuest
+  guestData: IGuest;
 }
 
 export default function InviteInfo({ guestData }: Props) {
@@ -11,7 +11,9 @@ export default function InviteInfo({ guestData }: Props) {
       <RoseImage className="absolute -top-[10%] -left-[40%] z-10" />
 
       <section className="w-[90%] h-[90%] flex justify-evenly items-center flex-col z-20 bg-white-90">
-        <h2 className="font-callem-script text-7xl flex-wrap text-primary text-center">{guestData.family}</h2>
+        <h2 className="font-callem-script text-7xl flex-wrap text-primary text-center">
+          {guestData.family}
+        </h2>
 
         <p className="w-full text-center font-eb-garamond italic text-xl text-primary-dark">
           Com a benção de Deus e nossos pais
@@ -20,7 +22,9 @@ export default function InviteInfo({ guestData }: Props) {
 
         <section className="w-full flex flex-col items-center justify-center gap-2">
           <div className="relative w-full flex items-center justify-center h-5">
-            <p className="absolute bg-white z-20 font-eb-garamond text-primary-dark text-center text-xl px-2">Sábado, às 16h30</p>
+            <p className="absolute bg-white z-20 font-eb-garamond text-primary-dark text-center text-xl px-2">
+              Sábado, às 16h30
+            </p>
 
             <hr className="bg-primary-dark h-1 w-3/4 absolute z-10" />
           </div>
@@ -35,8 +39,12 @@ export default function InviteInfo({ guestData }: Props) {
 
           <hr className="bg-primary-dark h-1 w-3/4" />
 
-          <p className="mt-5 font-eb-garamond text-primary-dark">Espaço dos Buritis, Dourados-MS</p>
-          <p className="font-eb-garamond text-primary-dark">Encerramento às 0h</p>
+          <p className="mt-5 font-eb-garamond text-primary-dark">
+            Espaço dos Buritis, Dourados-MS
+          </p>
+          <p className="font-eb-garamond text-primary-dark">
+            Encerramento às 0h
+          </p>
         </section>
       </section>
 
@@ -48,5 +56,5 @@ export default function InviteInfo({ guestData }: Props) {
 
       <RoseImage className="absolute z-10 w-8/12 -bottom-[10%] -right-[30%]" />
     </section>
-  )
+  );
 }

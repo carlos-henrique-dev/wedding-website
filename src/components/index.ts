@@ -1,2 +1,2 @@
-export * from './RoseImage'
-export * from './BouncingArrowDown'
+export * from "./RoseImage";
+export * from "./BouncingArrowDown";

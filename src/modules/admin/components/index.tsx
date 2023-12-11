@@ -1,5 +1,5 @@
-export { default as InviteCard } from './inviteCard'
-export { default as DetailsModal } from './detailsModal'
-export { default as CreateInviteModal } from './createInviteModal'
-export { default as ReportModal } from './reportModal'
-export { default as Header } from './Header'
+export { default as InviteCard } from "./inviteCard";
+export { default as DetailsModal } from "./detailsModal";
+export { default as CreateInviteModal } from "./createInviteModal";
+export { default as ReportModal } from "./reportModal";
+export { default as Header } from "./Header";

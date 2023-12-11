@@ -1,128 +1,153 @@
-import { BouncingArrowDown, RoseImage } from '@/components'
-import { IGuest } from '@/interfaces'
-import { useEffect, useState } from 'react'
-import ConfirmAbsenceAlert from './ConfirmAbsenceAlert'
+import { BouncingArrowDown, RoseImage } from "@/components";
+import { IGuest } from "@/interfaces";
+import { useEffect, useState } from "react";
+import ConfirmAbsenceAlert from "./ConfirmAbsenceAlert";
 
 interface Props {
-  guestData: IGuest
-  loading: boolean
-  refreshData: () => Promise<void>
-  toggleLoading: (state: boolean) => void
+  guestData: IGuest;
+  loading: boolean;
+  refreshData: () => Promise<void>;
+  toggleLoading: (state: boolean) => void;
 }
 
-export default function RSVP({ guestData, loading, refreshData, toggleLoading }: Props) {
-  const [confirmedGuests, setConfirmedGuests] = useState<string[]>([])
-  const [showConfirmTip, setShowConfirmTip] = useState(false)
-  const [showConfirmAbsence, setShowConfirmAbsence] = useState(false)
+export default function RSVP({
+  guestData,
+  loading,
+  refreshData,
+  toggleLoading,
+}: Props) {
+  const [confirmedGuests, setConfirmedGuests] = useState<string[]>([]);
+  const [showConfirmTip, setShowConfirmTip] = useState(false);
+  const [showConfirmAbsence, setShowConfirmAbsence] = useState(false);
 
   useEffect(() => {
     if (showConfirmTip) {
       setTimeout(() => {
-        setShowConfirmTip(false)
-      }, 2000)
+        setShowConfirmTip(false);
+      }, 2000);
     }
-  }, [showConfirmTip])
+  }, [showConfirmTip]);
 
   async function confirmPresence() {
     if (!confirmedGuests.length) {
-      setShowConfirmTip(true)
-      return
+      setShowConfirmTip(true);
+      return;
     }
 
-    toggleLoading(true)
+    toggleLoading(true);
 
-    const members = confirmedGuests.map((name) => name.split('guest-')[1])
-    console.log(members)
-    await fetch('/api/confirm-presence', {
-      method: 'POST',
+    const members = confirmedGuests.map((name) => name.split("guest-")[1]);
+    console.log(members);
+    await fetch("/api/confirm-presence", {
+      method: "POST",
       body: JSON.stringify({ code: guestData.code, members }),
-    })
+    });
 
-    await refreshData()
-    toggleLoading(false)
+    await refreshData();
+    toggleLoading(false);
   }
 
   async function confirmAbsence() {
-    console.log('confirm absence')
-    toggleLoading(true)
+    console.log("confirm absence");
+    toggleLoading(true);
 
-    await fetch('/api/confirm-absence', {
-      method: 'POST',
+    await fetch("/api/confirm-absence", {
+      method: "POST",
       body: JSON.stringify({ code: guestData.code }),
-    })
+    });
 
-    await refreshData()
-    toggleLoading(false)
-    setShowConfirmAbsence(false)
+    await refreshData();
+    toggleLoading(false);
+    setShowConfirmAbsence(false);
   }
 
   const confirmedCount = () => {
-    let count = 0
-    const suffix = guestData.members.length > 1 ? 'convidados confirmados' : 'convidado confirmado'
-    const mountMessage = (total: number) => `${total} de ${guestData.members.length} ${suffix}`
+    let count = 0;
+    const suffix =
+      guestData.members.length > 1
+        ? "convidados confirmados"
+        : "convidado confirmado";
+    const mountMessage = (total: number) =>
+      `${total} de ${guestData.members.length} ${suffix}`;
 
-    if (guestData.absent) return mountMessage(count)
+    if (guestData.absent) return mountMessage(count);
 
     if (guestData.confirmed) {
-      count = guestData.members.filter((member) => member.is_coming).length
-      return mountMessage(count)
+      count = guestData.members.filter((member) => member.is_coming).length;
+      return mountMessage(count);
     }
 
-    count = confirmedGuests.length
+    count = confirmedGuests.length;
 
-    return mountMessage(count)
-  }
+    return mountMessage(count);
+  };
 
   const handleCheckConfirmed = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked, name } = event.target
+    const { checked, name } = event.target;
 
     if (!checked) {
-      setConfirmedGuests(confirmedGuests.filter((item) => item !== name))
-      return
+      setConfirmedGuests(confirmedGuests.filter((item) => item !== name));
+      return;
     }
 
     if (confirmedGuests.includes(name)) {
-      setConfirmedGuests(confirmedGuests.filter((item) => item === name))
-      return
+      setConfirmedGuests(confirmedGuests.filter((item) => item === name));
+      return;
     }
 
-    setConfirmedGuests([...confirmedGuests, name])
-  }
+    setConfirmedGuests([...confirmedGuests, name]);
+  };
 
-  const isMemberConfirmed = (name: string) => guestData.members.some((member) => member.name === name && member.is_coming)
+  const isMemberConfirmed = (name: string) =>
+    guestData.members.some(
+      (member) => member.name === name && member.is_coming,
+    );
 
   const confirmPresenceButtonLabel = () => {
-    if (loading) return 'Confirmando...'
+    if (loading) return "Confirmando...";
 
-    if (guestData.absent) return 'Ausência confirmada'
+    if (guestData.absent) return "Ausência confirmada";
 
-    if (guestData.confirmed) return 'Presença confirmada'
+    if (guestData.confirmed) return "Presença confirmada";
 
-    return 'Confirmar'
-  }
+    return "Confirmar";
+  };
 
-  const disableForm = guestData.confirmed || guestData.absent
+  const disableForm = guestData.confirmed || guestData.absent;
 
   return (
     <section className="relative overflow-hidden w-full h-full flex justify-center items-center">
       {/* a div with a spinner loading */}
-      <div className={`absolute w-full h-full bg-white/60 z-40 flex justify-center items-center ${loading ? 'block' : 'hidden'}`}>
+      <div
+        className={`absolute w-full h-full bg-white/60 z-40 flex justify-center items-center ${
+          loading ? "block" : "hidden"
+        }`}
+      >
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
       </div>
 
       <RoseImage className="absolute -top-[10%] -left-[40%] z-10" />
 
       <section className="w-[90%] h-[90%] flex justify-evenly items-center flex-col z-20 bg-white-90">
-        <h3 className="font-arapey text-2xl flex-wrap text-primary">Confirme sua presença</h3>
+        <h3 className="font-arapey text-2xl flex-wrap text-primary">
+          Confirme sua presença
+        </h3>
 
-        <h4 className='font-arapey text-xl flex-wrap text-primary-dark text-center'>Pedimos que confirme até <br />DATA LIMITE</h4>
-
+        <h4 className="font-arapey text-xl flex-wrap text-primary-dark text-center">
+          Pedimos que confirme até <br />
+          DATA LIMITE
+        </h4>
 
         <div className="w-full bg-white flex flex-col items-center justify-center p-2">
-          <span className='text-sm text-primary-dark w-full text-center mb-3'>Selecione os convidados que irão participar</span>
+          <span className="text-sm text-primary-dark w-full text-center mb-3">
+            Selecione os convidados que irão participar
+          </span>
 
           {guestData.members.map((member, index) => (
-            <div key={index} className='flex w-full flex-row gap-2 p-1 items-center'>
+            <div
+              key={index}
+              className="flex w-full flex-row gap-2 p-1 items-center"
+            >
               <input
                 disabled={disableForm}
                 defaultChecked={isMemberConfirmed(member.name)}
@@ -142,12 +167,13 @@ export default function RSVP({ guestData, loading, refreshData, toggleLoading }:
           <p className="text-primary mt-3">{confirmedCount()}</p>
         </div>
 
-
-        <div className='w-full flex flex-col gap-2 px-4'>
-          <div className='relative'>
-            {
-              showConfirmTip && <p className='w-full text-center text-primary absolute bottom-10'>Você precisa selecionar pelo menos uma pessoa da lista!</p>
-            }
+        <div className="w-full flex flex-col gap-2 px-4">
+          <div className="relative">
+            {showConfirmTip && (
+              <p className="w-full text-center text-primary absolute bottom-10">
+                Você precisa selecionar pelo menos uma pessoa da lista!
+              </p>
+            )}
 
             <button
               disabled={disableForm}
@@ -158,8 +184,12 @@ export default function RSVP({ guestData, loading, refreshData, toggleLoading }:
             </button>
           </div>
 
-          <div className='relative w-full'>
-            <ConfirmAbsenceAlert isOpen={showConfirmAbsence} onConfirm={confirmAbsence} onCancel={() => setShowConfirmAbsence(false)} />
+          <div className="relative w-full">
+            <ConfirmAbsenceAlert
+              isOpen={showConfirmAbsence}
+              onConfirm={confirmAbsence}
+              onCancel={() => setShowConfirmAbsence(false)}
+            />
 
             <button
               disabled={disableForm}
@@ -179,7 +209,6 @@ export default function RSVP({ guestData, loading, refreshData, toggleLoading }:
       </section>
 
       <RoseImage className="absolute z-10 w-8/12 -bottom-[10%] -right-[30%]" />
-
     </section>
-  )
+  );
 }

@@ -1,23 +1,38 @@
-import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter } from '@chakra-ui/react'
-import { signOut } from 'next-auth/react'
-import { useRef } from 'react'
+import {
+  Button,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogCloseButton,
+  AlertDialogBody,
+  AlertDialogFooter,
+} from "@chakra-ui/react";
+import { signOut } from "next-auth/react";
+import { useRef } from "react";
 
 interface Props {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export function LogoutModal({ isOpen, onClose }: Props) {
-  const cancelRef = useRef(null)
+  const cancelRef = useRef(null);
 
   const onConfirmLogout = () => {
     signOut({
       redirect: false,
-    })
-  }
+    });
+  };
 
   return (
-    <AlertDialog motionPreset="slideInBottom" leastDestructiveRef={cancelRef} onClose={onClose} isOpen={isOpen} isCentered>
+    <AlertDialog
+      motionPreset="slideInBottom"
+      leastDestructiveRef={cancelRef}
+      onClose={onClose}
+      isOpen={isOpen}
+      isCentered
+    >
       <AlertDialogOverlay />
 
       <AlertDialogContent>
@@ -25,7 +40,10 @@ export function LogoutModal({ isOpen, onClose }: Props) {
 
         <AlertDialogCloseButton />
 
-        <AlertDialogBody>Você terá que fazer login novamente para acessar o painel de gestão de convidados.</AlertDialogBody>
+        <AlertDialogBody>
+          Você terá que fazer login novamente para acessar o painel de gestão de
+          convidados.
+        </AlertDialogBody>
 
         <AlertDialogFooter>
           <Button ref={cancelRef} onClick={onClose}>
@@ -38,5 +56,5 @@ export function LogoutModal({ isOpen, onClose }: Props) {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

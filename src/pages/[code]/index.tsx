@@ -1,37 +1,39 @@
-import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next'
-import Head from 'next/head'
-import { IGuest } from '@/interfaces'
-import { useEffect, useState } from 'react'
-import Home from './components/Home'
-import InviteInfo from './components/InviteInfo'
-import { BouncingArrowDown } from '@/components'
-import RSVP from './components/RSVP'
-import MoreInfo from './components/MoreInfo'
+import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from "next";
+import Head from "next/head";
+import { IGuest } from "@/interfaces";
+import { useEffect, useState } from "react";
+import Home from "./components/Home";
+import InviteInfo from "./components/InviteInfo";
+import { BouncingArrowDown } from "@/components";
+import RSVP from "./components/RSVP";
+import MoreInfo from "./components/MoreInfo";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const { FireStoreAdapter } = await import('@/infra')
-  const database = new FireStoreAdapter()
+  const { FireStoreAdapter } = await import("@/infra");
+  const database = new FireStoreAdapter();
 
-  const guestsList = await database.getCodes()
+  const guestsList = await database.getCodes();
 
-  const paths = guestsList.map(({ code }) => ({ params: { code } }))
+  const paths = guestsList.map(({ code }) => ({ params: { code } }));
   return {
     paths,
-    fallback: 'blocking',
-  }
-}
+    fallback: "blocking",
+  };
+};
 
-export const getStaticProps: GetStaticProps = async ({ params }): Promise<GetStaticPropsResult<{ guest: IGuest }>> => {
-  const { FireStoreAdapter } = await import('@/infra')
-  const database = new FireStoreAdapter()
+export const getStaticProps: GetStaticProps = async ({
+  params,
+}): Promise<GetStaticPropsResult<{ guest: IGuest }>> => {
+  const { FireStoreAdapter } = await import("@/infra");
+  const database = new FireStoreAdapter();
 
-  const code = params?.code
-  const guest = await database.getOne(code as string)
+  const code = params?.code;
+  const guest = await database.getOne(code as string);
 
   if (!guest) {
     return {
       notFound: true,
-    }
+    };
   }
 
   return {
@@ -39,48 +41,48 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<GetSta
       guest,
     },
     revalidate: 60 * 60, // 1 hour
-  }
-}
+  };
+};
 
 interface Props {
-  guest: IGuest
+  guest: IGuest;
 }
 
 export default function InvitePage({ guest: guestsProps }: Props) {
-  const [loading, setLoading] = useState(false)
-  const [guests, setGuests] = useState<IGuest>(guestsProps)
+  const [loading, setLoading] = useState(false);
+  const [guests, setGuests] = useState<IGuest>(guestsProps);
 
   async function markAsSeen() {
-    await fetch('/api/mark-as-seen', {
-      method: 'POST',
+    await fetch("/api/mark-as-seen", {
+      method: "POST",
       body: JSON.stringify({ code: guests.code }),
-    })
+    });
   }
 
   async function getGuestDetails() {
-    const url = '/api/guest-details?code=' + guests.code
+    const url = "/api/guest-details?code=" + guests.code;
     const response = await fetch(url, {
-      method: 'GET',
-    })
+      method: "GET",
+    });
 
-    const data: IGuest = await response.json()
+    const data: IGuest = await response.json();
 
-    setGuests(data)
+    setGuests(data);
   }
 
-
-
   useEffect(() => {
-    markAsSeen()
+    markAsSeen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+  }, []);
 
   return (
     <>
       <Head>
         <title>{`Convite ${guests.family}`}</title>
-        <meta name="description" content="Vamos casar e sua presença será uma bênção para nós!" />
+        <meta
+          name="description"
+          content="Vamos casar e sua presença será uma bênção para nós!"
+        />
       </Head>
 
       <main className="w-screen h-screen flex overflow-y-scroll flex-col relative">
@@ -98,14 +100,22 @@ export default function InvitePage({ guest: guestsProps }: Props) {
           </div>
         </section>
 
-        <section className="absolute top-full w-full h-screen bg-green-100 shadow-sm" id="informacoes-convite">
+        <section
+          className="absolute top-full w-full h-screen bg-green-100 shadow-sm"
+          id="informacoes-convite"
+        >
           <div className="relative w-full h-full">
             <div className="w-full h-full bg-white">
               <InviteInfo guestData={guests} />
             </div>
 
             <div className="w-full h-full bg-white" id="rsvp">
-              <RSVP guestData={guests} loading={loading} refreshData={getGuestDetails} toggleLoading={setLoading} />
+              <RSVP
+                guestData={guests}
+                loading={loading}
+                refreshData={getGuestDetails}
+                toggleLoading={setLoading}
+              />
             </div>
 
             <div className="w-full h-full bg-white" id="mais-informacoes">
@@ -115,5 +125,5 @@ export default function InvitePage({ guest: guestsProps }: Props) {
         </section>
       </main>
     </>
-  )
+  );
 }

@@ -1,1 +1,1 @@
-export * from './firebase-adapter'
+export * from "./firebase-adapter";
