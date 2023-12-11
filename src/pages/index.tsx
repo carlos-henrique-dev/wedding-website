@@ -1,4 +1,6 @@
+import { RoseImage } from '@/components'
 import Head from 'next/head'
+import Image from 'next/image'
 
 const content = {
   title: `Alão vai Casar`,
@@ -17,16 +19,23 @@ export default function Home() {
         <meta property="og:description" content={content.subtitle} />
       </Head>
 
-      <main className="home">
-        <section className="content">
-          <h1 className="title">
-            <span>Alan</span>
-            <span> - e - </span>
-            <span>Fran</span>
-          </h1>
-        </section>
+      <main className="flex w-screen h-screen justify-center items-center relative overflow-hidden">
+        <RoseImage className="absolute -top-[10%] -left-[40%]" />
 
-        <h1>Em desenvolvimento</h1>
+        <h1 className="font-callem-script text-5xl text-center flex flex-col text-primary absolute left-10 bottom-1/4">
+          <span>Alan</span>
+          <span>e</span>
+          <span>Francislaine</span>
+        </h1>
+
+        <Image
+          src="/images/bride_and_groom.png"
+          alt="background-rose"
+          width="860"
+          height="910"
+          //
+          className="absolute -bottom-[15%] -right-10 w-4/5"
+        />
       </main>
     </>
   )

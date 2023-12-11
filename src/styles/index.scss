@@ -1,9 +1,6 @@
-@import "./variables.scss";
-@import "./common.scss";
-
-@import "./home.scss";
-@import "./not_found.scss";
-@import "./invite.scss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html {
 	scroll-behavior: smooth;
@@ -12,6 +9,7 @@ html {
 }
 
 * {
+	scroll-behavior: smooth;
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -20,4 +18,12 @@ html {
 ::-webkit-scrollbar {
 	width: 0px;
 	background: transparent;
+}
+
+input[type="checkbox"]:checked::before {
+	content: "\2713";
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+	color: white;
 }
