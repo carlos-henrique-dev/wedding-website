@@ -2,10 +2,15 @@ import { BouncingArrowDown, RoseImage } from "@/components";
 import { IGuest } from "@/interfaces";
 
 interface Props {
-  guestData: IGuest;
+  guestData?: IGuest;
 }
 
 export default function InviteInfo({ guestData }: Props) {
+
+  if (!guestData) {
+    return null;
+  }
+
   return (
     <section className="relative overflow-hidden w-full h-full flex justify-center items-center">
       <RoseImage className="absolute -top-[10%] -left-[40%] z-10" />

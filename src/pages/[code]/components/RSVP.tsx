@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ConfirmAbsenceAlert from "./ConfirmAbsenceAlert";
 
 interface Props {
-  guestData: IGuest;
+  guestData?: IGuest;
   loading: boolean;
   refreshData: () => Promise<void>;
   toggleLoading: (state: boolean) => void;
@@ -37,10 +37,10 @@ export default function RSVP({
     toggleLoading(true);
 
     const members = confirmedGuests.map((name) => name.split("guest-")[1]);
-    console.log(members);
+
     await fetch("/api/confirm-presence", {
       method: "POST",
-      body: JSON.stringify({ code: guestData.code, members }),
+      body: JSON.stringify({ code: guestData?.code, members }),
     });
 
     await refreshData();
@@ -48,7 +48,8 @@ export default function RSVP({
   }
 
   async function confirmAbsence() {
-    console.log("confirm absence");
+    if (!guestData) return;
+
     toggleLoading(true);
 
     await fetch("/api/confirm-absence", {
@@ -62,6 +63,8 @@ export default function RSVP({
   }
 
   const confirmedCount = () => {
+    if (!guestData) return null;
+
     let count = 0;
     const suffix =
       guestData.members.length > 1
@@ -99,29 +102,32 @@ export default function RSVP({
   };
 
   const isMemberConfirmed = (name: string) =>
-    guestData.members.some(
+    guestData?.members.some(
       (member) => member.name === name && member.is_coming,
     );
 
   const confirmPresenceButtonLabel = () => {
     if (loading) return "Confirmando...";
 
-    if (guestData.absent) return "Ausência confirmada";
+    if (guestData?.absent) return "Ausência confirmada";
 
-    if (guestData.confirmed) return "Presença confirmada";
+    if (guestData?.confirmed) return "Presença confirmada";
 
     return "Confirmar";
   };
 
-  const disableForm = guestData.confirmed || guestData.absent;
+  const disableForm = guestData?.confirmed || guestData?.absent;
+
+  if (!guestData) {
+    return null;
+  }
 
   return (
     <section className="relative overflow-hidden w-full h-full flex justify-center items-center">
       {/* a div with a spinner loading */}
       <div
-        className={`absolute w-full h-full bg-white/60 z-40 flex justify-center items-center ${
-          loading ? "block" : "hidden"
-        }`}
+        className={`absolute w-full h-full bg-white/60 z-40 flex justify-center items-center ${loading ? "block" : "hidden"
+          }`}
       >
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
       </div>
