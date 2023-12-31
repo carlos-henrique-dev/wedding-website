@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 
 const content = {
-  title: `Alão vai Casar`,
+  title: `Casamento Alan e Francislaine`,
   subtitle:
     "Vamos casar! E você está convidado para testemunhar nossa união. Clique para saber mais.",
 };

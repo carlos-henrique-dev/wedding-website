@@ -12,5 +12,5 @@ export default async function handler(
   const { code } = JSON.parse(req.body);
   const invite = await database.deleteInvite(code);
 
-  res.status(200).json(invite);
+  return res.status(200).json(invite);
 }

@@ -12,5 +12,5 @@ export default async function handler(
 
   const groups = await database.getGroups();
 
-  res.status(200).json(groups);
+  return res.status(200).json(groups);
 }

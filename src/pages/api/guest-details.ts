@@ -12,8 +12,8 @@ export default async function handler(
   const guest = await database.getOne(req.query.code as string);
 
   if (guest !== null) {
-    res.status(200).json(guest);
+    return res.status(200).json(guest);
   }
 
-  res.status(404).json({ error: "Not Found" });
+  return res.status(404).json({ error: "Not Found" });
 }

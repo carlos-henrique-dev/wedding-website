@@ -11,5 +11,5 @@ export default async function handler(
 
   const guests = await database.getList();
 
-  res.status(200).json(guests);
+  return res.status(200).json(guests);
 }

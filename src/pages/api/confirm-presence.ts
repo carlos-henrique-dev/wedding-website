@@ -12,5 +12,5 @@ export default async function handler(
   const { code, members } = JSON.parse(req.body);
   const invite = await database.confirmPresence({ code, members });
 
-  res.status(200).json(invite);
+ return res.status(200).json(invite);
 }
