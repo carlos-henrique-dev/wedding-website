@@ -1,4 +1,4 @@
-import { IGuest } from "@/interfaces";
+import { IGroup, IGuest } from "@/interfaces";
 import {
   CopyIcon,
   CheckIcon,
@@ -29,6 +29,7 @@ import CreateInviteModal from "./createInviteModal";
 
 interface IInviteCardProps {
   invite: IGuest;
+  groups: Array<IGroup>;
   copyToClipboard: (text: string) => void;
   openDetails: (invite: IGuest) => void;
   onDeleteInvite: (code: string) => void;
@@ -36,6 +37,7 @@ interface IInviteCardProps {
 
 export default function InviteCard({
   invite,
+  groups,
   copyToClipboard,
   openDetails,
   onDeleteInvite,
@@ -172,6 +174,7 @@ export default function InviteCard({
           isOpen={isEditOpen}
           onClose={onEditEnd}
           invite={invite}
+          groups={groups}
         />
       )}
 

@@ -1,10 +1,8 @@
 import {
-  AddIcon,
   ChevronDownIcon,
   HamburgerIcon,
   SearchIcon,
   UpDownIcon,
-  ViewIcon,
 } from "@chakra-ui/icons";
 import {
   HStack,
@@ -27,7 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { FILTERS_OPTIONS, GROUP_OPTIONS, SORT_OPTIONS } from "../constants";
 import { ChangeEvent, useEffect, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { LogoutModal } from "./logoutModal";
 
 interface IHeaderProps {
@@ -299,22 +297,6 @@ export default function Header({
               Pesquisa
             </Button>
           </WrapItem>
-
-          {/* <WrapItem mx={2}>
-            <Button
-              size={{
-                base: 'sm',
-                md: 'md',
-                lg: 'md',
-                xl: 'md',
-              }}
-              colorScheme="blue"
-              onClick={onShowReportsClick}
-              rightIcon={<ViewIcon w={4} h={4} cursor="pointer" />}
-            >
-              Relatório
-            </Button>
-          </WrapItem> */}
         </Wrap>
       </HStack>
 

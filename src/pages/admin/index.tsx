@@ -16,7 +16,7 @@ import {
   Tag,
   Stack,
 } from "@chakra-ui/react";
-import { IGuest } from "@/interfaces";
+import { IGroup, IGuest } from "@/interfaces";
 import {
   CreateInviteModal,
   DetailsModal,
@@ -27,7 +27,6 @@ import {
 import { FILTERS_OPTIONS, OPTIONS, SORT_OPTIONS } from "../../modules/admin/constants";
 import { Filters } from "../../modules/admin/interfaces";
 import { withAuthorization } from "@/hocs";
-import { useSession } from "next-auth/react";
 
 interface IState {
   invites: Array<IGuest>;
@@ -58,10 +57,21 @@ const INITIAL_STATE: IState = {
 };
 
 function AdminManagePage() {
-  const { data, status } = useSession();
 
   const toast = useToast();
   const [state, setState] = useState<IState>(INITIAL_STATE);
+  const [groups, setGroups] = useState<Array<IGroup>>([]);
+
+  useEffect(() => {
+    async function getGroups() {
+      const res = await fetch("/api/groups");
+      const data = (await res.json()) satisfies Array<IGroup>;
+
+      setGroups(data);
+    }
+
+    getGroups();
+  }, []);
 
   async function getInvites() {
     const res = await fetch("/api/guest-list");
@@ -231,6 +241,7 @@ function AdminManagePage() {
       <InviteCard
         key={index}
         invite={invite}
+        groups={groups}
         copyToClipboard={copyToClipboard}
         openDetails={openDetails}
         onDeleteInvite={onDeleteInvite}
@@ -342,10 +353,12 @@ function AdminManagePage() {
             isOpen={state.showDetails}
             onClose={() => setState({ ...state, showDetails: false })}
             invite={state.selectedInvite}
+            groups={groups}
           />
         )}
         {state.showNewInviteModal && (
           <CreateInviteModal
+            groups={groups}
             isOpen={state.showNewInviteModal}
             onClose={() => setState({ ...state, showNewInviteModal: false })}
           />

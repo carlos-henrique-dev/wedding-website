@@ -1,4 +1,4 @@
-import { IGuest } from "@/interfaces";
+import { IGroup, IGuest } from "@/interfaces";
 import {
   Modal,
   ModalOverlay,
@@ -28,17 +28,21 @@ import { useEffect, useRef } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { GROUP_OPTIONS } from "../constants";
 import { useSession } from "next-auth/react";
+import { Sorter } from '../interfaces';
+import { formatDate } from '@/utils';
 
 interface IDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   invite?: IGuest;
+  groups: Array<IGroup>;
 }
 
 export default function CreateInviteModal({
   isOpen,
   onClose,
   invite,
+  groups,
 }: IDetailsModalProps) {
   const { data } = useSession();
   const toast = useToast();
@@ -152,6 +156,12 @@ export default function CreateInviteModal({
     }
   }
 
+  const getGroupLabel = (group: Sorter) => {
+    const _groupData = groups.find((g) => g.code === group.value)
+
+    return `${group.label} (confirmar até ${formatDate(_groupData?.dateLimit)})`
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -207,7 +217,7 @@ export default function CreateInviteModal({
                   <Select placeholder="Selecione um grupo" {...field}>
                     {GROUP_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>
-                        {option.label}
+                        {getGroupLabel(option)}
                       </option>
                     ))}
                   </Select>
@@ -235,7 +245,7 @@ export default function CreateInviteModal({
                       nome da família
                     </Text>
                     , a URL do convite será alterada. Se já tiver enviado o
-                    convite, envie novamente para que o link seja atualizado.
+                    convite, envie novamente o link atualizado.
                   </Text>
                 </Alert>
               )}

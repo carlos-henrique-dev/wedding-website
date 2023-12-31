@@ -1,4 +1,5 @@
-import { IGuest, IMember } from "@/interfaces";
+import { IGroup, IGuest, IMember } from "@/interfaces";
+import { formatDate } from '@/utils';
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Modal,
@@ -28,12 +29,14 @@ import { useFieldArray, useForm } from "react-hook-form";
 
 interface IDetailsModalProps {
   invite?: IGuest;
+  groups: Array<IGroup>;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function DetailsModal({
   invite,
+  groups,
   isOpen,
   onClose,
 }: IDetailsModalProps) {
@@ -128,6 +131,12 @@ export default function DetailsModal({
     return invite.confirmed ? "Convite aceito" : "Convite recusado";
   };
 
+  const groupInformation = (group: string) => {
+    const groupOption = groups.find((option) => option.code === group);
+
+    return `confirmar até ${formatDate(groupOption?.dateLimit)}`;
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -147,6 +156,9 @@ export default function DetailsModal({
           <Flex height="60px" align="flex-end">
             <Box flex="2">
               <Heading size="md">{invite.family}</Heading>
+              <Text fontSize="sm" color="gray.500">
+                {groupInformation(invite.group)}
+              </Text>
             </Box>
 
             <Box flex="1">
