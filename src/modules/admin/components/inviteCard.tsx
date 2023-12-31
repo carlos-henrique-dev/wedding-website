@@ -128,6 +128,15 @@ export default function InviteCard({
           onClick={() => openDetails(invite)}
         >
           <HStack>
+            <CheckIcon color={invite.openedTimes > 0 ? "green.300" : "gray.300"} />
+            <Text fontSize="sm" color="gray.500">
+              {
+                "Convite visualizado " + invite.openedTimes + (invite.openedTimes === 1 ? " vez" : " vezes")
+              }
+            </Text>
+          </HStack>
+
+          <HStack>
             <CheckIcon color={invite.inviteSent ? "green.300" : "red.300"} />
             <Text fontSize="sm" color="gray.500">
               {invite.inviteSent ? "Convite enviado" : "Convite não enviado"}

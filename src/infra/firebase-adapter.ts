@@ -1,5 +1,6 @@
 import { IDatabaseClient, IGuest, IGuestList, IMember } from "@/interfaces";
 import { fireStoreInstance } from "@/config";
+import { IGroup } from '@/interfaces/models/group';
 
 export class FireStoreAdapter implements IDatabaseClient {
   private readonly fireStore = fireStoreInstance;
@@ -164,6 +165,22 @@ export class FireStoreAdapter implements IDatabaseClient {
     }
 
     const data = result.docs[0]?.data();
+
+    return data;
+  };
+
+  // GROUPS
+  getGroups = async () => {
+    const result = await this.fireStore.collection("groups").get();
+
+    const data = result.docs.map((group) => {
+      const _data = group.data()
+
+      return {
+        code: _data.code,
+        dateLimit: new Date(_data.dateLimit.seconds * 1000).toISOString(),
+      }
+    }) as IGroup[];
 
     return data;
   };

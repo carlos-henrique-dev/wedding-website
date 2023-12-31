@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from "next";
 import Head from "next/head";
-import { IGuest } from "@/interfaces";
+import { IGroup, IGuest } from "@/interfaces";
 import { useEffect, useState } from "react";
 import Home from "./components/Home";
 import InviteInfo from "./components/InviteInfo";
@@ -23,12 +23,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({
   params,
-}): Promise<GetStaticPropsResult<{ guest: IGuest }>> => {
+}): Promise<GetStaticPropsResult<{ guest: IGuest, groups: Array<IGroup> }>> => {
   const { FireStoreAdapter } = await import("@/infra");
   const database = new FireStoreAdapter();
 
   const code = params?.code;
   const guest = await database.getOne(code as string);
+  const groups = await database.getGroups();
+  console.log({groups});
 
   if (!guest) {
     return {
@@ -39,6 +41,7 @@ export const getStaticProps: GetStaticProps = async ({
   return {
     props: {
       guest,
+      groups,
     },
     revalidate: 60 * 60, // 1 hour
   };
@@ -46,9 +49,10 @@ export const getStaticProps: GetStaticProps = async ({
 
 interface Props {
   guest: IGuest;
+  groups: Array<IGroup>;
 }
 
-export default function InvitePage({ guest: guestsProps }: Props) {
+export default function InvitePage({ guest: guestsProps, groups }: Props) {
   const [loading, setLoading] = useState(false);
   const [guests, setGuests] = useState<IGuest>(guestsProps);
 
@@ -112,6 +116,7 @@ export default function InvitePage({ guest: guestsProps }: Props) {
             <div className="w-full h-full bg-white" id="rsvp">
               <RSVP
                 guestData={guests}
+                groupData={groups}
                 loading={loading}
                 refreshData={getGuestDetails}
                 toggleLoading={setLoading}

@@ -1,10 +1,12 @@
 import { BouncingArrowDown, RoseImage } from "@/components";
-import { IGuest } from "@/interfaces";
-import { useEffect, useState } from "react";
+import { IGroup, IGuest } from "@/interfaces";
+import { use, useEffect, useMemo, useState } from "react";
 import ConfirmAbsenceAlert from "./ConfirmAbsenceAlert";
+import { formatDate } from '@/utils';
 
 interface Props {
   guestData?: IGuest;
+  groupData?: Array<IGroup>;
   loading: boolean;
   refreshData: () => Promise<void>;
   toggleLoading: (state: boolean) => void;
@@ -12,6 +14,7 @@ interface Props {
 
 export default function RSVP({
   guestData,
+  groupData,
   loading,
   refreshData,
   toggleLoading,
@@ -118,6 +121,22 @@ export default function RSVP({
 
   const disableForm = guestData?.confirmed || guestData?.absent;
 
+  const guestGroup = useMemo(() => {
+    if (!guestData?.group) return null;
+
+    const dateLimit = groupData?.find((group) => group.code === guestData?.group)?.dateLimit;
+
+    return formatDate(dateLimit);
+  }, [guestData?.group, groupData]);
+
+  const isExpired = useMemo(() => {
+    if (!guestData?.group) return false;
+
+    const dateLimit = groupData?.find((group) => group.code === guestData?.group)?.dateLimit || '';
+
+    return new Date(dateLimit) < new Date();
+  }, [guestData?.group, groupData]);
+
   if (!guestData) {
     return null;
   }
@@ -141,7 +160,7 @@ export default function RSVP({
 
         <h4 className="font-arapey text-xl flex-wrap text-primary-dark text-center">
           Pedimos que confirme até <br />
-          DATA LIMITE
+          <strong>{guestGroup}</strong>
         </h4>
 
         <div className="w-full bg-white flex flex-col items-center justify-center p-2">
@@ -155,7 +174,7 @@ export default function RSVP({
               className="flex w-full flex-row gap-2 p-1 items-center"
             >
               <input
-                disabled={disableForm}
+                disabled={disableForm || isExpired}
                 defaultChecked={isMemberConfirmed(member.name)}
                 className="appearance-none h-5 w-5 border border-gray-300 rounded checked:bg-teal-500 checked:border-transparent focus:outline-none flex items-center justify-center"
                 type="checkbox"
@@ -173,39 +192,54 @@ export default function RSVP({
           <p className="text-primary mt-3">{confirmedCount()}</p>
         </div>
 
-        <div className="w-full flex flex-col gap-2 px-4">
-          <div className="relative">
-            {showConfirmTip && (
-              <p className="w-full text-center text-primary absolute bottom-10">
-                Você precisa selecionar pelo menos uma pessoa da lista!
-              </p>
-            )}
 
-            <button
-              disabled={disableForm}
-              onClick={() => confirmPresence()}
-              className="bg-teal-400 text-white rounded px-4 py-2 disabled:opacity-50 w-full"
-            >
-              {confirmPresenceButtonLabel()}
-            </button>
-          </div>
+        {
+          isExpired && (
+            <p className="w-full text-center text-red-400">
+              O prazo para confirmação de presença expirou!
+              <br />
+              Entre em contato com os noivos.
+            </p>
+          )
+        }
 
-          <div className="relative w-full">
-            <ConfirmAbsenceAlert
-              isOpen={showConfirmAbsence}
-              onConfirm={confirmAbsence}
-              onCancel={() => setShowConfirmAbsence(false)}
-            />
+        {
+          !isExpired && (
+            <div className="w-full flex flex-col gap-2 px-4">
+              <div className="relative">
+                {showConfirmTip && (
+                  <p className="w-full text-center text-primary absolute bottom-10">
+                    Você precisa selecionar pelo menos uma pessoa da lista!
+                  </p>
+                )}
 
-            <button
-              disabled={disableForm}
-              onClick={() => setShowConfirmAbsence(true)}
-              className="bg-red-400 text-white rounded px-4 py-2 disabled:opacity-50 w-full"
-            >
-              Não poderei ir
-            </button>
-          </div>
-        </div>
+                <button
+                  disabled={disableForm}
+                  onClick={() => confirmPresence()}
+                  className="bg-teal-400 text-white rounded px-4 py-2 disabled:opacity-50 w-full disabled:bg-gray-400"
+                >
+                  {confirmPresenceButtonLabel()}
+                </button>
+              </div>
+
+              <div className="relative w-full">
+                <ConfirmAbsenceAlert
+                  isOpen={showConfirmAbsence}
+                  onConfirm={confirmAbsence}
+                  onCancel={() => setShowConfirmAbsence(false)}
+                />
+
+                <button
+                  disabled={disableForm}
+                  onClick={() => setShowConfirmAbsence(true)}
+                  className="bg-red-400 text-white rounded px-4 py-2 disabled:opacity-50 w-full disabled:bg-gray-400"
+                >
+                  Não poderei ir
+                </button>
+              </div>
+            </div>
+          )
+        }
 
         <div className="mt-5 absolute bottom-5 z-30 transform translate-x-1/2">
           <a href="#mais-informacoes">

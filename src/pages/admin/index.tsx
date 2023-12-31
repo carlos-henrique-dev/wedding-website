@@ -24,7 +24,7 @@ import {
   InviteCard,
   ReportModal,
 } from "../../modules/admin/components";
-import { FILTERS_OPTIONS, SORT_OPTIONS } from "../../modules/admin/constants";
+import { FILTERS_OPTIONS, OPTIONS, SORT_OPTIONS } from "../../modules/admin/constants";
 import { Filters } from "../../modules/admin/interfaces";
 import { withAuthorization } from "@/hocs";
 import { useSession } from "next-auth/react";
@@ -166,10 +166,10 @@ function AdminManagePage() {
       },
 
       // group
-      firstOption: (invite: IGuest) => invite.group === "firstOption",
-      secondOption: (invite: IGuest) => invite.group === "secondOption",
-      thirdOption: (invite: IGuest) => invite.group === "thirdOption",
-      fourthOption: (invite: IGuest) => invite.group === "fourthOption",
+      firstOption: (invite: IGuest) => invite.group === OPTIONS.firstOption,
+      secondOption: (invite: IGuest) => invite.group === OPTIONS.secondOption,
+      thirdOption: (invite: IGuest) => invite.group === OPTIONS.thirdOption,
+      fourthOption: (invite: IGuest) => invite.group === OPTIONS.fourthOption,
     };
 
     const filtersValues = state.filters.map((filter) => filter.value);

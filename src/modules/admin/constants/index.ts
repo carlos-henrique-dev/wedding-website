@@ -16,9 +16,16 @@ export const SORT_OPTIONS: Array<Sorter> = [
   { label: "Convites não enviados", value: "notSent" },
 ];
 
+export enum OPTIONS {
+  firstOption = "firstOption",
+  secondOption = "secondOption",
+  thirdOption = "thirdOption",
+  fourthOption = "fourthOption",
+}
+
 export const GROUP_OPTIONS: Array<Sorter> = [
-  { label: "1ª Opção", value: "firstOption" },
-  { label: "2ª Opção", value: "secondOption" },
-  { label: "3ª Opção", value: "thirdOption" },
-  { label: "4ª Opção", value: "fourthOption" },
+  { label: "1ª Opção", value: OPTIONS.firstOption },
+  { label: "2ª Opção", value: OPTIONS.secondOption },
+  { label: "3ª Opção", value: OPTIONS.thirdOption },
+  { label: "4ª Opção", value: OPTIONS.fourthOption },
 ];
