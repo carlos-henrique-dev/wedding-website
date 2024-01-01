@@ -28,7 +28,7 @@ export default function InviteInfo({ guestData }: Props) {
         <section className="w-full flex flex-col items-center justify-center gap-2">
           <div className="relative w-full flex items-center justify-center h-5">
             <p className="absolute bg-white z-20 font-eb-garamond text-primary-dark text-center text-xl px-2">
-              Sábado, às 16h30
+              Sábado, cerimônia às 16h30
             </p>
 
             <hr className="bg-primary-dark h-1 w-3/4 absolute z-10" />
