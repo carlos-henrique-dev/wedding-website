@@ -68,8 +68,7 @@ export default function MoreInfo() {
               localizado na
               <br />
               <span className="text-teal-700">
-                Rua dos Buritis, 1000 - Jardim Buriti Sereno, Aparecida de
-                Goiânia - GO, 74932-410.
+                BR-163 - São Pedro, Dourados - MS, 79804-970.
               </span>
             </p>
 
