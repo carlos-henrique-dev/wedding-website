@@ -12,6 +12,7 @@ module.exports = {
       colors: {
         primary: "#B36F46",
         "primary-light": "#EFB48F",
+        'primary-lighter': '#f6f1ef',
         "primary-dark": "#713723",
         "white-90": "rgba(255, 255, 255, 0.9)",
       },

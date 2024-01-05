@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex w-screen h-screen justify-center items-center relative overflow-hidden">
+    <main className="flex w-screen h-screen justify-center items-center relative overflow-hidden max-w-lg">
       <RoseImage className="absolute -top-[10%] -left-[40%]" />
 
       <h1 className="font-callem-script text-5xl text-center flex flex-col text-primary absolute left-10 bottom-1/4">

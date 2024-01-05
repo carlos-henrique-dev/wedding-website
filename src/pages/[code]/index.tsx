@@ -30,7 +30,7 @@ export const getStaticProps: GetStaticProps = async ({
   const code = params?.code;
   const guest = await database.getOne(code as string);
   const groups = await database.getGroups();
-  console.log({groups});
+  console.log({ groups });
 
   if (!guest) {
     return {
@@ -89,12 +89,12 @@ export default function InvitePage({ guest: guestsProps, groups }: Props) {
         />
       </Head>
 
-      <main className="w-screen h-screen flex overflow-y-scroll flex-col relative">
-        <section className="fixed top-0 w-full h-screen">
+      <main className="w-screen h-screen flex overflow-y-scroll flex-col relative justify-center items-center bg-primary-lighter">
+        <section className="fixed top-0 h-screen justify-center items-center bg-white">
           <Home />
         </section>
 
-        <section className="absolute top-0 w-screen h-screen z-10">
+        <section className="absolute top-0 w-screen h-screen z-10 max-w-lg">
           <div className="relative flex w-full h-full items-center justify-center">
             <div className="absolute bottom-5 left-1/2 right-1/2 z-30 transform translate-x-1/2">
               <a href="#informacoes-convite">
@@ -105,7 +105,7 @@ export default function InvitePage({ guest: guestsProps, groups }: Props) {
         </section>
 
         <section
-          className="absolute top-full w-full h-screen bg-green-100 shadow-sm"
+          className="absolute top-full w-full h-screen bg-green-100 shadow-sm max-w-lg"
           id="informacoes-convite"
         >
           <div className="relative w-full h-full">
