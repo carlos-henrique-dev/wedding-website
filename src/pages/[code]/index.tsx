@@ -189,7 +189,10 @@ export default function Invite({ guest: guestsProps }: Props) {
 
   return (
     <>
-
+      <Head>
+        <title>{`Convite ${guests.family}`}</title>
+        <meta name="description" content="Vamos casar e sua presença será uma bênção para nós!" />
+      </Head>
 
       <main className="invite">
         <RoseImage className="first_rose_background" />
@@ -270,7 +273,7 @@ export default function Invite({ guest: guestsProps }: Props) {
               <span className="time">ÀS 16h</span>
             </span>
 
-             <div className="date-divider" />
+            <div className="date-divider" />
 
             <span className="time-place">
               <span className="place">
