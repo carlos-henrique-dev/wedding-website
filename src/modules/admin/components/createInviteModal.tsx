@@ -49,12 +49,12 @@ export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsM
     family: string
     side: string
     members: Array<{ value: string }>
-    group: string
+    // group: string
   }>({
     defaultValues: {
       side: invite?.side || data?.user.side || 'bride',
       family: invite?.family || undefined,
-      group: invite?.group || undefined,
+      // group: invite?.group || undefined,
       members: invite?.members.map((member) => ({ value: member.name })) || undefined,
     },
   })
@@ -99,7 +99,7 @@ export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsM
       absent: false,
       inviteSent: false,
       openedTimes: 0,
-      group: values.group,
+      // group: values.group,
     }
 
     const method = invite ? 'PUT' : 'POST'
@@ -176,7 +176,7 @@ export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsM
               <FormErrorMessage>{String(errors?.side?.message)}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.group}>
+            {/* <FormControl isInvalid={!!errors.group}>
               <FormLabel htmlFor="group">Grupo</FormLabel>
               <Controller
                 name="group"
@@ -196,7 +196,7 @@ export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsM
               />
 
               <FormErrorMessage>{String(errors?.group?.message)}</FormErrorMessage>
-            </FormControl>
+            </FormControl> */}
 
             <FormControl isInvalid={!!errors.family}>
               {invite && (

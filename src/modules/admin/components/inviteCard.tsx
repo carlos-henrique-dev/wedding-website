@@ -35,11 +35,11 @@ export default function InviteCard({ invite, copyToClipboard, openDetails, onDel
     return invite.confirmed ? 'Convite aceito' : 'Convite não confirmado'
   }
 
-  const getGroup = () => {
-    const option = GROUP_OPTIONS.find((option) => option.value === invite.group)
+  // const getGroup = () => {
+  //   const option = GROUP_OPTIONS.find((option) => option.value === invite.group)
 
-    return option ? `(${option?.label})` : ''
-  }
+  //   return option ? `(${option?.label})` : ''
+  // }
 
   return (
     <>
@@ -48,9 +48,9 @@ export default function InviteCard({ invite, copyToClipboard, openDetails, onDel
           <VStack onClick={() => openDetails(invite)}>
             <Heading as="h5" size="xs" color={invite.confirmed ? 'green.300' : 'red.300'} flexDirection="row">
               {invite.family}{' '}
-              <Text color="gray.400" fontSize="sm" as="p" fontWeight="normal" display="inline-block">
+              {/* <Text color="gray.400" fontSize="sm" as="p" fontWeight="normal" display="inline-block">
                 {getGroup()}
-              </Text>
+              </Text> */}
             </Heading>
           </VStack>
 

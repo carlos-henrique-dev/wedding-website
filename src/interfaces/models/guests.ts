@@ -14,7 +14,7 @@ export interface IGuest {
   members: IMember[]
   openedTimes: number
   side: TSide
-  group: string
+  // group: string
 }
 
 export type IGuestList = Array<Pick<IGuest, 'code'>>

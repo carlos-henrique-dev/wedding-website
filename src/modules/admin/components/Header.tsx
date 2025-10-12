@@ -9,12 +9,12 @@ interface IHeaderProps {
   onNewInviteClick: () => void
   onShowReportsClick: () => void
   onFilterClick: (filter: Array<string>) => void
-  onGroupClick: (group: Array<string> | undefined) => void
+  // onGroupClick: (group: Array<string> | undefined) => void
   onSortClick: (sorter: string | null) => void
   onSearchClick: (search: string) => void
 }
 
-export default function Header({ onNewInviteClick, onShowReportsClick, onFilterClick, onGroupClick, onSearchClick, onSortClick }: IHeaderProps) {
+export default function Header({ onNewInviteClick, onShowReportsClick, onFilterClick, /* onGroupClick, */ onSearchClick, onSortClick }: IHeaderProps) {
   const { data } = useSession()
 
   const { isOpen: showConfirmLogout, onOpen: onTryLogout, onClose: onCancelLogout } = useDisclosure()
@@ -50,10 +50,10 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilters])
 
-  useEffect(() => {
-    onGroupClick(selectedGroup)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedGroup])
+  // useEffect(() => {
+  //   onGroupClick(selectedGroup)
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedGroup])
 
   const toggleSearchBar = () => {
     setSearchBarState({ show: !searchBarState.show, search: '' })
@@ -162,7 +162,7 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
             </Menu>
           </WrapItem>
 
-          <WrapItem>
+          {/* <WrapItem>
             <Menu closeOnSelect={false}>
               <MenuButton
                 as={Button}
@@ -189,7 +189,7 @@ export default function Header({ onNewInviteClick, onShowReportsClick, onFilterC
                 </CheckboxGroup>
               </MenuList>
             </Menu>
-          </WrapItem>
+          </WrapItem> */}
 
           <WrapItem>
             <Menu>

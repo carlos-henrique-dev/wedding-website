@@ -20,7 +20,7 @@ interface IState {
   filters: Filters
   sort: string | null
   search: string
-  group?: Array<string>
+  // group?: Array<string>
 }
 
 const INITIAL_STATE: IState = {
@@ -34,7 +34,7 @@ const INITIAL_STATE: IState = {
   filters: [FILTERS_OPTIONS[0]],
   sort: null,
   search: '',
-  group: undefined,
+  // group: undefined,
 }
 
 function AdminManagePage() {
@@ -119,9 +119,9 @@ function AdminManagePage() {
     setState({ ...state, sort: sorter })
   }
 
-  function setGroup(group: Array<string> | undefined) {
-    setState({ ...state, group })
-  }
+  // function setGroup(group: Array<string> | undefined) {
+  //   setState({ ...state, group })
+  // }
 
   function filterInvites() {
     const filters = {
@@ -137,10 +137,10 @@ function AdminManagePage() {
       },
 
       // group
-      firstOption: (invite: IGuest) => invite.group === 'firstOption',
-      secondOption: (invite: IGuest) => invite.group === 'secondOption',
-      thirdOption: (invite: IGuest) => invite.group === 'thirdOption',
-      fourthOption: (invite: IGuest) => invite.group === 'fourthOption',
+      // firstOption: (invite: IGuest) => invite.group === 'firstOption',
+      // secondOption: (invite: IGuest) => invite.group === 'secondOption',
+      // thirdOption: (invite: IGuest) => invite.group === 'thirdOption',
+      // fourthOption: (invite: IGuest) => invite.group === 'fourthOption',
     }
 
     const filtersValues = state.filters.map((filter) => filter.value)
@@ -148,9 +148,9 @@ function AdminManagePage() {
     const filterItems = () => {
       const filterKeys = state.filters.filter((f) => f.value !== 'all').map((filter) => filter.value)
 
-      if (state.group) {
-        filterKeys.push(...state.group)
-      }
+      // if (state.group) {
+      //   filterKeys.push(...state.group)
+      // }
 
       return state.invites.filter((invite) => {
         return filterKeys.every((key) => {
@@ -159,7 +159,7 @@ function AdminManagePage() {
       })
     }
 
-    return filtersValues.includes('all') && !state.group ? state.invites : filterItems()
+    return filtersValues.includes('all') /* && !state.group  */? state.invites : filterItems()
   }
 
   function sortInvites(a: IGuest, b: IGuest) {
@@ -204,7 +204,7 @@ function AdminManagePage() {
         </Head>
 
         <Container centerContent minHeight="100vh" minWidth="full">
-          <Header onNewInviteClick={onNewInvite} onShowReportsClick={toggleReportsModal} onFilterClick={setFilters} onSearchClick={searchInvites} onSortClick={setSorters} onGroupClick={setGroup} />
+          <Header onNewInviteClick={onNewInvite} onShowReportsClick={toggleReportsModal} onFilterClick={setFilters} onSearchClick={searchInvites} onSortClick={setSorters} /* onGroupClick={setGroup} */ />
 
           <Divider color="gray.200" />
 
