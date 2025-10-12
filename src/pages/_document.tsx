@@ -1,6 +1,6 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 
-const OG_IMAGE = 'https://drive.google.com/file/d/1RoG_1XOZj1gdOH5glt58FWQFJcj5cYha/view?usp=share_link'
+const OG_IMAGE = 'https://casamento-marcia-e-maicon.s3.us-east-1.amazonaws.com/og_image2.png'
 
 export default function Document() {
   return (
@@ -10,7 +10,7 @@ export default function Document() {
 
         {/* <!-- Open Graph / Facebook --> */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://henriquethaysa-wedding.com/" />
+        <meta property="og:url" content="https://casamento-marcia-e-maicon.com.br/" />
         <meta property="og:image" content={OG_IMAGE} />
         <meta property="og:image:secure_url" content={OG_IMAGE} />
         <meta property="og:image:type" content="image/jpeg" />

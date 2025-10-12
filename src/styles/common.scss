@@ -2,25 +2,27 @@
 .rose-middle-right {
 	position: absolute;
 	z-index: 0;
+	aspect-ratio: 16/9;
+	object-fit: contain;
 }
 
 .rose-top-left {
-	top: -40%;
-	left: -15%;
-	transform: rotate(10deg);
+	top: -15%;
+	left: -10%;
+	transform: rotate(-15deg);
 
 	@media (max-width: 428px) {
 		width: 350px;
 		height: 370px;
-		top: -20%;
-		left: -30%;
+		top: -15%;
+		left: -10%;
 	}
 }
 
 .rose-middle-right {
-	bottom: -50%;
-	right: -30%;
-	transform: rotate(45deg);
+	bottom: -20%;
+	right: -25%;
+	transform: rotate(-22deg);
 
 	@media (max-width: 428px) {
 		width: 350px;

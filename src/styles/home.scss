@@ -15,7 +15,7 @@
 		}
 
 		.title {
-			font-family: "Amsterdam Four";
+			font-family: "Amoresa";
 			font-size: 7rem;
 			color: $primary;
 			font-weight: lighter;
@@ -36,6 +36,11 @@
 
 			@media (max-height: 700px) {
 				font-size: 2.5rem;
+			}
+
+			.and-sign {
+				margin: 0 20px;
+				font-size: 4rem;
 			}
 		}
 

@@ -2,7 +2,7 @@ import { RoseImage } from '@/components'
 import Head from 'next/head'
 
 const content = {
-  title: `Henrique e Thaysa\'s Wedding`,
+  title: `Casamento de Márcia & Maicon`,
   subtitle: 'Vamos casar! E você está convidado para testemunhar nossa união. Clique para saber mais.',
 }
 
@@ -23,22 +23,23 @@ export default function Home() {
 
         <section className="content">
           <h1 className="title">
-            <span>Henrique</span>
-            <span>e</span>
-            <span>Thaysa</span>
+            <span>Marcia</span>
+            <span className="and-sign">&</span>
+            <span>Maicon</span>
           </h1>
 
           <section className="subtitle">
             <div className="sentence">
-              <span>&quot;Grandes coisas fez o Senhor por nós.</span>
-              <span>Por isso estamos alegres.&quot;</span>
+              <span>&quot;Assim, permanecem agora estes três: a fé, a esperança e o amor.</span>
+              <br />
+              <span>O maior deles porém é o amor.&quot;</span>
             </div>
 
-            <span>Salmos 126:3</span>
+            <span>Coríntios 13:13</span>
           </section>
 
           <section className="date">
-            <span>15 - 07 - 2023</span>
+            <span>29 - 11 - 2025</span>
           </section>
         </section>
 

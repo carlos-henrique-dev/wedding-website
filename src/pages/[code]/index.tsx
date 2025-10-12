@@ -43,6 +43,8 @@ interface Props {
   guest: IGuest
 }
 
+const PIX_KEY = '67 99664-9263'
+
 export default function Invite({ guest: guestsProps }: Props) {
   const [confirmedGuests, setConfirmedGuests] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
@@ -176,7 +178,7 @@ export default function Invite({ guest: guestsProps }: Props) {
     }
   }
   const copyPixKey = () => {
-    navigator.clipboard.writeText('henriqueok20@gmail.com')
+    navigator.clipboard.writeText(PIX_KEY)
     setPixKeyCopied(true)
   }
 
@@ -187,44 +189,29 @@ export default function Invite({ guest: guestsProps }: Props) {
 
   return (
     <>
-      <Head>
-        <title>{`Convite ${guests.family}`}</title>
-        <meta name="description" content="Vamos casar e sua presença será uma bênção para nós!" />
-      </Head>
+
 
       <main className="invite">
-        <div className="paper">
-          <svg>
-            <filter id="roughpaper">
-              <feTurbulence type="fractalNoise" baseFrequency="0.04" result="noise" numOctaves="5" />
-
-              <feDiffuseLighting in="noise" lightingColor="#fff" surfaceScale="2">
-                <feDistantLight azimuth="45" elevation="60" />
-              </feDiffuseLighting>
-            </filter>
-          </svg>
-        </div>
-
         <RoseImage className="first_rose_background" />
 
         <section className="cover" id="cover">
           <h1 className="title">
-            <span>Henrique</span>
-            <span>e</span>
-            <span>Thaysa</span>
+            <span>Marcia</span>
+            <span className="and-sign">&</span>
+            <span>Maicon</span>
           </h1>
 
           <p className="subtitle">
             <span className="verse">
-              <span>&quot;Grandes coisas fez o Senhor por nós.</span>
-              <span>Por isso estamos alegres.&quot;</span>
+              <span>&quot;Assim, permanecem agora estes três: a fé, a esperança e o amor.</span>
+              <span>O maior deles porém é o amor.&quot;</span>
             </span>
 
-            <span>Salmos 126:3</span>
+            <span>Coríntios 13:13</span>
           </p>
 
           <p className="date">
-            <span>15 - 07 - 2023</span>
+            <span>29 - 11 - 2025</span>
           </p>
 
           <a href="#details" className="arrow_down">
@@ -248,10 +235,10 @@ export default function Invite({ guest: guestsProps }: Props) {
           <span className="invitation">COM A BÊNÇÃO DE DEUS E NOSSOS PAIS</span>
 
           <p className="parents">
-            <span>Luciana Fernandes</span>
-            <span>Marluci Tobias</span>
-            <span>João Carlos</span>
-            <span>Elio Joaquim</span>
+            <span>Januário Riquelme (in memorian)</span>
+            <span>Zanir Marció </span>
+            <span>Sara Calonga Riquelme </span>
+            <span>Jandira Pase Marció</span>
           </p>
 
           <span className="invitation">
@@ -266,19 +253,30 @@ export default function Invite({ guest: guestsProps }: Props) {
             <div className="date-divider" />
 
             <span className="date">
-              <span>JULHO</span>
-              <span className="day">15</span>
-              <span className="year">2023</span>
+              <span className="day">29</span>
+              <span> DE NOVEMBRO</span>
+              <span className="year">DE 2025</span>
             </span>
 
             <div className="date-divider" />
 
             <span className="time-place">
-              <span className="time">ÀS 18h</span>
-
               <span className="place">
-                <span>PALLADIUM</span>
-                <span>BUFFET</span>
+                <span className='place-description'>CERIMÔNIA</span>
+                <span>CHÁCARA</span>
+                <span>HOFF GRILL</span>
+              </span>
+
+              <span className="time">ÀS 16h</span>
+            </span>
+
+             <div className="date-divider" />
+
+            <span className="time-place">
+              <span className="place">
+                <span className='place-description'>RECEPÇÃO</span>
+                <span>CHURRASCARIA</span>
+                <span>HOFF GRILL</span>
               </span>
             </span>
           </div>
@@ -301,10 +299,10 @@ export default function Invite({ guest: guestsProps }: Props) {
             <div className="confirmation">
               <Image src="/images/mini_rose.png" alt="mini_rose" width={60} height={60} className="mini_rose" />
 
-              {/* <span className="information">
+              <span className="information">
                 {confirmationText}
-                <br /> PRESENÇA ATÉ O DIA <b>15-06-2023</b>
-              </span> */}
+                <br /> PRESENÇA ATÉ O DIA <b>12-11-2025</b>
+              </span>
 
               <span className="information">Selecione na lista abaixo as pessoas que estarão presentes.</span>
 
@@ -395,7 +393,7 @@ export default function Invite({ guest: guestsProps }: Props) {
 
           {showGiftsInfo && (
             <div className="info-modal">
-              <div className="info-modal-content normal-height">
+              <div className="info-modal-content normal-height half-width">
                 <span className="close-button" onClick={toggleGiftsInfo}>
                   Fechar
                 </span>
@@ -416,7 +414,7 @@ export default function Invite({ guest: guestsProps }: Props) {
                     <br />
                     <br />
                     <span>
-                      Chave: <strong>henriqueok20@gmail.com</strong>
+                      Chave: <strong>{PIX_KEY}</strong>
                     </span>
                     <button className="copy-pix" onClick={() => copyPixKey()}>
                       Copiar chave
@@ -436,7 +434,7 @@ export default function Invite({ guest: guestsProps }: Props) {
                 </span>
 
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3669.4112850366396!2d-55.22242031811882!3d-23.118637317134738!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x948a14066ab82db3%3A0xb94f8c9f31164de6!2sPalladium%20Buffet!5e0!3m2!1sen!2sbr!4v1685947028405!5m2!1sen!2sbr"
+                  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3670.4512346615256!2d-55.214988!3d-23.080572!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDA0JzUwLjEiUyA1NcKwMTInNTQuMCJX!5e0!3m2!1sen!2sbr!4v1760209187841!5m2!1sen!2sbr"
                   width="600"
                   height="450"
                   style={{ border: 0 }}
