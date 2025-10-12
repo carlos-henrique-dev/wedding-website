@@ -251,15 +251,18 @@ export default function Invite({ guest: guestsProps }: Props) {
           </span>
 
           <div className="date_place">
-            <span className="date">SÁBADO</span>
 
-            <div className="date-divider" />
 
             <span className="date">
               <span className="day">29</span>
               <span> DE NOVEMBRO</span>
               <span className="year">DE 2025</span>
             </span>
+
+            <div className="date-divider" />
+
+            <span className="date">SÁBADO</span>
+
 
             <div className="date-divider" />
 
