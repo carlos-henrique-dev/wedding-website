@@ -199,7 +199,7 @@ export default function Invite({ guest: guestsProps }: Props) {
 
         <section className="cover" id="cover">
           <h1 className="title">
-            <span>Marcia</span>
+            <span>Márcia</span>
             <span className="and-sign">&</span>
             <span>Maicon</span>
           </h1>
@@ -238,7 +238,7 @@ export default function Invite({ guest: guestsProps }: Props) {
           <span className="invitation">COM A BÊNÇÃO DE DEUS E NOSSOS PAIS</span>
 
           <p className="parents">
-            <span>Januário Riquelme (in memorian)</span>
+            <span>Januário Riquelme <br /> (in memorian)</span>
             <span>Zanir Marció </span>
             <span>Sara Calonga Riquelme </span>
             <span>Jandira Pase Marció</span>

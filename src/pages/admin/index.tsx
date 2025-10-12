@@ -200,7 +200,8 @@ function AdminManagePage() {
     <ChakraProvider>
       <main>
         <Head>
-          <title>Página de Gerenciamento</title>
+        <title>Página de Gerenciamento</title>
+        <meta name="description" content="Gerencie os seus convidados" />
         </Head>
 
         <Container centerContent minHeight="100vh" minWidth="full">

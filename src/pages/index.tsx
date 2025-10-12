@@ -23,7 +23,7 @@ export default function Home() {
 
         <section className="content">
           <h1 className="title">
-            <span>Marcia</span>
+            <span>Márcia</span>
             <span className="and-sign">&</span>
             <span>Maicon</span>
           </h1>
