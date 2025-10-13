@@ -81,6 +81,7 @@ export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsM
 
   async function onSubmit(values: any) {
     const code = values.family
+      .trim()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/\s/g, '-')
@@ -89,10 +90,10 @@ export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsM
 
     const data: IGuest = {
       code,
-      family: values.family,
+      family: values.family.trim(),
       side: values.side,
       members: values.members.map((member: any) => ({
-        name: member.value,
+        name: member.value.trim(),
         is_coming: false,
       })),
       confirmed: false,
