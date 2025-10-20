@@ -92,7 +92,9 @@ export default function CreateInviteModal({ isOpen, onClose, invite }: IDetailsM
       code,
       family: values.family.trim(),
       side: values.side,
-      members: values.members.map((member: any) => ({
+      members: values.members
+      .filter((member: any) => member.value && member.value.trim() !== '')
+      .map((member: any) => ({
         name: member.value.trim(),
         is_coming: false,
       })),

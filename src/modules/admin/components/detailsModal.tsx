@@ -115,7 +115,18 @@ export default function DetailsModal({ invite, isOpen, onClose }: IDetailsModalP
   const confirmationLabel = () => {
     if (invite.absent) return 'Convidado não comparecerá'
 
-    return invite.confirmed ? 'Convite aceito' : 'Convite recusado'
+    if (invite.confirmed) {
+      const allComing = invite.members.every((member) => member.is_coming)
+      if (allComing) return 'Convite totalmente aceito'
+
+      return 'Convite parcialmente aceito'
+    }
+
+    const noOneComingYet = invite.members.every((member) => !member.is_coming)
+
+    if (!invite.confirmed && noOneComingYet) return 'Convite não respondido ainda'
+
+    return 'Convite parcialmente aceito'
   }
 
   return (
