@@ -10,9 +10,10 @@ interface IInviteCardProps {
   copyToClipboard: (text: string) => void
   openDetails: (invite: IGuest) => void
   onDeleteInvite: (code: string) => void
+  refreshInvites: () => void
 }
 
-export default function InviteCard({ invite, copyToClipboard, openDetails, onDeleteInvite }: IInviteCardProps) {
+export default function InviteCard({ invite, copyToClipboard, openDetails, onDeleteInvite, refreshInvites }: IInviteCardProps) {
   const { isOpen, onOpen: deleteInvite, onClose } = useDisclosure()
   const { isOpen: isEditOpen, onOpen: onEditInviteOpen, onClose: onEditEnd } = useDisclosure()
 
@@ -21,6 +22,11 @@ export default function InviteCard({ invite, copyToClipboard, openDetails, onDel
   const handleDelete = () => {
     onClose()
     onDeleteInvite(invite.code)
+  }
+
+  const handleEditEnd = () => {
+    refreshInvites()
+    onEditEnd()
   }
 
   const confirmationColor = () => {
@@ -92,7 +98,7 @@ export default function InviteCard({ invite, copyToClipboard, openDetails, onDel
         </VStack>
       </Card>
 
-      {isEditOpen && <CreateInviteModal isOpen={isEditOpen} onClose={onEditEnd} invite={invite} />}
+      {isEditOpen && <CreateInviteModal isOpen={isEditOpen} onClose={handleEditEnd} invite={invite} />}
 
       <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
         <AlertDialogOverlay>

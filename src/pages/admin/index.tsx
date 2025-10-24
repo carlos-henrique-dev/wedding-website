@@ -42,12 +42,18 @@ function AdminManagePage() {
 
   const toast = useToast()
   const [state, setState] = useState<IState>(INITIAL_STATE)
+  const [isFetching, setIsFetching] = useState(false)
 
   async function getInvites() {
+    if (isFetching) return
+
+    setIsFetching(true)
+
     const res = await fetch('/api/guest-list')
     const data = (await res.json()) satisfies Array<IGuest>
 
     setState({ ...state, invites: data, total: data.length, loading: false })
+    setIsFetching(false)
   }
 
   useEffect(() => {
@@ -78,7 +84,7 @@ function AdminManagePage() {
   }
 
   function openDetails(invite: IGuest) {
-    setState({ ...state, showDetails: true, selectedInvite: invite })
+    if (!state.showDetails) setState({ ...state, showDetails: true, selectedInvite: invite })
   }
 
   function onNewInvite() {
@@ -159,7 +165,7 @@ function AdminManagePage() {
       })
     }
 
-    return filtersValues.includes('all') /* && !state.group  */? state.invites : filterItems()
+    return filtersValues.includes('all') /* && !state.group  */ ? state.invites : filterItems()
   }
 
   function sortInvites(a: IGuest, b: IGuest) {
@@ -189,7 +195,7 @@ function AdminManagePage() {
       })
     }
 
-    const card = (invite: IGuest, index: number) => <InviteCard key={index} invite={invite} copyToClipboard={copyToClipboard} openDetails={openDetails} onDeleteInvite={onDeleteInvite} />
+    const card = (invite: IGuest, index: number) => <InviteCard key={index} invite={invite} copyToClipboard={copyToClipboard} openDetails={openDetails} onDeleteInvite={onDeleteInvite} refreshInvites={getInvites} />
 
     return state.sort ? filteredInvites.slice().sort(sortInvites).map(card) : filteredInvites.map(card)
   }
@@ -200,8 +206,8 @@ function AdminManagePage() {
     <ChakraProvider>
       <main>
         <Head>
-        <title>Página de Gerenciamento</title>
-        <meta name="description" content="Gerencie os seus convidados" />
+          <title>Página de Gerenciamento</title>
+          <meta name="description" content="Gerencie os seus convidados" />
         </Head>
 
         <Container centerContent minHeight="100vh" minWidth="full">
