@@ -44,6 +44,12 @@ interface Props {
 }
 
 const PIX_KEY = '67 99664-9263'
+const RSVP_DEADLINE = new Date('2025-11-05T23:59:59')
+const FORMATTED_RSVP_DEADLINE = RSVP_DEADLINE.toLocaleDateString('pt-BR', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+})
 
 export default function Invite({ guest: guestsProps }: Props) {
   const [confirmedGuests, setConfirmedGuests] = useState<string[]>([])
@@ -182,7 +188,7 @@ export default function Invite({ guest: guestsProps }: Props) {
     setPixKeyCopied(true)
   }
 
-  const isConfirmButtonDisabled = guests.absent || guests.confirmed
+  const isConfirmButtonDisabled = guests.absent || guests.confirmed || loading || new Date() > RSVP_DEADLINE
 
   const inviteText = guests.members.length > 1 ? 'CONVIDAMOS VOCÊS PARA A CELEBRAÇÃO DO NOSSO' : 'CONVIDAMOS VOCÊ PARA A CELEBRAÇÃO DO NOSSO'
   const confirmationText = guests.members.length > 1 ? 'PEDIMOS QUE CONFIRMEM SUA' : 'PEDIMOS QUE CONFIRME SUA'
@@ -238,7 +244,9 @@ export default function Invite({ guest: guestsProps }: Props) {
           <span className="invitation">COM A BÊNÇÃO DE DEUS E NOSSOS PAIS</span>
 
           <p className="parents">
-            <span>Januário Riquelme <br /> (in memorian)</span>
+            <span>
+              Januário Riquelme <br /> (in memorian)
+            </span>
             <span>Zanir Marció </span>
             <span>Sara Calonga Riquelme </span>
             <span>Jandira Pase Marció</span>
@@ -251,8 +259,6 @@ export default function Invite({ guest: guestsProps }: Props) {
           </span>
 
           <div className="date_place">
-
-
             <span className="date">
               <span className="day">29</span>
               <span> DE NOVEMBRO</span>
@@ -263,12 +269,11 @@ export default function Invite({ guest: guestsProps }: Props) {
 
             <span className="date">SÁBADO</span>
 
-
             <div className="date-divider" />
 
             <span className="time-place">
               <span className="place">
-                <span className='place-description'>CERIMÔNIA</span>
+                <span className="place-description">CERIMÔNIA</span>
                 <span>CHÁCARA</span>
                 <span>HOFF GRILL</span>
               </span>
@@ -280,7 +285,7 @@ export default function Invite({ guest: guestsProps }: Props) {
 
             <span className="time-place">
               <span className="place">
-                <span className='place-description'>RECEPÇÃO</span>
+                <span className="place-description">RECEPÇÃO</span>
                 <span>CHURRASCARIA</span>
                 <span>HOFF GRILL</span>
               </span>
@@ -306,8 +311,16 @@ export default function Invite({ guest: guestsProps }: Props) {
               <Image src="/images/mini_rose.png" alt="mini_rose" width={60} height={60} className="mini_rose" />
 
               <span className="information">
-                {confirmationText}
-                <br /> PRESENÇA ATÉ O DIA <b>12-11-2025</b>
+                {new Date() <= RSVP_DEADLINE ? (
+                  <>
+                    {confirmationText}
+                    <br /> PRESENÇA ATÉ O DIA <b>{FORMATTED_RSVP_DEADLINE}</b>
+                  </>
+                ) : (
+                  <>
+                    O PRAZO PARA CONFIRMAÇÃO DE PRESENÇA <br /> ENCERROU DIA <b>{FORMATTED_RSVP_DEADLINE}</b>
+                  </>
+                )}
               </span>
 
               <span className="information">Selecione na lista abaixo as pessoas que estarão presentes.</span>
@@ -316,7 +329,7 @@ export default function Invite({ guest: guestsProps }: Props) {
                 {guests.members.map((member, index) => (
                   <div className="guest" key={index}>
                     <input
-                      disabled={guests.confirmed || guests.absent}
+                      disabled={isConfirmButtonDisabled}
                       defaultChecked={isConfirmed(member.name)}
                       className="checkbox"
                       type="checkbox"
@@ -336,7 +349,7 @@ export default function Invite({ guest: guestsProps }: Props) {
 
               <div className="actions">
                 {guests.confirmed ? null : (
-                  <button className="cancel-button" type="button" disabled={guests.absent} onClick={() => setShowConfirmAbsence(!showConfirmAbsence)}>
+                  <button className="cancel-button" type="button" disabled={isConfirmButtonDisabled} onClick={() => setShowConfirmAbsence(!showConfirmAbsence)}>
                     {confirmAbsenceButtonLabel()}
                   </button>
                 )}
